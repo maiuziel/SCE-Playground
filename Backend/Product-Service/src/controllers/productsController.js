@@ -1,3 +1,5 @@
+import { productsService } from '../services/productsService.js';
+
 export const updateProduct = async (req, res) => {
     try {
         res.status(200).json('update products controller');
@@ -22,18 +24,26 @@ export const createProduct = async (req, res) => {
     }
 };
 
-export const readProduct = async (req, res) => {
+export const readAllProducts = async (req, res) => {
     try {
-        res.status(200).json('read product controller');
+        const products = await productsService.fetchAllProducts();
+        res.status(200).json(products);
     } catch (error) {
-        res.status(500).json({error: 'error from read function', details: error});
+        res.status(500).json({ error: 'Error fetching all products', details: error.message });
     }
 };
 
-export const readAllProducts = async (req, res) => {
+export const readProduct = async (req, res) => {
     try {
-        res.status(200).json('read all products controller');
+        const { id } = req.params;
+        const product = await Product.findByPk(id);
+
+        if (!product) {
+            return res.status(404).json({ error: `Product with id ${id} not found` });
+        }
+
+        res.status(200).json(product);
     } catch (error) {
-        res.status(500).json({error: 'error from read all function', details: error});
+        res.status(500).json({ error: 'Error fetching product', details: error.message });
     }
 };

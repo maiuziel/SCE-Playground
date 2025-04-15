@@ -1,4 +1,4 @@
-// products-service/src/data-access/db.js
+// products-service/src/data-access/productsDataAccess.js
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';
 
