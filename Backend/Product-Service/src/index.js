@@ -10,13 +10,13 @@ const PORT = process.env.PORT || 4006;
 app.use(json());
 
 // Initialize the database connection
-// initDb()
-//   .then(() => {
-//     console.log('Database connected successfully');
-//   })
-//   .catch((err) => {
-//     console.error('Database connection failed:', err.message);
-//   });
+initDb()
+  .then(() => {
+    console.log('Database connected successfully');
+  })
+  .catch((err) => {
+    console.error('Database connection failed:', err.message);
+  });
 
 // Authentication routes
 app.use('/', Routes);
