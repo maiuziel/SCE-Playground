@@ -31,7 +31,7 @@ jobs:
     #- name: Run Tests
      # run: npm run test
     - name: npm run linter
-      run: npm tun lint
+      run: npm run lint
     - run: npm ci
     - run: npm run build --if-present
     #- run: npm test
