@@ -14,6 +14,9 @@ app.use(cors());
 
 // Gateway routes
 app.use('/', gatewayRoutes);
+app.get('/', (req, res) => {
+  res.send('Welcgome');
+});
 
 // Error Handling
 app.use(errorHandler);

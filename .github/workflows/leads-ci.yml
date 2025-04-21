@@ -25,7 +25,7 @@ jobs:
       with:
         node-version: 18.x
         cache: 'npm'
-        cache-dependency-path: 'Backend/LeadsService/package-lock.json' # חשוב מאוד!
+        cache-dependency-path: 'Backend/LeadsService/package-lock.json' 
 
     - name: Install dependencies
       working-directory: Backend/LeadsService
@@ -35,7 +35,9 @@ jobs:
     - name: Run tests
       working-directory: Backend/LeadsService
       run: npm run test
-    - name: npm run linter
+
+
+    - name: Run linter
       working-directory: Backend/LeadsService
       run: npm run lint
   # deploy-server:
