@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const customerService = require('../Service/Customer-ServiceService');
+//const customerService = require('../Controller/Customer-ServiceController');
 
 router.post('/', async (req, res) => {
   const customer = await customerService.createCustomer(req.body);

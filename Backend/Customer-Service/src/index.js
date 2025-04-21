@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 4002;
 
-const customerController = require('./Customer-Service/src/Controller/Customer-ServiceController');
+const customerController = require('./Controller/Customer-ServiceController');
 
 // תוספי אמצע (middlewares)
 app.use(express.json());
