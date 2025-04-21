@@ -30,7 +30,7 @@ const recipes = [
   }
 ];
 
-app.get('/recipes', (req, res) => {
+app.get( (req, res) => {
   res.json(recipes);
 });
 
