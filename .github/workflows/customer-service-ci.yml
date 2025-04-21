@@ -3,15 +3,13 @@ name: Customer Service CI
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clone repository
+    - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Use Node.js
@@ -23,6 +21,6 @@ jobs:
       run: npm install
       working-directory: Backend/Customer-Service
 
-    - name: Run linter or basic check
-      run: node index.js
+    - name: Run basic check
+      run: node src/index.js
       working-directory: Backend/Customer-Service
