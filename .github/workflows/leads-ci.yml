@@ -6,8 +6,12 @@ name: Leads_Workflow CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'Backend/LeadsService/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'Backend/LeadsService/**'
 
 jobs:
   build-and-test:
