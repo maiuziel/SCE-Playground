@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "mocha tests/*.spec.js",
+    "test": "mocha --require dotenv/config src/test/**/*.js",
     "lint": "eslint src/*"
   },
   "keywords": [],
