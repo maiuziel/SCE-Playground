@@ -30,13 +30,14 @@ jobs:
     - name: Install dependencies
       working-directory: Backend/LeadsService
       run: npm install
-            npm install --save-dev jest
+           npm install --save-dev jest
 
     - name: Run tests
       working-directory: Backend/LeadsService
       run: npm run test
-    # - name: npm run linter
-    #   run: npm run lint
+    - name: npm run linter
+      working-directory: Backend/LeadsService
+      run: npm run lint
   # deploy-server:
   #     needs: build-and-test
   #     runs-on: ubuntu-latest
