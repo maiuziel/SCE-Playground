@@ -37,14 +37,14 @@ export const findLeadsByName = async (name) => {
   
   export const sortByNameAsc = async () => {
     const result = await pool.query(
-      `SELECT * FROM leads ORDER BY LOWER(full_name) ASC`
+      'SELECT * FROM leads ORDER BY LOWER(full_name) ASC'
     );
     return result.rows;
   };
   
   export const sortByNameDesc = async () => {
     const result = await pool.query(
-      `SELECT * FROM leads ORDER BY LOWER(full_name) DESC`
+      'SELECT * FROM leads ORDER BY LOWER(full_name) DESC'
     );
     return result.rows;
   };
