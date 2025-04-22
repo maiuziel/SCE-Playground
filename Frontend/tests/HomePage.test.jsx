@@ -1,7 +1,6 @@
-// HomePage.test.jsx
+import { describe, test, expect } from 'vitest'; // ✅ חובה להיות ראשון
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import HomePage from '../src/pages/HomePage.jsx';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -12,7 +11,6 @@ describe('HomePage', () => {
         <HomePage />
       </BrowserRouter>
     );
-    // screen is your access point to the rendered DOM
-    expect(screen.getByText('Welcome to SCE Software Ltd.')).toBeInTheDocument();
+    expect(screen.getByText('Welcome to SCE Software Ltd.')).toBeTruthy();
   });
 });
