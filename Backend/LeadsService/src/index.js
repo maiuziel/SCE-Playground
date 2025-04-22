@@ -1,16 +1,16 @@
-require('dotenv').config(); 
+import express from 'express';
+import dotenv from 'dotenv';
 
-const express = require('express');
+dotenv.config();
 const app = express();
+const PORT = process.env.PORT || 4001;
 
-
-const port = process.env.PORT || 3000;
+app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Welcccome');
+  res.send('Leads Service is running!');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-
-}); 
+app.listen(PORT, () => {
+  console.log(`Leads service running on port: ${PORT}`);
+});
