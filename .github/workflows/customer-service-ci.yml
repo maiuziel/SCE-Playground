@@ -9,18 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Set Git config to handle line endings
+        run: |
+          git config --global core.autocrlf input
+          git config --global core.safecrlf true
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: npm install
-      working-directory: Backend/Customer-Service
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-    - name: Run basic check
-      run: node src/index.js
-      working-directory: Backend/Customer-Service
+      - name: Install dependencies
+        run: npm install
+        working-directory: Backend/Customer-Service
+
+      - name: run linter
+        run: npm run lint
+        working-directory: Backend/Customer-Service
+
+      - name: Run basic check
+        run: node src/index.js
+        working-directory: Backend/Customer-Service
