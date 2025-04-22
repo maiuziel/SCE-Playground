@@ -2,14 +2,14 @@ import * as leadsService from '../services/leadsService.js';
 
 export const createLead = async (req, res) => {
   try {
-    const { name, email, phone, product, status } = req.body;
+    const { full_name, email, phone, product_interest } = req.body;
     const lead = await leadsService.create({full_name, email, phone, product_interest});
     
     res.status(201).json(lead);
   } catch (error) {
     res.status(500).json({ message: 'Error creating lead', error });
   }
-}
+};
 
 export const getAllLeads = async (req, res) => {
     try {
@@ -18,7 +18,7 @@ export const getAllLeads = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const findLeadsByName = async (req, res) => {
     try {
@@ -28,7 +28,7 @@ export const findLeadsByName = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const filterLeadsByStatus = async (req, res) => {
     try {
@@ -38,7 +38,7 @@ export const filterLeadsByStatus = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const sortLeadsByNameAsc = async (req, res) => {
     try {
@@ -47,7 +47,7 @@ export const sortLeadsByNameAsc = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const sortLeadsByNameDesc = async (req, res) => {
     try {
@@ -56,7 +56,7 @@ export const sortLeadsByNameDesc = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const sortLeadsByProductAsc = async (req, res) => {
     try {
@@ -65,7 +65,7 @@ export const sortLeadsByProductAsc = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const sortLeadsByProductDesc = async (req, res) => {
     try {
@@ -74,7 +74,7 @@ export const sortLeadsByProductDesc = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const sortLeadsByDateAsc = async (req, res) => {
     try {
@@ -83,7 +83,7 @@ export const sortLeadsByDateAsc = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const sortLeadsByDateDesc = async (req, res) => {
     try {
@@ -92,7 +92,7 @@ export const sortLeadsByDateDesc = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-}
+};
 
 export const updateNoteByEmail = async (req, res) => {
     try {
@@ -102,7 +102,7 @@ export const updateNoteByEmail = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error updating lead note', error });
     }
-}
+};
 
 export const updateStatusByEmail = async (req, res) => {
     try {
@@ -112,7 +112,7 @@ export const updateStatusByEmail = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error updating lead status', error });
     }
-}
+};
 
 export const deleteMultipleLeads = async (req, res) => {
     try {
@@ -126,5 +126,5 @@ export const deleteMultipleLeads = async (req, res) => {
     }
   };
 
-  
+
 
