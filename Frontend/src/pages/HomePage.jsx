@@ -19,9 +19,15 @@ export default function HomePage() {
         />
       </div>
 
-      <button className="home-button" onClick={() => navigate('/customer-service')}>
-        Go to Customer Service
-      </button>
+      <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+        <button className="home-button" onClick={() => navigate('/customer-service')}>
+          Go to Customer Service
+        </button>
+
+        <button className="home-button" onClick={() => navigate('/client')}>
+          Go to Client
+        </button>
+      </div>
     </div>
   );
 }
