@@ -26,7 +26,7 @@ const recipes = [
     id: 3,
     name: "Avocado Toast",
     ingredients: ["Bread", "Avocado", "Lemon", "Chili Flakes", "Salt"],
-    instructions: "Toast bread. Mash avocado with lemon. Spread and top with chili flakes."
+    instructions: "Toast bread. Mash avocado with lemon; Spread and top with chili flakes."
   }
 ];
 
