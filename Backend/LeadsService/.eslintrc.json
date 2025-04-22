@@ -3,7 +3,8 @@
     "env": {
       "browser": true,
       "node": true,
-      "es2021": true
+      "es2021": true,
+      "jest": true
     },
     // "extends" pulls in recommended ESLint rules. This is a good starting point for new developers.
     "extends": [
@@ -28,7 +29,7 @@
   
       // Enforce single quotes for strings.
       "quotes": ["error", "single", { "avoidEscape": true }],
-  
+
       // Encourage === and !== over == and != to avoid bugs with type coercion.
       "eqeqeq": ["warn", "always"],
   

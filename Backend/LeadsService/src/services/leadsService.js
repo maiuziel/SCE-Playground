@@ -61,9 +61,7 @@ export const create = async (leadData) => {
   return await data.createLead(leadData);
 };
 
-export const getAll = async () => {
-  return await data.getAllLeads();
-}
+export const getAll = async () => await data.getAllLeads();
 
 export const findByName = async (name) => {
     if (!name || name.trim() === '') {
@@ -76,7 +74,7 @@ export const findByName = async (name) => {
     }
     
     return await data.findLeadsByName(name);
-}
+};
 
 export const filterByStatus = async (status) => {
     if (!status || status.trim() === '') {
@@ -89,31 +87,19 @@ export const filterByStatus = async (status) => {
     }
     
     return await data.filterLeadsByStatus(status);
-}
+};
 
-export const sortByNameAsc = async () => {
-    return await data.sortByNameAsc();
-}
+export const sortByNameAsc = async () => await data.sortByNameAsc();
 
-export const sortByNameDesc = async () => {
-    return await data.sortByNameDesc();
-}
+export const sortByNameDesc = async () => await data.sortByNameDesc();
 
-export const sortByProductAsc = async () => {
-    return await data.sortByProductAsc();
-}
+export const sortByProductAsc = async () => await data.sortByProductAsc();
 
-export const sortByProductDesc = async () => {
-    return await data.sortByProductDesc();
-}
+export const sortByProductDesc = async () => await data.sortByProductDesc();
 
-export const sortByDateAsc = async () => {
-    return await data.sortByDateAsc();
-}
+export const sortByDateAsc = async () => await data.sortByDateAsc();
 
-export const sortByDateDesc = async () => {
-    return await data.sortByDateDesc();
-}
+export const sortByDateDesc = async () => await data.sortByDateDesc();
 
 export const updateNoteByEmail = async (email, note) => {
     if (!email || email.trim() === '') {
@@ -128,7 +114,7 @@ export const updateNoteByEmail = async (email, note) => {
         throw new Error('Note must be at most 255 characters');
     }
     return await data.updateNoteByEmail(email, note);
-}
+};
 
 export const updateStatusByEmail = async (email, status) => {
     if (!email || email.trim() === '') {
@@ -147,7 +133,7 @@ export const updateStatusByEmail = async (email, status) => {
         throw new Error('Invalid status');
     }
     return await data.updateStatusByEmail(email, status);
-}
+};
 
 
 export const deleteMultipleLeads = async (emails) => {
