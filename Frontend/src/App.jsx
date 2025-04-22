@@ -9,6 +9,11 @@ import ReportsPage from './pages/ReportsPage.jsx';
 import CustomerServicePage from './pages/CustomerServicePage.jsx';
 import ClientPage from './pages/ClientPage.jsx'; 
 import ClientRequestPage from './pages/ClientRequestPage.jsx';
+import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
+import SupportHistoryPage from './pages/SupportHistoryPage.jsx';
+
+
+
 
 
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
@@ -63,6 +68,11 @@ function App() {
             <Route path='/customer-service' element={<CustomerServicePage />} />
             <Route path='/client' element={<ClientPage />} /> 
             <Route path="/client-request" element={<ClientRequestPage />} />
+            <Route path="/subscriptions" element={<SubscriptionsPage />} />
+            <Route path="/support-history" element={<SupportHistoryPage />} />
+
+
+
 
 
             <Route
