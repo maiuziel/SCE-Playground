@@ -1,4 +1,5 @@
 import pool from './db.js';
+import service from '../services/leadsService.js';
 
 export const createLead = async ({ full_name, phone, email, product_interest }) => {
   const result = await pool.query(
