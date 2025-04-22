@@ -1,0 +1,170 @@
+import * as data from '../data-access/leadsDataAccess.js';
+
+export const create = async (leadData) => {
+  const { full_name, phone, email, product_interest } = leadData;
+
+ 
+  if (!full_name || full_name.trim() === '') {
+    throw new Error('Full name is required');
+  }
+
+  if (full_name.length > 255) {
+    throw new Error('Full name must be at most 255 characters');
+  }
+
+  const nameRegex = /^[a-zA-Z\s]+$/;
+  if (!nameRegex.test(full_name)) {
+    throw new Error('Full name can contain only letters and spaces');
+  }
+
+  if (!phone || phone.trim() === '') {
+    throw new Error('Phone is required');
+  }
+
+  
+  const phoneRegex = /^05\d{2}-\d{6}$/;
+  if (!phone || !phoneRegex.test(phone)) {
+    throw new Error('Phone number must be in format like 05XX-XXXXXX');
+  }
+
+  
+  if (!email || email.trim() === '') {
+    throw new Error('Email is required');
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.(com|co\.il)$/;
+  if (!emailRegex.test(email)) {
+    throw new Error('Email must be in format like example@example.com (com or co.il)');
+  }
+
+  
+  if (!product_interest || product_interest.trim() === '') {
+    throw new Error('Product interest is required');
+  }
+
+  if (product_interest.length > 255) {
+    throw new Error('Product interest must be at most 255 characters');
+  }
+
+ 
+  const allLeads = await data.getAllLeads();
+
+  if (allLeads.find((lead) => lead.email === email)) {
+    throw new Error('Lead with this email already exists');
+  }
+
+  if (allLeads.find((lead) => lead.phone === phone)) {
+    throw new Error('Lead with this phone number already exists');
+  }
+
+  
+  return await data.createLead(leadData);
+};
+
+export const getAll = async () => {
+  return await data.getAllLeads();
+}
+
+export const findByName = async (name) => {
+    if (!name || name.trim() === '') {
+        throw new Error('Name is required');
+    }
+    
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    if (!nameRegex.test(name)) {
+        throw new Error('Name can contain only letters and spaces');
+    }
+    
+    return await data.findLeadsByName(name);
+}
+
+export const filterByStatus = async (status) => {
+    if (!status || status.trim() === '') {
+        throw new Error('Status is required');
+    }
+    
+    const validStatuses = ['new', 'in-progress', 'closed'];
+    if (!validStatuses.includes(status)) {
+        throw new Error('Invalid status');
+    }
+    
+    return await data.filterLeadsByStatus(status);
+}
+
+export const sortByNameAsc = async () => {
+    return await data.sortByNameAsc();
+}
+
+export const sortByNameDesc = async () => {
+    return await data.sortByNameDesc();
+}
+
+export const sortByProductAsc = async () => {
+    return await data.sortByProductAsc();
+}
+
+export const sortByProductDesc = async () => {
+    return await data.sortByProductDesc();
+}
+
+export const sortByDateAsc = async () => {
+    return await data.sortByDateAsc();
+}
+
+export const sortByDateDesc = async () => {
+    return await data.sortByDateDesc();
+}
+
+export const updateNoteByEmail = async (email, note) => {
+    if (!email || email.trim() === '') {
+        throw new Error('Email is required');
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com|co\.il)$/;
+    if (!emailRegex.test(email)) {
+        throw new Error('Email must be in format like example@example.com (com or co.il)');
+    }
+    if(note.length > 255) {
+        throw new Error('Note must be at most 255 characters');
+    }
+    return await data.updateNoteByEmail(email, note);
+}
+
+export const updateStatusByEmail = async (email, status) => {
+    if (!email || email.trim() === '') {
+        throw new Error('Email is required');
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com|co\.il)$/;
+    if (!emailRegex.test(email)) {
+        throw new Error('Email must be in format like example@example.com (com or co.il)');
+    }
+    if (!status || status.trim() === '') {
+        throw new Error('Status is required');
+    }
+    const validStatuses = ['new', 'in-progress', 'closed'];
+    if (!validStatuses.includes(status)) {
+        throw new Error('Invalid status');
+    }
+    return await data.updateStatusByEmail(email, status);
+}
+
+
+export const deleteMultipleLeads = async (emails) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com|co\.il)$/;
+  if (!Array.isArray(emails) || emails.length === 0) {
+    throw new Error('Must provide a non-empty list of emails');
+  }
+
+  for (const email of emails) {
+    if (!email || email.trim() === '') {
+      throw new Error('All emails must be non-empty');
+    }
+
+    if (!emailRegex.test(email)) {
+      throw new Error(`Invalid email format: ${email}`);
+    }
+  }
+
+  return await data.deleteLeadsByEmails(emails);
+};
