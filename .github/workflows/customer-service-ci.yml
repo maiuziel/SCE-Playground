@@ -31,5 +31,5 @@ jobs:
         working-directory: Backend/Customer-Service
 
       - name: Run basic check
-        run: node src/index.js
+        run: npm test
         working-directory: Backend/Customer-Service
