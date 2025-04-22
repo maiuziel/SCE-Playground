@@ -16,7 +16,7 @@
     "dotenv": "^16.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.0",
+    
     "eslint": "^8.35.0",
     "globals": "^16.0.0"
   }
