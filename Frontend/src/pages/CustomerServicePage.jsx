@@ -1,16 +1,18 @@
-// frontend/src/pages/ClientPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function ClientPage() {
+export default function CustomerServicePage() {
   const navigate = useNavigate();
 
   return (
     <div className="page-container">
-      <h1 className="page-title">Client Portal</h1>
+      <h1 className="page-title">Customer Service Dashboard</h1>
 
-      <button className="home-button" onClick={() => navigate('/customer-service')}>
-        פנייה לנציג שירות
+      <button
+        className="home-button"
+        onClick={() => navigate('/manage-requests')}
+      >
+        Manage Requests
       </button>
     </div>
   );

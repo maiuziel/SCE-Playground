@@ -11,6 +11,8 @@ import ClientPage from './pages/ClientPage.jsx';
 import ClientRequestPage from './pages/ClientRequestPage.jsx';
 import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
 import SupportHistoryPage from './pages/SupportHistoryPage.jsx';
+import ManageRequestsPage from './pages/ManageRequestsPage.jsx';
+
 
 
 
@@ -70,6 +72,8 @@ function App() {
             <Route path="/client-request" element={<ClientRequestPage />} />
             <Route path="/subscriptions" element={<SubscriptionsPage />} />
             <Route path="/support-history" element={<SupportHistoryPage />} />
+            <Route path="/manage-requests" element={<ManageRequestsPage />} />
+
 
 
 
