@@ -14,3 +14,4 @@ app.post("/ping", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`service A is running on http://localhost:${PORT}`);
 });
+
