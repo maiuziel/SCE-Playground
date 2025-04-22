@@ -26,8 +26,8 @@ jobs:
         run: npm install
         working-directory: Backend/Customer-Service
 
-      - name: run linter
-        run: npm run lint
+      - name: Run linter and fix errors
+        run: npm run lint -- --fix
         working-directory: Backend/Customer-Service
 
       - name: Run basic check
