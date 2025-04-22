@@ -1,15 +1,17 @@
 import * as leadsService from '../services/leadsService.js';
 
 export const createLead = async (req, res) => {
-  try {
-    const { full_name, email, phone, product_interest } = req.body;
-    const lead = await leadsService.create({full_name, email, phone, product_interest});
-    
-    res.status(201).json(lead);
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating lead', error });
-  }
-};
+    try {
+      const { full_name, email, phone, product_interest } = req.body;
+      const lead = await leadsService.create({ full_name, email, phone, product_interest });
+      
+      res.status(201).json(lead);
+    } catch (error) {
+      console.error('Create lead error:', error); 
+      res.status(500).json({ message: 'Error creating lead', error });
+    }
+  };
+  
 
 export const getAllLeads = async (req, res) => {
     try {

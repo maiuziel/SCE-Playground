@@ -1,5 +1,4 @@
 import pool from './db.js';
-import service from '../services/leadsService.js';
 
 export const createLead = async ({ full_name, phone, email, product_interest }) => {
   const result = await pool.query(
@@ -27,13 +26,14 @@ export const findLeadsByName = async (name) => {
     return result.rows;
   };
 
-  export const fillterLeadsByStatus = async (status) => {
+  export const filterLeadsByStatus = async (status) => {
     const result = await pool.query(
-      'SELECT * FROM leads WHERE status = $1',
+      'SELECT * FROM leads WHERE status ILIKE $1',
       [status]
     );
     return result.rows;
   };
+  
   
   export const sortByNameAsc = async () => {
     const result = await pool.query(
@@ -49,25 +49,34 @@ export const findLeadsByName = async (name) => {
     return result.rows;
   };
   
-  export const sortByProductAsc = async (req, res) => {
-    const leads = await service.sortProductAsc();
-    res.json(leads);
+  export const sortByProductAsc = async () => {
+    const result = await pool.query(
+      'SELECT * FROM leads ORDER BY product_interest ASC'
+    );
+    return result.rows;
   };
   
-  export const sortByProductDesc = async (req, res) => {
-    const leads = await service.sortProductDesc();
-    res.json(leads);
+  export const sortByProductDesc = async () => {
+    const result = await pool.query(
+      'SELECT * FROM leads ORDER BY product_interest DESC'
+    );
+    return result.rows;
   };
   
-  export const sortByDateAsc = async (req, res) => {
-    const leads = await service.sortDateAsc();
-    res.json(leads);
+  export const sortByDateAsc = async () => {
+    const result = await pool.query(
+      'SELECT * FROM leads ORDER BY submission_date ASC'
+    );
+    return result.rows;
   };
   
-  export const sortByDateDesc = async (req, res) => {
-    const leads = await service.sortDateDesc();
-    res.json(leads);
+  export const sortByDateDesc = async () => {
+    const result = await pool.query(
+      'SELECT * FROM leads ORDER BY submission_date DESC'
+    );
+    return result.rows;
   };
+  
   
   export const updateNoteByEmail = async (email, note) => {
     const result = await pool.query(

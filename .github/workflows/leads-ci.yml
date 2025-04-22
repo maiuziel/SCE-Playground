@@ -31,6 +31,10 @@ jobs:
       working-directory: Backend/LeadsService
       run: npm install
            npm install --save-dev jest
+           npm install eslint@8.35.0 --save-dev
+           npm install express cors dotenv pg
+
+
 
     - name: Run tests
       working-directory: Backend/LeadsService

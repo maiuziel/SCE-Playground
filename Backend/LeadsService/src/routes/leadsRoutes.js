@@ -1,0 +1,42 @@
+import express from 'express';
+import {
+  createLead,
+  getAllLeads,
+    findLeadsByName,
+    filterLeadsByStatus,
+    sortLeadsByNameAsc,
+    sortLeadsByNameDesc,
+    sortLeadsByProductAsc,
+    sortLeadsByProductDesc,
+    sortLeadsByDateAsc,
+    sortLeadsByDateDesc,
+    updateNoteByEmail,
+    updateStatusByEmail,
+    deleteMultipleLeads
+} from '../controllers/leadsController.js';
+
+
+const router = express.Router();
+
+router.post('/', createLead);
+
+router.get('/', getAllLeads);
+router.get('/search', findLeadsByName);
+router.get('/filter', filterLeadsByStatus);
+
+router.get('/sort/name/asc', sortLeadsByNameAsc);
+router.get('/sort/name/desc', sortLeadsByNameDesc);
+
+router.get('/sort/product/asc', sortLeadsByProductAsc);
+router.get('/sort/product/desc', sortLeadsByProductDesc);
+
+router.get('/sort/date/asc', sortLeadsByDateAsc);
+router.get('/sort/date/desc', sortLeadsByDateDesc);
+
+router.put('/note', updateNoteByEmail);
+
+router.put('/status', updateStatusByEmail);
+
+router.delete('/delete', deleteMultipleLeads);
+
+export default router;

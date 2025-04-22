@@ -81,7 +81,7 @@ export const filterByStatus = async (status) => {
         throw new Error('Status is required');
     }
     
-    const validStatuses = ['new', 'in-progress', 'closed'];
+    const validStatuses = ['New', 'Contacted', 'Disqualified'];
     if (!validStatuses.includes(status)) {
         throw new Error('Invalid status');
     }
@@ -128,7 +128,7 @@ export const updateStatusByEmail = async (email, status) => {
     if (!status || status.trim() === '') {
         throw new Error('Status is required');
     }
-    const validStatuses = ['new', 'in-progress', 'closed'];
+    const validStatuses = ['New', 'Contacted', 'Disqualified'];
     if (!validStatuses.includes(status)) {
         throw new Error('Invalid status');
     }
