@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,9 +17,3 @@ export default function CustomerServicePage() {
     </div>
   );
 }
-=======
-export default function CustomerServicePage() {
-    return <h2>Welcome to Customer Service!</h2>;
-  }
-  
->>>>>>> d6fc473 (First commit)

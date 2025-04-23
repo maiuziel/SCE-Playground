@@ -4,11 +4,8 @@ import express, { json } from 'express';
 import authRoutes from './routes/authRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { initDb } from './data-access/db.js';
-<<<<<<< HEAD
 import { SupportRequest } from './data-access/supportRequest.model.js';
 
-=======
->>>>>>> d6fc473 (First commit)
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -33,7 +30,6 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Authentication service running on port ${PORT}`);
 });
-<<<<<<< HEAD
 app.post('/support-request', (req, res) => {
   const { subject, description } = req.body;
 
@@ -53,5 +49,3 @@ app.post('/support-request', async (req, res) => {
   }
 });
 
-=======
->>>>>>> d6fc473 (First commit)
