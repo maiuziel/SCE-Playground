@@ -3,9 +3,10 @@ process.env.NODE_ENV = 'test';
 
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+chai.use(chaiHttp); // חייב להיות לפני כל שימוש
+
 import { app, startTestServer } from './testServer.js';
 
-chai.use(chaiHttp); // חייב להיות לפני כל שימוש
 console.log('[DEBUG] chai.request =', typeof chai.request); // חייב להחזיר 'function'
 
 const { expect } = chai;
