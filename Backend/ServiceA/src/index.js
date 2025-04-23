@@ -11,6 +11,17 @@ app.post("/ping", async (req, res) => {
   res.status(200).send("Ping from service A")
 });
 
+app.post("/items", async (req, res) => {
+  const { name, userName } = req.body;
+  console.log("Item received:", req.body);
+
+  res.status(201).json({
+    id: 1,
+    name: name || "Unknown",
+    userName: userName || "Anonymous",
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`service A is running on http://localhost:${PORT}`);
 });
