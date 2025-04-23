@@ -2,8 +2,11 @@
   "devDependencies": {
     "chai": "^5.2.0",
     "chai-http": "^5.1.1"
+<<<<<<< HEAD
   },
   "dependencies": {
     "dotenv": "^16.5.0"
+=======
+>>>>>>> d6fc473 (First commit)
   }
 }

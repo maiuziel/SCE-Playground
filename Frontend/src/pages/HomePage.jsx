@@ -19,6 +19,7 @@ export default function HomePage() {
         />
       </div>
 
+<<<<<<< HEAD
       <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
         <button className="home-button" onClick={() => navigate('/customer-service')}>
           Go to Customer Service
@@ -28,6 +29,11 @@ export default function HomePage() {
           Go to Client
         </button>
       </div>
+=======
+      <button className="home-button" onClick={() => navigate('/customer-service')}>
+        Go to Customer Service
+      </button>
+>>>>>>> d6fc473 (First commit)
     </div>
   );
 }
