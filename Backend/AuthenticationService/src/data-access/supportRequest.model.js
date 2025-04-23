@@ -1,6 +1,6 @@
 // Backend/AuthenticationService/src/data-access/supportRequest.model.js
 import { DataTypes } from 'sequelize';
-import { sequelize } from './db.js';
+import { sequelize } from './db.js'; 
 
 export const SupportRequest = sequelize.define('SupportRequest', {
   subject: {

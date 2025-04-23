@@ -1,6 +1,13 @@
 // frontend/src/App.jsx
 import React, { useContext } from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useNavigate
+} from 'react-router-dom';
+
 import HomePage from './pages/HomePage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
@@ -12,10 +19,7 @@ import ClientRequestPage from './pages/ClientRequestPage.jsx';
 import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
 import SupportHistoryPage from './pages/SupportHistoryPage.jsx';
 import ManageRequestsPage from './pages/ManageRequestsPage.jsx';
-
-
-
-
+import RespondPage from './pages/RespondRequestPage.jsx'; // הנחה שיצרת RespondPage.jsx
 
 
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
@@ -31,7 +35,7 @@ function Navbar() {
     navigate('/signin');
   }
 
-  const userInitial = user && user.firstName ? user.firstName[0] : user && user.email ? user.email[0] : null;
+  const userInitial = user && (user.firstName?.[0] || user.email?.[0]);
 
   return (
     <div className='navbar'>
@@ -46,9 +50,16 @@ function Navbar() {
       <div className='nav-right'>
         <div className='nav-links'>
           <Link to='/'>Home</Link>
-          {!user ? <Link to='/signin'>Sign In</Link> : <a onClick={signUserOut}>Sign out</a>}
+          {!user
+            ? <Link to='/signin'>Sign In</Link>
+            : <a onClick={signUserOut}>Sign Out</a>
+          }
           <Link to='/signup'>Sign Up</Link>
           <Link to='/products'>Products</Link>
+          <Link to='/subscriptions'>Subscriptions</Link>
+          {user && <Link to='/client'>Client Portal</Link>}
+          {user && <Link to='/support-history'>My Requests</Link>}
+          {user && <Link to='/manage-requests'>Manage Requests</Link>}
         </div>
         {user && <div className='user-circle'>{userInitial}</div>}
       </div>
@@ -56,36 +67,45 @@ function Navbar() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <StoreProvider>
       <BrowserRouter>
         <Navbar />
+
         <div style={{ backgroundImage: 'url(/background.png)' }}>
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
-            <Route path='/customer-service' element={<CustomerServicePage />} />
-            <Route path='/client' element={<ClientPage />} /> 
-            <Route path="/client-request" element={<ClientRequestPage />} />
-            <Route path="/subscriptions" element={<SubscriptionsPage />} />
-            <Route path="/support-history" element={<SupportHistoryPage />} />
-            <Route path="/manage-requests" element={<ManageRequestsPage />} />
 
 
-
-
-
-
-            <Route
-              path='/products'
+            <Route path='/products'
               element={
                 <ProtectedRoute>
                   <ProductsPage />
                 </ProtectedRoute>
               }
+            />
+
+            <Route path='/subscriptions' element={<SubscriptionsPage />} />
+
+            <Route path='/client' element={<ClientPage />} />
+            <Route path='/client-request' element={<ClientRequestPage />} />
+            <Route path='/support-history' element={<SupportHistoryPage />} />
+
+            <Route path='/customer-service' element={<CustomerServicePage />} />
+            <Route path='/manage-requests' element={<ManageRequestsPage />} />
+            <Route path="/respond/:id" element={<RespondPage />} />
+
+            {/*
+              נניח שהגשנו RespondPage עם נתיב הרישום בסגנון /support-requests/:id/respond
+              כדאי להוסיף אותו כאן:
+            */}
+            <Route
+              path='/support-requests/:id/respond'
+              element={<RespondPage />}
             />
           </Routes>
         </div>
@@ -93,5 +113,3 @@ function App() {
     </StoreProvider>
   );
 }
-
-export default App;

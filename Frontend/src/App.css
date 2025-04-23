@@ -260,4 +260,21 @@ body {
   background-color: #005fa3;
 }
 
+/* כפתור “Respond” */
+.respond-button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  /* לא לקחת 100% רוחב */
+  display: inline-block;
+}
+
+.respond-button:hover {
+  background-color: #0056b3;
+}
 

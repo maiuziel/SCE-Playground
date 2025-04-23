@@ -10,7 +10,7 @@ export default function SupportHistoryPage() {
     fetch('http://localhost:4001/support-requests', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',  // אם אתה משתמש בעוגיות/טוקן
+      credentials: 'include',
     })
       .then(res => {
         if (!res.ok) throw new Error(`Status ${res.status}`);
@@ -22,13 +22,10 @@ export default function SupportHistoryPage() {
       })
       .catch(err => {
         console.error('Error fetching requests:', err);
-        setError(' Unable to display requests at the moment');
+        setError('לא ניתן להציג פניות כרגע');
         setLoading(false);
       });
   }, []);
-
-  if (loading) return <p>Loaded requests...</p>;
-  if (error)   return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
     <div className="page-container">
@@ -37,26 +34,31 @@ export default function SupportHistoryPage() {
         Here you can view all the support requests you've submitted.
       </p>
 
-      <table className="requests-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Subject</th>
-            <th>Description</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {requests.map(r => (
-            <tr key={r.id}>
-              <td>{r.id}</td>
-              <td>{r.subject}</td>
-              <td>{r.description}</td>
-              <td>{new Date(r.createdAt).toLocaleString()}</td>
+      {loading && <p>טוען פניות…</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {!loading && !error && (
+        <table className="requests-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Subject</th>
+              <th>Description</th>
+              <th>Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {requests.map(r => (
+              <tr key={r.id}>
+                <td>{r.id}</td>
+                <td>{r.subject}</td>
+                <td>{r.description}</td>
+                <td>{new Date(r.createdAt).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

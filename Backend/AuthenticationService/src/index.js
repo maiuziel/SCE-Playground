@@ -2,10 +2,16 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+// authentication-service/src/index.js
+import './data-access/supportRequest.model.js'; // ייבוא המודלים
 import authRoutes from './routes/authRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { initDb } from './data-access/db.js';
 import { SupportRequest } from './data-access/supportRequest.model.js';
+import { updateSupportRequestStatus } from './controllers/supportController.js';
+import { getSupportRequests } from './controllers/supportController.js';
+
+
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -38,6 +44,23 @@ app.post('/support-request', async (req, res) => {
     return res.status(500).json({ message: 'Failed to save support request' });
   }
 });
+app.patch('/support-requests/:id/status', updateSupportRequestStatus);
+
+app.get('/support-requests', getSupportRequests);
+// 5.1) רוטה להביא את כל הפניות
+app.get('/support-requests', async (req, res) => {
+  try {
+    const allRequests = await SupportRequest.findAll({
+      order: [['createdAt', 'DESC']],
+    });
+    return res.json(allRequests);
+  } catch (err) {
+    console.error('Error fetching support requests:', err);
+    return res.status(500).json({ message: 'Failed to fetch support requests' });
+  }
+});
+
+
 // 5.5) רוטה חדשה להבאת כל הפניות
 app.get('/support-requests', async (req, res) => {
   try {
@@ -49,6 +72,21 @@ app.get('/support-requests', async (req, res) => {
   } catch (err) {
     console.error('Error fetching support requests:', err);
     res.status(500).json({ message: 'Error fetching support requests' });
+  }
+});
+// POST /support-requests/:id/respond
+app.post('/support-requests/:id/respond', async (req, res) => {
+  const { id } = req.params;
+  const { response } = req.body;
+  try {
+    const reqItem = await SupportRequest.findByPk(id);
+    if (!reqItem) return res.status(404).json({ message: 'Not found' });
+    reqItem.response = response;
+    await reqItem.save();
+    return res.json({ message: 'Response saved' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Failed' });
   }
 });
 
