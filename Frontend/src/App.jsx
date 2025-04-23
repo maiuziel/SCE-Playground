@@ -14,10 +14,8 @@ import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
 import SupportHistoryPage from './pages/SupportHistoryPage.jsx';
 import ManageRequestsPage from './pages/ManageRequestsPage.jsx';
 import ReplyToRequestPage from './pages/ReplyToRequestPage.jsx';
-import AutoStatusUpdatePage from './pages/AutoStatusUpdatePage.jsx';
 import FilterByStatusPage from './pages/FilterByStatusPage.jsx';
 import SearchRequestsPage from './pages/SearchRequestsPage.jsx';
-import ManualStatusUpdatePage from './pages/ManualStatusUpdatePage.jsx';
 import WriteReplyPage from './pages/WriteReplyPage.jsx';
 import NotificationsPage from './pages/NotificationsPage.jsx';
 
@@ -82,10 +80,8 @@ function App() {
             <Route path="/support-history" element={<SupportHistoryPage />} />
             <Route path="/manage-requests" element={<ManageRequestsPage />} />
             <Route path="/reply-to-request" element={<ReplyToRequestPage />} />
-            <Route path="/auto-status-update" element={<AutoStatusUpdatePage />} />
             <Route path="/filter-by-status" element={<FilterByStatusPage />} />
             <Route path="/search-requests" element={<SearchRequestsPage />} />
-            <Route path="/manual-status-update" element={<ManualStatusUpdatePage />} />
             <Route path="/write-reply" element={<WriteReplyPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
 

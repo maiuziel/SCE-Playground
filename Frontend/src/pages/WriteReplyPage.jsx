@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 const requests = [
-  { id: 501, customer: 'רוני ישראלי', subject: 'בעיה בחיוב', status: 'פתוחה' },
-  { id: 502, customer: 'ניב ברק', subject: 'שאלה על מוצר', status: 'נענה' },
+  { id: 501, customer: 'Roni Israeli', subject: 'Billing issue', status: 'Open' },
+  { id: 502, customer: 'Niv Barak', subject: 'Product question', status: 'Answered' },
 ];
 
 export default function WriteReplyPage() {
@@ -10,14 +10,14 @@ export default function WriteReplyPage() {
   const [replyText, setReplyText] = useState('');
 
   const handleSend = () => {
-    alert(`התגובה נשלחה ללקוח: "${replyText}"`);
+    alert(`Reply sent to customer: "${replyText}"`);
     setReplyText('');
     setSelectedId(null);
   };
 
   return (
     <div style={{ textAlign: 'center', paddingTop: '40px', color: 'white' }}>
-      <h2>כתיבת תגובה ללקוח</h2>
+      <h2>Write Reply to Customer</h2>
 
       {requests.map(req => (
         <div key={req.id} style={{
@@ -27,12 +27,12 @@ export default function WriteReplyPage() {
           padding: '15px',
           borderRadius: '10px',
           width: '60%',
-          textAlign: 'right'
+          textAlign: 'left'
         }}>
-          <p><strong>לקוח:</strong> {req.customer}</p>
-          <p><strong>נושא:</strong> {req.subject}</p>
-          <p><strong>סטטוס:</strong> {req.status}</p>
-          <button onClick={() => setSelectedId(req.id)}>כתוב תגובה</button>
+          <p><strong>Customer:</strong> {req.customer}</p>
+          <p><strong>Subject:</strong> {req.subject}</p>
+          <p><strong>Status:</strong> {req.status}</p>
+          <button onClick={() => setSelectedId(req.id)}>Write Reply</button>
 
           {selectedId === req.id && (
             <div style={{ marginTop: '10px' }}>
@@ -41,9 +41,9 @@ export default function WriteReplyPage() {
                 style={{ width: '100%' }}
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
-                placeholder="הקלד את התגובה שלך..."
+                placeholder="Type your reply..."
               />
-              <button onClick={handleSend} style={{ marginTop: '8px' }}>שלח תגובה</button>
+              <button onClick={handleSend} style={{ marginTop: '8px' }}>Send Reply</button>
             </div>
           )}
         </div>

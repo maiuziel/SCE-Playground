@@ -22,35 +22,27 @@ export default function CustomerServicePage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
         <button style={buttonStyle} onClick={() => navigate('/manage-requests')}>
-          ניהול פניות לקוחות
+          Manage Customer Requests
         </button>
 
         <button style={buttonStyle} onClick={() => navigate('/reply-to-request')}>
-          מענה לפניות
-        </button>
-
-        <button style={buttonStyle} onClick={() => navigate('/auto-status-update')}>
-          עדכון סטטוס אוטומטי (מייל/SMS)
+          Respond to Requests
         </button>
 
         <button style={buttonStyle} onClick={() => navigate('/filter-by-status')}>
-          סינון לפי סטטוס
+          Filter by Status
         </button>
 
         <button style={buttonStyle} onClick={() => navigate('/search-requests')}>
-          חיפוש בקשות
-        </button>
-
-        <button style={buttonStyle} onClick={() => navigate('/manual-status-update')}>
-          עדכון סטטוס הבקשה
+          Search Requests
         </button>
 
         <button style={buttonStyle} onClick={() => navigate('/write-reply')}>
-          כתיבת תגובה ללקוח
+          Write Reply to Customer
         </button>
 
         <button style={buttonStyle} onClick={() => navigate('/notifications')}>
-          קבלת התראות על בקשות חדשות
+          Receive New Request Alerts
         </button>
       </div>
     </div>

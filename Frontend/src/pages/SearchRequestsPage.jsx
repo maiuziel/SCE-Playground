@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 const allRequests = [
-  { id: 301, customer: 'יעל כהן', message: 'שאלה על משלוח', status: 'פתוחה' },
-  { id: 302, customer: 'עמרי דגן', message: 'בקשה להחזר כספי', status: 'נענה' },
-  { id: 303, customer: 'מיכל לוי', message: 'שירות איטי', status: 'בהמתנה' },
-  { id: 304, customer: 'דוד סלע', message: 'שינוי פרטי מנוי', status: 'סגור' },
-  { id: 305, customer: 'נועה לוי', message: 'בעיה בתשלום', status: 'נענה' },
+  { id: 301, customer: 'Yael Cohen', message: 'Question about delivery', status: 'Open' },
+  { id: 302, customer: 'Omri Dagan', message: 'Request for refund', status: 'Answered' },
+  { id: 303, customer: 'Michal Levi', message: 'Slow service', status: 'Pending' },
+  { id: 304, customer: 'David Sela', message: 'Update subscription details', status: 'Closed' },
+  { id: 305, customer: 'Noa Levi', message: 'Payment issue', status: 'Answered' },
 ];
 
 export default function SearchRequestsPage() {
@@ -25,11 +25,11 @@ export default function SearchRequestsPage() {
 
   return (
     <div style={{ textAlign: 'center', paddingTop: '40px', color: 'white' }}>
-      <h2>חיפוש בקשות לפי מילות מפתח</h2>
+      <h2>Search Requests by Keywords</h2>
 
       <input
         type="text"
-        placeholder="הקלד שם לקוח או מילת מפתח..."
+        placeholder="Enter customer name or keyword..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         style={{
@@ -45,12 +45,12 @@ export default function SearchRequestsPage() {
         onClick={handleSearch}
         style={{ padding: '10px 20px', borderRadius: '8px', marginTop: '5px' }}
       >
-        חפש
+        Search
       </button>
 
       {results.length > 0 ? (
         <div style={{ marginTop: '30px' }}>
-          <h3>תוצאות:</h3>
+          <h3>Results:</h3>
           {results.map(req => (
             <div key={req.id} style={{
               backgroundColor: 'white',
@@ -59,16 +59,16 @@ export default function SearchRequestsPage() {
               padding: '15px',
               borderRadius: '10px',
               width: '60%',
-              textAlign: 'right'
+              textAlign: 'left'
             }}>
-              <p><strong>לקוח:</strong> {req.customer}</p>
-              <p><strong>פנייה:</strong> {req.message}</p>
-              <p><strong>סטטוס:</strong> {req.status}</p>
+              <p><strong>Customer:</strong> {req.customer}</p>
+              <p><strong>Message:</strong> {req.message}</p>
+              <p><strong>Status:</strong> {req.status}</p>
             </div>
           ))}
         </div>
       ) : (
-        query && <p style={{ marginTop: '30px' }}>לא נמצאו תוצאות 😕</p>
+        query && <p style={{ marginTop: '30px' }}>No results found 😕</p>
       )}
     </div>
   );

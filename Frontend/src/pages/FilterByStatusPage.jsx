@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 const allRequests = [
-  { id: 201, customer: 'מאיה ישראלי', status: 'פתוחה' },
-  { id: 202, customer: 'דניאל ברק', status: 'בהמתנה' },
-  { id: 203, customer: 'עדי כהן', status: 'נענה' },
-  { id: 204, customer: 'אופיר לוי', status: 'סגור' },
+  { id: 201, customer: 'Maya Israeli', status: 'Open' },
+  { id: 202, customer: 'Daniel Barak', status: 'Pending' },
+  { id: 203, customer: 'Adi Cohen', status: 'Answered' },
+  { id: 204, customer: 'Ofir Levi', status: 'Closed' },
 ];
 
 export default function FilterByStatusPage() {
@@ -18,7 +18,7 @@ export default function FilterByStatusPage() {
 
   return (
     <div style={{ textAlign: 'center', paddingTop: '40px', color: 'white' }}>
-      <h2>סינון פניות לפי סטטוס</h2>
+      <h2>Filter Requests by Status</h2>
 
       <div style={{ marginTop: '20px' }}>
         <select
@@ -26,21 +26,21 @@ export default function FilterByStatusPage() {
           onChange={(e) => setSelectedStatus(e.target.value)}
           style={{ padding: '10px', borderRadius: '8px' }}
         >
-          <option value="">בחר סטטוס</option>
-          <option value="פתוחה">פתוחה</option>
-          <option value="בהמתנה">בהמתנה</option>
-          <option value="נענה">נענה</option>
-          <option value="סגור">סגור</option>
+          <option value="">Select a Status</option>
+          <option value="Open">Open</option>
+          <option value="Pending">Pending</option>
+          <option value="Answered">Answered</option>
+          <option value="Closed">Closed</option>
         </select>
 
         <button onClick={handleFilter} style={{ marginRight: '10px', padding: '10px', borderRadius: '8px' }}>
-          סנן
+          Filter
         </button>
       </div>
 
       {filtered.length > 0 && (
         <div style={{ marginTop: '30px' }}>
-          <h3>תוצאות:</h3>
+          <h3>Results:</h3>
           {filtered.map(req => (
             <div key={req.id} style={{
               backgroundColor: 'white',
@@ -49,10 +49,10 @@ export default function FilterByStatusPage() {
               padding: '15px',
               borderRadius: '10px',
               width: '60%',
-              textAlign: 'right'
+              textAlign: 'left'
             }}>
-              <p><strong>לקוח:</strong> {req.customer}</p>
-              <p><strong>סטטוס:</strong> {req.status}</p>
+              <p><strong>Customer:</strong> {req.customer}</p>
+              <p><strong>Status:</strong> {req.status}</p>
             </div>
           ))}
         </div>
