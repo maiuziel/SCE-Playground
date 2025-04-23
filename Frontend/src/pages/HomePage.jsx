@@ -13,6 +13,9 @@ export default function HomePage() {
       <div className='home-images'>
         <img src='/reports.jpg' alt='Colorful Product 1' onClick={() => navigate('/reports')} />
       </div>
+
+      <button className="salesBtn"
+      onClick={() => navigate('/sales')}>go to sales</button>
     </div>
   );
 }
