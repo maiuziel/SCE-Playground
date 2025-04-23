@@ -1,5 +1,5 @@
 // authentication-service/src/data-access/db.js
-import './data-access/supportRequest.model.js';
+import './supportRequest.model.js';
 
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';
