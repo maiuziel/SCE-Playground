@@ -11,4 +11,7 @@ export const SupportRequest = sequelize.define('SupportRequest', {
     type: DataTypes.TEXT,
     allowNull: false,
   }
+}, {
+  tableName: 'support_requests',
+  timestamps: true, // יוצר עמודות createdAt / updatedAt
 });
