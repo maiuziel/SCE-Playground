@@ -4,8 +4,10 @@ require('dotenv').config();
 const app = express();
 
 const salesController = require('./controller/sales-controller');
+const salesRoutes = require('./routes/sales-routes');
 
 app.use(express.json());
+app.use('/sales', salesRoutes);
 
 app.post('/sales', salesController.createSale);
 
