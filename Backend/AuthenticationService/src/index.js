@@ -37,7 +37,6 @@ app.post('/support-request', (req, res) => {
 
   res.status(201).json({ message: 'Support request received' });
 });
-import { SupportRequest } from './data-access/supportRequest.model.js';
 
 app.post('/support-request', async (req, res) => {
   const { subject, description } = req.body;
