@@ -3,14 +3,17 @@ const salesService = require('../services/sales-service');
 
 // Create a new sale
 exports.createSale = async (req, res) => {
+  console.log('📥 Request body:', req.body);
   try {
     const sale = await salesService.createSale(req.body);
+    console.log('🔍 New sale created:', sale); // ← תראה אם sale.id קיים פה
     res.status(201).json(sale);
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error('❌ Error inserting sale:', err);
     res.status(500).json({ error: 'Failed to create sale' });
   }
 };
+
 
 // Retrieve all sales
 exports.getAllSales = async (req, res) => {

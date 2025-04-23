@@ -2,11 +2,11 @@
 const pool = require('../db');
 
 // Insert a new sale into the database
-exports.insertSale = async ({ product, amount, customer_id }) => {
+exports.insertSale = async ({customerId, date, time, products, notes }) => {
   const result = await pool.query(
-    `INSERT INTO sales (product, amount, customer_id)
-     VALUES ($1, $2, $3) RETURNING *`,
-    [product, amount, customer_id]
+    `INSERT INTO sales_conversations (customer_id, date, time, products, notes)
+     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+    [customerId, date, time, products, notes]
   );
   return result.rows[0];
 };

@@ -10,11 +10,19 @@ export default function SalesPage() {
   const [result, setResult] = useState(null);
 
   const handleSubmit = async (e) => {
+    console.log('📦 Sending to backend:', {
+      customerId:Number(customerId),
+      date,
+      time,
+      products,
+      notes,
+    });
+    
     e.preventDefault();
     try {
       // שליחת כל השדות לשרת דרך ה-Gateway
-      const res = await axios.post('/api/sales', {
-        customerId,
+      const res = await axios.post('http://localhost:4003/sales', {
+        customerId: Number(customerId) ,
         date,
         time,
         products,
@@ -40,7 +48,7 @@ export default function SalesPage() {
         style={{ display: 'flex', flexDirection: 'column', maxWidth: 350, gap: 14 }}
       >
         <input
-          type="text"
+          type="number"
           placeholder="Customer ID"
           value={customerId}
           onChange={e => setCustomerId(e.target.value)}

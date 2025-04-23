@@ -3,6 +3,7 @@ const salesDataAccess = require('../data-access/salesDataAccess');
 
 // Handle creation logic
 exports.createSale = async (data) => {
+  console.log(data);
   return await salesDataAccess.insertSale(data);
 };
 
