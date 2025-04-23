@@ -1,6 +1,8 @@
 import * as leadsService from '../services/leadsService.js';
 
 export const createLead = async (req, res) => {
+    console.log('🟢 נכנסתי ל־createLead');
+    console.log('📥 body:', req.body);
     try {
       const { full_name, email, phone, product_interest } = req.body;
       const lead = await leadsService.create({ full_name, email, phone, product_interest });
@@ -8,12 +10,13 @@ export const createLead = async (req, res) => {
       res.status(201).json(lead);
     } catch (error) {
       console.error('Create lead error:', error); 
-      res.status(500).json({ message: 'Error creating lead', error });
+      res.status(500).json({ message: 'Error creaDDting lead', error });
     }
   };
   
 
 export const getAllLeads = async (req, res) => {
+    
     try {
         const leads = await leadsService.getAll();
         res.status(200).json(leads);
@@ -97,6 +100,10 @@ export const sortLeadsByDateDesc = async (req, res) => {
 };
 
 export const updateNoteByEmail = async (req, res) => {
+    // הוספת לוגים לדיבוג
+    console.log('🛬 [LEADSSERVICE] הגיעה בקשה ל־updateNoteByEmail');
+    console.log('📥 body:', req.body);
+
     try {
         const { email, note } = req.body;
         const updatedLead = await leadsService.updateNoteByEmail(email, note);
@@ -105,6 +112,7 @@ export const updateNoteByEmail = async (req, res) => {
         res.status(500).json({ message: 'Error updating lead note', error });
     }
 };
+
 
 export const updateStatusByEmail = async (req, res) => {
     try {

@@ -1,7 +1,8 @@
 import express from 'express';
+
 import dotenv from 'dotenv';
-import cors from 'cors';
 import leadsRoutes from './routes/leadsRoutes.js';
+
 
 dotenv.config();
 
@@ -11,12 +12,16 @@ const PORT = process.env.PORT || 4001;
 
 app.use(express.json());
 
+// Initialize the database connection
 
-app.use(cors());
 
-// הנתיבים
-app.use('/leads', leadsRoutes);
+// Authentication routes
+app.use('/', leadsRoutes);
+app.get('/', (req, res) => {
+  res.send('Welcome to the Leads Service');
+});
+
 
 app.listen(PORT, () => {
-  console.log(`Leads service running on port ${PORT}`);
+  console.log(`Authentication service running on port ${PORT}`);
 });

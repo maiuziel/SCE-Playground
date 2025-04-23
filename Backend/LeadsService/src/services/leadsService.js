@@ -22,11 +22,15 @@ export const create = async (leadData) => {
   }
 
   
-  const phoneRegex = /^05\d{2}-\d{6}$/;
+  const phoneRegex = /^05\d{8}$/;
   if (!phone || !phoneRegex.test(phone)) {
     throw new Error('Phone number must be in format like 05XX-XXXXXX');
   }
 
+  
+  if (!phone || !phoneRegex.test(phone)) {
+    throw new Error('Phone number must be 10 digits and start with 05 (e.g. 0501234567)');
+  }
   
   if (!email || email.trim() === '') {
     throw new Error('Email is required');
@@ -105,7 +109,7 @@ export const updateNoteByEmail = async (email, note) => {
     if (!email || email.trim() === '') {
         throw new Error('Email is required');
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.(com|co\.il)$/;
     if (!emailRegex.test(email)) {
         throw new Error('Email must be in format like example@example.com (com or co.il)');

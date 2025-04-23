@@ -18,9 +18,11 @@ import {
 
 const router = express.Router();
 
-router.post('/', createLead);
 
-router.get('/', getAllLeads);
+router.post('/createlead', createLead);
+
+
+router.get('/getall', getAllLeads);
 router.get('/search', findLeadsByName);
 router.get('/filter', filterLeadsByStatus);
 

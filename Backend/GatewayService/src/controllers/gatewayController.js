@@ -8,7 +8,7 @@ const forwardAuthRequests = async (req, res, next) => {
     const path = req.originalUrl.replace('/auth', '');
     const url = `${authServiceUrl}${path}`;
 
-    console.log('Forwarding request to ' + url, ' body: ' + req.body);
+    console.log(`Forwarding request to ${  url}`, ` body: ${  req.body}`);
 
     // Forward the exact method and body
     const response = await axios({
@@ -32,3 +32,33 @@ const forwardAuthRequests = async (req, res, next) => {
 };
 
 export { forwardAuthRequests };
+const forwardLeadsRequests = async (req, res, next) => {
+  try {
+    const leadsServiceUrl = process.env.LEADS_SERVICE_URL;
+    const path = req.originalUrl.replace(/^\/leads/, '');
+    const url = `${leadsServiceUrl}${path}`;
+
+    console.log(`Forwarding request to ${  url}`, ' body: ', req.body);
+
+    // Forward the exact method and body
+    const response = await axios({
+      method: req.method,
+      url,
+      data: req.body
+    });
+
+    console.log('response: ', response.data);
+
+    return res.status(response.status).json(response.data);
+  } catch (error) {
+    console.log('Error while forwarding request to leads service. Error: ', error, error?.data);
+
+    if (error.response) {
+      return res.status(error.response.status).json(error.response.data);
+    }
+
+    return next(error);
+  }
+};
+
+export { forwardLeadsRequests };
