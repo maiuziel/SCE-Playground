@@ -44,6 +44,7 @@ export default function ManageRequestsPage() {
             <th>Subject</th>
             <th>Description</th>
             <th>Submitted At</th>
+            <th>status</th>
           </tr>
         </thead>
         <tbody>

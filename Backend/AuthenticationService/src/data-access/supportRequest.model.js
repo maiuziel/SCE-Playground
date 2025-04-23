@@ -1,4 +1,4 @@
-// authentication-service/src/data-access/supportRequest.model.js
+// Backend/AuthenticationService/src/data-access/supportRequest.model.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from './db.js';
 
@@ -10,8 +10,13 @@ export const SupportRequest = sequelize.define('SupportRequest', {
   description: {
     type: DataTypes.TEXT,
     allowNull: false,
+  },
+  status: {
+    type: DataTypes.ENUM('open', 'in_progress', 'closed'),
+    allowNull: false,
+    defaultValue: 'open',
   }
 }, {
   tableName: 'support_requests',
-  timestamps: true, // יוצר עמודות createdAt / updatedAt
+  timestamps: true,
 });
