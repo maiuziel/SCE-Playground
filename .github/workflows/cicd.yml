@@ -1,0 +1,57 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Sales_Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+    path:
+     - 'Backend/Sales-service'
+  pull_request:
+    branches: [ "main" ]
+    path:
+     - 'Backend/Sales-service'
+
+    
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Set environment variable
+      run: echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
+
+    
+    - name: Navigate to Sales-service
+      run: cd Backend/Sales-service
+
+    - name: Install dependencies
+      working-directory: Backend/Sales-service
+      run: npm install
+
+    - name: Run Tests
+      working-directory: Backend/Sales-service
+      run: npm run test
+
+    - name: Lint Code
+      working-directory: Backend/Sales-service
+      run: npm run lint
+    
+    
