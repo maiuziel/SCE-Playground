@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node src/index.js",
-    "test": "mocha tests/**/*.spec.js"
+    "test": "mocha --require esm tests/**/*.spec.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "@types/chai": "^5.2.1",
     "@types/mocha": "^10.0.10",
     "chai": "^5.2.0",
+    "esm": "^3.2.25",
     "mocha": "^11.1.0",
     "nodemon": "^3.1.9"
   }
