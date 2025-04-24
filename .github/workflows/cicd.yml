@@ -6,8 +6,12 @@ name: Sales_Workflow
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'Backend/Sales-service/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'Backend/Sales-service/**'
 
 jobs:
   build:
@@ -31,9 +35,6 @@ jobs:
 
     - name: Set environment variable
       run: echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
-
-    #- name: Set environment variables
-     # run: echo "DB_CONNECTION_STRING=postgres://postgres:postgres@localhost:5432/sales_db" >> $GITHUB_ENV
 
     - name: install dependencies
       run: npm install
