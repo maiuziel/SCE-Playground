@@ -42,12 +42,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-      name: Wait for Postgres
-      run: |
-        until pg_isready -h localhost -p 5432 -U postgres; do
-          echo "Waiting for Postgres to be ready..."
-          sleep 2
-        done
+    - name: Set environment variable
+      run: echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
 
     - name: Set environment variables
       run: echo "DB_CONNECTION_STRING=postgres://postgres:postgres@localhost:5432/sales_db" >> $GITHUB_ENV
