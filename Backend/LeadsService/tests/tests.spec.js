@@ -21,5 +21,7 @@ describe('Leads Service Tests', () => {
     const res = await request(app).get('/leads/getall');
     expect(res.status).to.equal(200);
     expect(res.body).to.be.an('array');
+    console.log("📋 All leads returned from the server:", res.body);
+
   });
 });
