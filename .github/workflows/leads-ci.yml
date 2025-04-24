@@ -38,6 +38,8 @@ jobs:
 
     - name: Run tests
       working-directory: Backend/LeadsService
+      env:
+        DB_CONNECTION_STRING: postgresql://leadsuser:4fXzPHnmfMLJuTIGQRGrtm4FGjd6WdOu@dpg-d03istqdbo4c738e7ggg-a.oregon-postgres.render.com/leadsdb_desk
       run: npm run test
 
 
