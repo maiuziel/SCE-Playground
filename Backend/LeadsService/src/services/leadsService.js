@@ -139,7 +139,6 @@ export const updateStatusByEmail = async (email, status) => {
     return await data.updateStatusByEmail(email, status);
 };
 
-
 export const deleteMultipleLeads = async (emails) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.(com|co\.il)$/;
   if (!Array.isArray(emails) || emails.length === 0) {
@@ -158,3 +157,15 @@ export const deleteMultipleLeads = async (emails) => {
 
   return await data.deleteLeadsByEmails(emails);
 };
+
+export const getLeadsProductName = async (productName) => {
+    if (!productName || productName.trim() === '') {
+        throw new Error('Product name is required');
+    }
+
+    if (productName.length > 255) {
+      throw new Error('Product interest must be at most 255 characters');
+    }
+    
+    return await data.getLeadsByProductName(productName);
+}

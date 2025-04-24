@@ -12,7 +12,8 @@ import {
     sortLeadsByDateDesc,
     updateNoteByEmail,
     updateStatusByEmail,
-    deleteMultipleLeads
+    deleteMultipleLeads,
+    getLeadsByProductName
 } from '../controllers/leadsController.js';
 
 
@@ -25,6 +26,8 @@ router.post('/createlead', createLead);
 router.get('/getall', getAllLeads);
 router.get('/search', findLeadsByName);
 router.get('/filter', filterLeadsByStatus);
+
+router.get('getleadsprodyct',getLeadsByProductName);
 
 router.get('/sort/name/asc', sortLeadsByNameAsc);
 router.get('/sort/name/desc', sortLeadsByNameDesc);
@@ -40,5 +43,4 @@ router.put('/note', updateNoteByEmail);
 router.put('/status', updateStatusByEmail);
 
 router.delete('/delete', deleteMultipleLeads);
-
 export default router;

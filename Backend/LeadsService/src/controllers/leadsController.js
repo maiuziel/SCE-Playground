@@ -100,9 +100,8 @@ export const sortLeadsByDateDesc = async (req, res) => {
 };
 
 export const updateNoteByEmail = async (req, res) => {
-    // הוספת לוגים לדיבוג
-    console.log('🛬 [LEADSSERVICE] הגיעה בקשה ל־updateNoteByEmail');
-    console.log('📥 body:', req.body);
+    
+    
 
     try {
         const { email, note } = req.body;
@@ -135,6 +134,16 @@ export const deleteMultipleLeads = async (req, res) => {
       res.status(400).json({ error: error.message });
     }
   };
+
+  export const getLeadsByProductName = async (req, res) => {
+    try {
+        const { productName } = req.query;
+        const leads = await leadsService.getLeadsProductName(productName);
+        res.status(200).json(leads);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching leads', error });
+    }
+};
 
 
 

@@ -107,4 +107,11 @@ export const findLeadsByName = async (name) => {
     );
     return result.rows;
   };
+  export const getLeadsByProductName = async (productName) => {
+    const result = await pool.query(
+      'SELECT * FROM leads WHERE product_interest ILIKE $1',
+      [productName] 
+    );
+    return result.rows;
+  }
   
