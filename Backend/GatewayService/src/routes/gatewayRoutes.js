@@ -8,6 +8,6 @@ const router = Router();
 router.use('/auth', forwardAuthRequests);
 
 // כל הבקשות ל־/api/sales יעברו ל־sales-service
-router.use('/api/sales', forwardSalesRequests);
+router.use('/sales', forwardSalesRequests);
 
 export default router;
