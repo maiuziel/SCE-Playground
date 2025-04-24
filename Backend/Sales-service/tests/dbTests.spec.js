@@ -3,17 +3,9 @@ import { expect } from 'chai';
 import pool from '../src/db'; // Ensure the path is correct for your project
 
 describe('sales_conversationsTest Table', () => {
+  let pool;
   before(async () => {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS sales_conversationsTest (
-        id INTEGER GENERATED ALWAYS AS IDENTITY,
-        customer_id INTEGER NOT NULL,
-        date DATE NOT NULL DEFAULT CURRENT_DATE,
-        time TIME NOT NULL DEFAULT CURRENT_TIME,
-        products TEXT,
-        notes TEXT
-      )
-    `);
+    ({ default: pool } = await import('../src/db'));
   });
 
   beforeEach(async () => {
