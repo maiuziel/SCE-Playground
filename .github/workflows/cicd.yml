@@ -38,6 +38,7 @@ jobs:
     - name: Set environment variable
       run: echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
 
+    
     - name: Navigate to Sales-service
       run: cd Backend/Sales-service
 
@@ -52,5 +53,5 @@ jobs:
     - name: Lint Code
       working-directory: Backend/Sales-service
       run: npm run lint
-      
-
+    
+    

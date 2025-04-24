@@ -1,5 +1,6 @@
-const { expect } = require('chai');
-const pool = require('../src/db'); // שים לב שהנתיב תואם לפרויקט שלך
+// Replace the require statement with an import
+import { expect } from 'chai';
+import pool from '../src/db'; // Ensure the path is correct for your project
 
 describe('sales_conversationsTest Table', () => {
   before(async () => {
