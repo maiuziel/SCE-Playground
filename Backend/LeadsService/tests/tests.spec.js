@@ -1,19 +1,26 @@
-// tests/leads.test.js
 import chai from 'chai';
-import request from 'supertest'; // ⬅️ במקום chai-http
+import request from 'supertest';
 import { app, startTestServer } from './testServer.js';
 
 const { expect } = chai;
 let server;
 
-describe('Leads Service Testss', () => {
+describe('Leads Service Tests', () => {
   before(async function () {
     this.timeout(10000);
-    server = await startTestServer();
+    server = await startTestServer(); // 🔄 מפעיל את השרת
   });
 
-  after(async () => {
-    server.close();
+  after(async function () {
+    // ✅ סוגר את השרת אחרי שכל הטסטים סיימו
+    if (server && server.close) {
+      await new Promise((resolve, reject) => {
+        server.close((err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      });
+    }
   });
 
   it('should return all leads', async () => {
