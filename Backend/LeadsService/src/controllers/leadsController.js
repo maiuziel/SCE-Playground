@@ -10,7 +10,7 @@ export const createLead = async (req, res) => {
       res.status(201).json(lead);
     } catch (error) {
       console.error('Create lead error:', error); 
-      res.status(500).json({ message: 'Error creaDDting lead', error });
+      res.status(500).json({ message: 'Error creating lead', error });
     }
   };
   

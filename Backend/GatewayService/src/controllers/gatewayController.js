@@ -34,6 +34,8 @@ const forwardAuthRequests = async (req, res, next) => {
 
 
 export { forwardAuthRequests };
+
+
 const forwardLeadsRequests = async (req, res, next) => {
   try {
     const leadsServiceUrl = process.env.LEADS_SERVICE_URL;

@@ -24,7 +24,7 @@ export const create = async (leadData) => {
   
   const phoneRegex = /^05\d{8}$/;
   if (!phone || !phoneRegex.test(phone)) {
-    throw new Error('Phone number must be in format like 05XX-XXXXXX');
+    throw new Error('Phone number must be in format like 05XXXXXXXX');
   }
 
   
