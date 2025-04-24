@@ -4,6 +4,7 @@ const salesService = require('../services/sales-service');
 // Create a new sale
 exports.createSale = async (req, res) => {
   try {
+    console.log("been here");
     const sale = await salesService.createSale(req.body);
     console.log('🔍 New sale created:', sale); // ← תראה אם sale.id קיים פה
     res.status(201).json(sale);

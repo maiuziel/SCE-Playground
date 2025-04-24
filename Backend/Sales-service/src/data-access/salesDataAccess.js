@@ -3,6 +3,7 @@ const pool = require('../db');
 
 // Insert a new sale into the database
 exports.insertSale = async ({customerId, date, time, products, notes }) => {
+  console.log("been here 3");
   const result = await pool.query(
     `INSERT INTO sales_conversations (customer_id, date, time, products, notes)
      VALUES ($1, $2, $3, $4, $5) RETURNING *`,
