@@ -12,9 +12,11 @@ describe('Leads Service Tests', () => {
   });
 
   after(async function () {
-    await stopTestServer(); // 🔴 סוגר את השרת אחרי הטסטים
-  });
+    await stopTestServer();
 
+    // ✅ רק אם אתה מריץ על CI כמו GitHub Actions – מסיים את התהליך
+    setTimeout(() => process.exit(0), 200);
+  });
   it('should return all leads', async () => {
     const res = await request(app).get('/leads/getall');
     expect(res.status).to.equal(200);
