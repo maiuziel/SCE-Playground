@@ -45,6 +45,7 @@ export default function SupportHistoryPage() {
               <th>Subject</th>
               <th>Description</th>
               <th>Date</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -54,6 +55,7 @@ export default function SupportHistoryPage() {
                 <td>{r.subject}</td>
                 <td>{r.description}</td>
                 <td>{new Date(r.createdAt).toLocaleString()}</td>
+                <td>{r.status}</td>
               </tr>
             ))}
           </tbody>

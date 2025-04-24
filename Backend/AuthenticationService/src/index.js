@@ -2,6 +2,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import { Op } from 'sequelize';
 // authentication-service/src/index.js
 import './data-access/supportRequest.model.js'; // ייבוא המודלים
 import authRoutes from './routes/authRoutes.js';
@@ -10,6 +11,7 @@ import { initDb } from './data-access/db.js';
 import { SupportRequest } from './data-access/supportRequest.model.js';
 import { updateSupportRequestStatus } from './controllers/supportController.js';
 import { getSupportRequests } from './controllers/supportController.js';
+
 
 
 
@@ -89,6 +91,46 @@ app.post('/support-requests/:id/respond', async (req, res) => {
     return res.status(500).json({ message: 'Failed' });
   }
 });
+app.post('/support-requests/:id/response', async (req, res) => {
+  const { id } = req.params;
+  const { message } = req.body;
+
+  try {
+    const request = await SupportRequest.findByPk(id);
+    if (!request) {
+      return res.status(404).json({ message: 'Support request not found' });
+    }
+
+    // עדכון ההודעה בתגובה
+    request.responseMessage = message;
+    await request.save();
+
+    return res.status(200).json({ message: 'Response saved successfully' });
+  } catch (error) {
+    console.error('Error saving response:', error);
+    return res.status(500).json({ message: 'Failed to save response' });
+  }
+});
+
+  app.get('/support-requests/unread', async (req, res) => {
+  try {
+    const unreadResponses = await SupportRequest.findAll({
+      where: {
+        responseMessage: {
+          [Op.ne]: null
+        },
+        responseMessageRead: false
+      },
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.json(unreadResponses);
+  } catch (err) {
+    console.error('Error fetching unread messages:', err);
+    res.status(500).json({ message: 'Failed to fetch notifications' });
+  }
+});
+
 
 // 6) error handler צריך לבוא אחרי כל הרוטות
 app.use(errorHandler);

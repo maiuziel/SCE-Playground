@@ -15,7 +15,12 @@ export const SupportRequest = sequelize.define('SupportRequest', {
     type: DataTypes.ENUM('open', 'in_progress', 'closed'),
     allowNull: false,
     defaultValue: 'open',
+  },
+  responseMessageRead: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   }
+  
 }, {
   tableName: 'support_requests',
   timestamps: true,

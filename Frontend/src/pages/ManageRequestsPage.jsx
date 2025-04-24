@@ -1,4 +1,3 @@
-// frontend/src/pages/ManageRequestsPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,6 +11,26 @@ export default function ManageRequestsPage() {
       .then(setRequests)
       .catch(console.error);
   }, []);
+
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      const res = await fetch(`http://localhost:4001/support-requests/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (res.ok) {
+        setRequests(prev =>
+          prev.map(r => (r.id === id ? { ...r, status: newStatus } : r))
+        );
+      } else {
+        console.error('Failed to update status');
+      }
+    } catch (err) {
+      console.error('Error updating status:', err);
+    }
+  };
 
   return (
     <div className="page-container">
@@ -36,7 +55,16 @@ export default function ManageRequestsPage() {
               <td>{r.id}</td>
               <td>{r.subject}</td>
               <td>{r.description}</td>
-              <td>{r.status}</td>
+              <td>
+                <select
+                  value={r.status}
+                  onChange={(e) => handleStatusChange(r.id, e.target.value)}
+                >
+                  <option value="open">Open</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="closed">Done</option>
+                </select>
+              </td>
               <td>
                 <button
                   className="action-button"
@@ -70,6 +98,11 @@ export default function ManageRequestsPage() {
         .requests-table th {
           text-align: center;
           padding: 12px;
+        }
+
+        select {
+          padding: 6px;
+          border-radius: 4px;
         }
       `}</style>
     </div>
