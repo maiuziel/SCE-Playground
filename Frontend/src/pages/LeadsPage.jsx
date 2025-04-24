@@ -23,6 +23,8 @@ export default function LeadsPage() {
         console.log('✅ תשובה מה־Gateway:', result.data); 
 
       setResponse(result.data);
+      alert(`Created new lead thanks for your interest in ${productInterest}`);
+
     } catch (error) {
       console.error('Error creating lead:', error);
     }

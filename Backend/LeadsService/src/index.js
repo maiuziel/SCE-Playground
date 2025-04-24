@@ -1,7 +1,9 @@
 import express from 'express';
 
+
 import dotenv from 'dotenv';
 import leadsRoutes from './routes/leadsRoutes.js';
+import app from './app.js';
 
 
 dotenv.config();
@@ -25,3 +27,5 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Authentication service running on port ${PORT}`);
 });
+
+
