@@ -23,7 +23,7 @@ export default function SalesPage() {
     e.preventDefault();
     try {
       // שליחת כל השדות לשרת דרך ה-Gateway
-      const res = await api.post('api/sales', {
+      const res = await api.post('sales', {
         customerId: Number(customerId) ,
         date,
         time,
