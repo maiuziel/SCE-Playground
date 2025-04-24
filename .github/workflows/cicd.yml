@@ -7,11 +7,12 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'Backend/Sales-service/**'
+      - 'Backend/**'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'Backend/Sales-service/**'
+      - 'Backend/**'
+    
 
 jobs:
   build:
