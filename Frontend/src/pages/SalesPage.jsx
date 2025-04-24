@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import api from '../services/api.js';
+
 
 export default function SalesPage() {
   const [customerId, setCustomerId] = useState('');
@@ -21,7 +23,7 @@ export default function SalesPage() {
     e.preventDefault();
     try {
       // שליחת כל השדות לשרת דרך ה-Gateway
-      const res = await axios.post('http://localhost:4003/sales', {
+      const res = await api.post('/sales', {
         customerId: Number(customerId) ,
         date,
         time,

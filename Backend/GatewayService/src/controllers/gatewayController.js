@@ -31,14 +31,19 @@ const forwardAuthRequests = async (req, res, next) => {
   }
 };
 
+// gateway-service/src/controllers/gatewayController.js
 const forwardSalesRequests = async (req, res, next) => {
   try {
-    // שימי לב: הכתובת צריכה להתאים למיקום שבו רץ Sales-service שלך
-    const salesServiceUrl = 'http://localhost:4003/sales';
+    // Use environment variable instead of hardcoded URL
+    const salesServiceUrl = process.env.SALES_SERVICE_URL || 'http://localhost:4003';
+    const path = req.originalUrl.replace('/sales', '');
+    const url = `${salesServiceUrl}/sales${path}`;
+
+    console.log('Forwarding request to sales service:', url);
 
     const response = await axios({
       method: req.method,
-      url: salesServiceUrl,
+      url: url,
       data: req.body,
       headers: req.headers,
     });
@@ -52,5 +57,6 @@ const forwardSalesRequests = async (req, res, next) => {
     return next(error);
   }
 };
+
 
 export { forwardAuthRequests,forwardSalesRequests };
