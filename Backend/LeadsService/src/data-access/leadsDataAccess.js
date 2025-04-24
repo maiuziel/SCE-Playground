@@ -113,5 +113,5 @@ export const findLeadsByName = async (name) => {
       [productName] 
     );
     return result.rows;
-  }
+  };
   

@@ -168,4 +168,4 @@ export const getLeadsProductName = async (productName) => {
     }
     
     return await data.getLeadsByProductName(productName);
-}
+};
