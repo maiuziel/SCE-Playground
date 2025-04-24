@@ -35,7 +35,7 @@ const forwardAuthRequests = async (req, res, next) => {
 const forwardSalesRequests = async (req, res, next) => {
   try {
     // Use environment variable instead of hardcoded URL
-    const salesServiceUrl = process.env.SALES_SERVICE_URL || 'http://localhost:4003';
+    const salesServiceUrl = process.env.SALES_SERVICE_URL;
     const path = req.originalUrl.replace('/sales', '');
     const url = `${salesServiceUrl}/sales${path}`;
 
