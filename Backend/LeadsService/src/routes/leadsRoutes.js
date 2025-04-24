@@ -27,7 +27,7 @@ router.get('/getall', getAllLeads);
 router.get('/search', findLeadsByName);
 router.get('/filter', filterLeadsByStatus);
 
-router.get('getleadsprodyct',getLeadsByProductName);
+router.get('/getleadsproduct',getLeadsByProductName);
 
 router.get('/sort/name/asc', sortLeadsByNameAsc);
 router.get('/sort/name/desc', sortLeadsByNameDesc);
