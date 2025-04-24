@@ -22,8 +22,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with: 
-          path: Backend
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -38,7 +37,6 @@ jobs:
 
     - name: install dependencies
       run: npm install
-      working-directory: backend
 
     - name: Build project (if needed)
       run: npm run build --if-present
