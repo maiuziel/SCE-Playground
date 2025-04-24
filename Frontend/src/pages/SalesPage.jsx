@@ -22,7 +22,7 @@ export default function SalesPage() {
     
     e.preventDefault();
     try {
-      // שליחת כל השדות לשרת דרך ה-Gateway
+      // Send all fields through Gateway
       const res = await api.post('sales', {
         customerId: Number(customerId) ,
         date,
@@ -31,7 +31,7 @@ export default function SalesPage() {
         notes,
       });
       setResult(res.data);
-      // איפוס הטופס אחרי שליחה מוצלחת
+      //Form reset after successful send
       setCustomerId('');
       setDate('');
       setTime('');

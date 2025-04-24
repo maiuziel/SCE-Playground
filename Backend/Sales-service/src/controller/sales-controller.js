@@ -6,7 +6,7 @@ exports.createSale = async (req, res) => {
   try {
     console.log("been here");
     const sale = await salesService.createSale(req.body);
-    console.log('🔍 New sale created:', sale); // ← תראה אם sale.id קיים פה
+    console.log('🔍 New sale created:', sale); 
     res.status(201).json(sale);
   } catch (err) {
     console.error('Error inserting sale:', err);
