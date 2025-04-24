@@ -17,7 +17,7 @@ export async function stopTestServer() {
     return new Promise((resolve, reject) => {
       server.close((err) => {
         if (err) return reject(err);
-        console.log("🔴 Test server closed");
+        console.log('🔴 Test server closed');
         resolve();
       });
     });

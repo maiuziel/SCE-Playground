@@ -8,7 +8,7 @@ import app from './app.js';
 
 dotenv.config();
 
-const app = express();
+
 const PORT = process.env.PORT || 4001;
 
 

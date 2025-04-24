@@ -4,7 +4,10 @@
       "browser": true,
       "node": true,
       "es2021": true,
-      "jest": true
+      "jest": true,
+      "mocha": true 
+
+      
     },
     // "extends" pulls in recommended ESLint rules. This is a good starting point for new developers.
     "extends": [
