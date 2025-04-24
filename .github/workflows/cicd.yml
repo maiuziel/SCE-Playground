@@ -55,7 +55,7 @@ jobs:
       run: npm run build --if-present
 
     - name: Run database tests
-      run: npm test
+      run: npm run test
     - name: Run Tests
       run: npm run test
     - name: npm run linter
