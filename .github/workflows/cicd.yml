@@ -38,17 +38,19 @@ jobs:
     - name: Set environment variable
       run: echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
 
-    - name: install dependencies
+    - name: Navigate to Sales-service
+      run: cd Backend/Sales-service
+
+    - name: Install dependencies
+      working-directory: Backend/Sales-service
       run: npm install
 
-    - name: Build project (if needed)
-      run: npm run build --if-present
-
-    - run: npm install mocha
     - name: Run Tests
+      working-directory: Backend/Sales-service
       run: npm run test
-    - name: npm run linter
+
+    - name: Lint Code
+      working-directory: Backend/Sales-service
       run: npm run lint
-    - run: npm ci
-    - run: npm run build --if-present
-    
+      
+
