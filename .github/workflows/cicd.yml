@@ -43,7 +43,7 @@ jobs:
 
     - run: npm install mocha
     - name: Run Tests
-      working-directory: /Backend/Sales-sevice
+      working-directory: ../Backend/Sales-sevice
       run: npm run test
     - name: npm run linter
       run: npm run lint
