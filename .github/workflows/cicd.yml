@@ -14,6 +14,21 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sales_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
@@ -26,12 +41,29 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
+      name: Wait for Postgres
+      run: |
+        until pg_isready -h localhost -p 5432 -U postgres; do
+          echo "Waiting for Postgres to be ready..."
+          sleep 2
+        done
+
+    - name: Set environment variables
+      run: echo "DB_CONNECTION_STRING=postgres://postgres:postgres@localhost:5432/sales_db" >> $GITHUB_ENV
+
     - name: install dependencies
       run: npm install
-    #- name: Run Tests
-     # run: npm run test
-    #- name: npm run linter
-     # run: npm run lint
+
+    - name: Build project (if needed)
+      run: npm run build --if-present
+
+    - name: Run database tests
+      run: npm test
+    - name: Run Tests
+      run: npm run test
+    - name: npm run linter
+      run: npm run lint
     - run: npm ci
     - run: npm run build --if-present
-    #- run: npm test
+    
