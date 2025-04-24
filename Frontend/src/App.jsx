@@ -38,10 +38,7 @@ function Navbar()
       <div className='nav-right'>
         <div className='nav-links'>
           <Link to='/'>Home</Link>
-          {!user ? <Link to='/signin'>Sign In</Link> : <a onClick={signUserOut}>Sign out</a>}
-          <Link to='/signup'>Sign Up</Link>
           <Link to='/products'>Products</Link>
-          
         </div>
         {/* If logged in, show user circle */}
         {user && <div className='user-circle'>{userInitial}</div>}
