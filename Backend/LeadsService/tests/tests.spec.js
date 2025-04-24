@@ -6,7 +6,7 @@ import { app, startTestServer } from './testServer.js';
 const { expect } = chai;
 let server;
 
-describe('Leads Service Testss', () => {
+describe('Leads Service Tests', () => {
   before(async function () {
     this.timeout(10000);
     server = await startTestServer();
