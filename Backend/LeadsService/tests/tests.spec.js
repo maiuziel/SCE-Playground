@@ -8,13 +8,13 @@ let server;
 describe('Leads Service Tests', () => {
   before(async function () {
     this.timeout(10000);
-    server = await startTestServer(); // 🟢 מפעיל את השרת
+    server = await startTestServer(); 
   });
 
   after(async function () {
     await stopTestServer();
 
-    // ✅ רק אם אתה מריץ על CI כמו GitHub Actions – מסיים את התהליך
+   
     setTimeout(() => process.exit(0), 200);
   });
   it('should return all leads', async () => {
