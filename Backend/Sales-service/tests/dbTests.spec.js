@@ -1,6 +1,6 @@
-// Replace the import statements with require
+// Replace the require statement with an import
 const { expect } = require('chai');
-const pool = require('../src/db'); // Ensure the path is correct for your project
+const pool = require('../src/db');  // Ensure the path is correct for your project
 
 describe('sales_conversationsTest Table', () => {
   before(async () => {
