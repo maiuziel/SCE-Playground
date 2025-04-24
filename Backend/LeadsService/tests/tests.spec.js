@@ -1,6 +1,6 @@
 import chai from 'chai';
 import request from 'supertest';
-import { app, startTestServer } from './testServer.js';
+import { app, startTestServer, stopTestServer } from './testServer.js';
 
 const { expect } = chai;
 let server;
@@ -8,19 +8,11 @@ let server;
 describe('Leads Service Tests', () => {
   before(async function () {
     this.timeout(10000);
-    server = await startTestServer(); // 🔄 מפעיל את השרת
+    server = await startTestServer(); // 🟢 מפעיל את השרת
   });
 
   after(async function () {
-    // ✅ סוגר את השרת אחרי שכל הטסטים סיימו
-    if (server && server.close) {
-      await new Promise((resolve, reject) => {
-        server.close((err) => {
-          if (err) return reject(err);
-          resolve();
-        });
-      });
-    }
+    await stopTestServer(); // 🔴 סוגר את השרת אחרי הטסטים
   });
 
   it('should return all leads', async () => {
