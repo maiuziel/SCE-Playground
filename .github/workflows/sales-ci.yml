@@ -6,11 +6,11 @@ name: Sales_Workflow
 on:
   push:
     branches: [ "main" ]
-    path:
+    paths:
      - 'Backend/Sales-service'
   pull_request:
     branches: [ "main" ]
-    path:
+    paths:
      - 'Backend/Sales-service'
 
     
