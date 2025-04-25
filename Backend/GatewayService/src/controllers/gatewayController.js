@@ -8,7 +8,7 @@ const forwardAuthRequests = async (req, res, next) => {
     const path = req.originalUrl.replace('/auth', '');
     const url = `${authServiceUrl}${path}`;
 
-    console.log('Forwarding request to ' + url, ' body: ' + req.body);
+    console.log(`Forwarding request to ${  url}`, ` body: ${  req.body}`);
 
     // Forward the exact method and body
     const response = await axios({
@@ -20,7 +20,6 @@ const forwardAuthRequests = async (req, res, next) => {
 
     return res.status(response.status).json(response.data);
   } catch (error) {
-    // Error from the microservice or network
     console.log(
       'Error while forwarding request to auth service. Error: ',
       error,
@@ -28,7 +27,6 @@ const forwardAuthRequests = async (req, res, next) => {
     );
 
     if (error.response) {
-      // The microservice responded with an error status
       return res.status(error.response.status).json(error.response.data);
     }
     return next(error);
@@ -41,7 +39,7 @@ const forwardProductsRequests = async (req, res, next) => {
     const path = req.originalUrl.replace('/products', '');
     const url = `${productsServiceUrl}${path}`;
 
-    console.log('Forwarding request to ' + url, ' body: ' + req.body);
+    console.log(`Forwarding request to ${  url}`, ` body: ${  req.body}`);
 
     // Forward the exact method and body
     const response = await axios({
