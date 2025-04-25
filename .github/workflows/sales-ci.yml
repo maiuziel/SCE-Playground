@@ -6,11 +6,11 @@ name: Sales_Workflow
 on:
   push:
     branches: [ "main" ]
-    paths:
+    path:
      - 'Backend/Sales-service'
   pull_request:
     branches: [ "main" ]
-    paths:
+    path:
      - 'Backend/Sales-service'
 
     
@@ -53,5 +53,5 @@ jobs:
     - name: Lint Code
       working-directory: Backend/Sales-service
       run: npm run lint
-    #check
+    
     
