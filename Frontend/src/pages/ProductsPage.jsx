@@ -50,7 +50,7 @@ export default function ProductsPage() {
   
     try {
       const response = await api.post('/products/create-product', formData);
-      const newProduct = response.data; // שמור את המוצר החדש
+      const newProduct = response.data; 
       setSuccess(`Created new item with ID ${newProduct.id}. Welcome, ${decoded.firstName}`);
       setFormData({ name: '', category: '' });
       setProducts((prev) => [...prev, newProduct]);
