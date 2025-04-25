@@ -44,6 +44,7 @@ function Navbar() {
         />
       </div>
 
+<<<<<<< HEAD
       <div className="nav-right">
         <div className="nav-links">
           <Link to="/">Home</Link>
@@ -54,6 +55,20 @@ function Navbar() {
           )}
           <Link to="/signup">Sign Up</Link>
           <Link to="/products">Products</Link>
+=======
+      <div className='nav-right'>
+        <div className='nav-links'>
+          <Link to='/'>Home</Link>
+          <Link to='/products'>Products</Link>
+          {!user ? (
+            <div className='nav-links'>
+              <Link to='/signin'>Sign In</Link>
+              <Link to='/signup'>Sign Up</Link>
+            </div>
+          ) : (
+            <a onClick={signUserOut}>Sign out</a>
+          )}
+>>>>>>> 8df1b7b35205e0a40dafb8c26de783bad71bba95
         </div>
         {/* If logged in, show user circle */}
         {user && <div className="user-circle">{userInitial}</div>}
