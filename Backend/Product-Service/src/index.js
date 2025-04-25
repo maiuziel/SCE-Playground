@@ -22,5 +22,5 @@ initDb()
 app.use('/', Routes);
 
 app.listen(PORT, () => {
-  console.log(`Authentication service running on port ${PORT}`);
+  console.log(`Products service running on port ${PORT}`);
 });

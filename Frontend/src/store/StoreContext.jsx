@@ -1,5 +1,5 @@
 // frontend/src/store/StoreContext.jsx
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
 // Create the StoreContext
 export const StoreContext = createContext();
@@ -11,8 +11,8 @@ export function StoreProvider({ children }) {
 
   // Load token from localStorage (or sessionStorage) on initial load.
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
     if (storedToken) {
       setToken(storedToken);
     }
@@ -23,13 +23,13 @@ export function StoreProvider({ children }) {
 
   // Save token to localStorage whenever it changes
   useEffect(() => {
-    if (token) localStorage.setItem('token', token);
-    else localStorage.removeItem('token');
+    if (token) localStorage.setItem("token", token);
+    else localStorage.removeItem("token");
   }, [token]);
 
   useEffect(() => {
-    if (user) localStorage.setItem('user', JSON.stringify(user));
-    else localStorage.removeItem('user');
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
   }, [user]);
 
   const signIn = (userData, authToken) => {
@@ -46,8 +46,10 @@ export function StoreProvider({ children }) {
     user,
     token,
     signIn,
-    signOut
+    signOut,
   };
 
-  return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
+  return (
+    <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
+  );
 }
