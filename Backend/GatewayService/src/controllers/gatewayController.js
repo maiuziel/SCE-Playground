@@ -1,6 +1,8 @@
 // gateway-service/src/controllers/gatewayController.js
 import axios from 'axios';
 import 'dotenv/config';
+import https from 'https';
+
 
 const forwardAuthRequests = async (req, res, next) => {
   try {
@@ -35,9 +37,10 @@ const forwardAuthRequests = async (req, res, next) => {
 const forwardSalesRequests = async (req, res, next) => {
   try {
     // Use environment variable instead of hardcoded URL
-    const salesServiceUrl = process.env.SALES_SERVICE_URL || 'http://localhost:4003';
+    const salesServiceUrl = process.env.SALES_SERVICE_URL;
     const path = req.originalUrl.replace('/sales', '');
     const url = `${salesServiceUrl}/sales${path}`;
+    const agent = new https.Agent({ rejectUnauthorized: false });
 
     console.log('Forwarding request to sales service:', url);
 

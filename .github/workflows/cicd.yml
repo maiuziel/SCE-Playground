@@ -51,5 +51,11 @@ jobs:
     - name: Lint Code
       working-directory: Backend/Sales-service
       run: npm run lint
-    
+   
+  deploy-server:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: activate deploy hook
+        run: curl https://api.render.com/deploy/srv-d059e33uibrs73fmrdeg?key=J59U0Zma71U
     

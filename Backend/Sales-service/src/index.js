@@ -7,9 +7,13 @@ const app = express();
 const salesController = require('./controller/sales-controller');
 const salesRoutes = require('./routes/sales-routes');
 
-app.use(cors());
+app.use(cors({
+  origin: '*', // או כתובת ספציפית של ה־frontend/gateway
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
-app.use('/sales', salesRoutes);
+//app.use('/sales', salesRoutes);
 
 app.post('/sales', salesController.createSale);
 
