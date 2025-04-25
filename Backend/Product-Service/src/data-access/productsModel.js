@@ -1,9 +1,9 @@
 // products-service/src/data-access/productsModel.js
-import { DataTypes } from "sequelize";
-import { sequelize } from "./productsDataAccess.js";
+import { DataTypes } from 'sequelize';
+import { sequelize } from './productsDataAccess.js';
 
 export const Products = sequelize.define(
-  "Product",
+  'Product',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -33,6 +33,6 @@ export const Products = sequelize.define(
     },
   },
   {
-    tableName: "products",
+    tableName: 'products',
   }
 );
