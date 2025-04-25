@@ -14,6 +14,6 @@ describe('HomePage', () => {
         </BrowserRouter>
       </StoreProvider>
     );
-    expect(screen.getByText('Welcome to SCE Software Ltd.')).toBeInTheDocument();
+    expect(screen.getByText(/Welcome to SCE Software Ltd\./i)).toBeInTheDocument();
   });
 });

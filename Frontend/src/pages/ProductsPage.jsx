@@ -10,7 +10,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({ name: '', category: '' });
-  const [success, setSuccess] = useState(null); // נוספה
+  const [success, setSuccess] = useState(null); 
   const { user, token } = useContext(StoreContext);
   const decoded = jwtDecode(token);
 
