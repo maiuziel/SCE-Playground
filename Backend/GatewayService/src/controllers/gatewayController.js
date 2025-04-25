@@ -48,17 +48,29 @@ const forwardSalesRequests = async (req, res, next) => {
       method: req.method,
       url: url,
       data: req.body,
-      headers: req.headers,
+      headers: { 
+        'User-Agent': 'Mozilla/5.0 (compatible; Render-Gateway/1.0)',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     });
 
     return res.status(response.status).json(response.data);
   } catch (error) {
-    console.log('Error while forwarding request to sales service:', error.message);
-    if (error.response) {
-      return res.status(error.response.status).json(error.response.data);
+    console.log('❌ Error while forwarding request to sales service:');
+  
+    try {
+      console.log('📛 error.toJSON:', error.toJSON());
+    } catch (jsonErr) {
+      console.log('📛 error.message:', error.message);
     }
-    return next(error);
+  
+    return res
+      .status(error.response?.status || 500)
+      .json(error.response?.data || { error: 'Unknown gateway error' });
   }
+  
+  
 };
 
 
