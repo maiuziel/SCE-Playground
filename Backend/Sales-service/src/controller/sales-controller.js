@@ -3,7 +3,7 @@ const salesService = require('../services/sales-service');
 
 // Create a new sale
 exports.createSale = async (req, res) => {
-  console.log('📥 POST /sales');
+  console.log('📥 POST/sales');
   console.log('🧾 Headers:', req.headers);
   console.log('📦 Body:', req.body);
   try {
