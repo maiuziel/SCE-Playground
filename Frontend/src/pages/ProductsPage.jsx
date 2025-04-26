@@ -84,7 +84,7 @@ export default function ProductsPage() {
         )}
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
-      {products.length > 0 && (
+      {/* {products.length > 0 && (
   <div className="product-list">
     <h2>Product List</h2>
     <ul>
@@ -95,7 +95,7 @@ export default function ProductsPage() {
       ))}
     </ul>
   </div>
-)}
+)} */}
     </div>
   );
 }

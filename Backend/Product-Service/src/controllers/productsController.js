@@ -1,41 +1,51 @@
 import { productsService } from '../services/productsService.js';
 import { Products } from '../data-access/productsModel.js';
 
-export const updateProduct = async (req, res) => {
-  try {
-    res.status(200).json('update products controller');
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: 'error from update function', details: error });
-  }
-};
-
-export const deleteProduct = async (req, res) => {
-  try {
-    res.status(200).json('delete products controller');
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: 'error from delete function', details: error });
-  }
-};
-
 export const createProduct = async (req, res) => {
   try {
-    const { name, category } = req.body;
-
-    const newProduct = await Products.create({
-      name: name || null,
-      category: category || null, 
-    });
-
+    const productData = req.body;
+    const newProduct = await productsService.createProduct(productData);
     res.status(201).json(newProduct);
   } catch (error) {
     console.error('Create product error:', error);
     res
       .status(500)
       .json({ message: 'Error creating product', details: error.message });
+  }
+};
+
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    const updatedProduct = await productsService.updateProductById(id, updateData);
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: 'Error updating product', details: error.message });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await productsService.deleteProductById(id);
+    res.status(200).json(result);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: 'Error deleting product', details: error.message });
+  }
+};
+
+export const readProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsService.fetchProductById(id);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching product', details: error.message });
   }
 };
 
@@ -50,10 +60,4 @@ export const readAllProducts = async (req, res) => {
   }
 };
 
-export const readProduct = async (req, res) => {
-  try {
-    res.status(200).json('read product controller');
-  } catch (error) {
-    res.status(500).json({ error: 'error from read function', details: error });
-  }
-};
+
