@@ -45,7 +45,7 @@ export const readProduct = async (req, res) => {
     const product = await productsService.fetchProductById(id);
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching product', details: error.message });
+    res.status(500).json({ error: 'Error fetching product.', details: error.message });
   }
 };
 
