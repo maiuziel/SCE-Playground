@@ -37,6 +37,8 @@ jobs:
         run: |
           cd Backend/Product-Service
           npm test
+        env:
+          POSTGRES_URI: ${{ secrets.POSTGRES_URI }}
 
   deploy-to-render:
     runs-on: ubuntu-latest
