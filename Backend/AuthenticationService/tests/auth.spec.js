@@ -1,4 +1,5 @@
 // authentication-service/tests/auth.test.js
+/* eslint-env mocha */
 process.env.NODE_ENV = 'test';
 
 import chai from 'chai';
@@ -15,7 +16,7 @@ describe('Authentication Service Tests', () => {
   before(async function() {
     this.timeout(10000); // 10 seconds
     server = await startTestServer();
-    console.log("test server is running");
+    console.log('test server is running');
     
   });
 
