@@ -26,7 +26,7 @@ const forwardAuthRequests = async (req, res, next) => {
     console.log('Error while forwarding request to auth service. Error: ', error, error?.data);
 
     if (error.response) {
-      // The microservice responded with an error status
+      // The microservice responded with an error status.
       return res.status(error.response.status).json(error.response.data);
     }
     return next(error);
@@ -40,7 +40,6 @@ const forwardSalesRequests = async (req, res, next) => {
     const salesServiceUrl = process.env.SALES_SERVICE_URL;
     const path = req.originalUrl.replace('/sales', '');
     const url = `${salesServiceUrl}/sales${path}`;
-    const agent = new https.Agent({ rejectUnauthorized: false });
 
     console.log('Forwarding request to sales service:', url);
 
