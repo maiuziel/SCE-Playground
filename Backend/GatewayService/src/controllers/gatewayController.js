@@ -33,7 +33,6 @@ const forwardAuthRequests = async (req, res, next) => {
 
 
 
-export { forwardAuthRequests };
 
 
 const forwardLeadsRequests = async (req, res, next) => {
@@ -65,4 +64,4 @@ const forwardLeadsRequests = async (req, res, next) => {
   }
 };
 
-export { forwardLeadsRequests };
+export { forwardLeadsRequests,forwardAuthRequests };
