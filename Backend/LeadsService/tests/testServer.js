@@ -2,7 +2,7 @@ import app from '../src/app.js';
 
 let server = null;
 
-export async function startTestServer(port = 9999) {
+export async function startTestServer(port  9999) {
   return new Promise((resolve, reject) => {
     server = app.listen(port, () => {
       console.log(`🟢 Test server running on port ${port}`);
