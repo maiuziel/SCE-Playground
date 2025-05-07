@@ -6,7 +6,7 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user'));
-  if (user && user.email == "babilabong@gmail.com") {
+  if (user && user.email == 'babilabong@gmail.com') {
     return (
       <div className='home-container'>
         <h1>Welcome to SCE Software Ltd.</h1>
