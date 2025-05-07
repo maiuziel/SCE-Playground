@@ -34,7 +34,7 @@ export const deleteProduct = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: 'Error deleting product', details: error.message });
+      .json({ error: 'deleting product failed', details: error.message });
   }
 };
 
