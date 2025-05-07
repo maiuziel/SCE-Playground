@@ -16,7 +16,7 @@ describe('Product Service Tests', () => {
   before(async function() {
     this.timeout(10000);
     server = await startTestServer();
-    console.log('Product test server is running');
+    console.log('Product tests is running');
   });
 
   after(async () => {

@@ -2,11 +2,11 @@ name: CI - Product Service
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "sprint-3"]
     paths:
       - "Backend/ProductService/**"
   pull_request:
-    branches: ["main"]
+    branches: ["main", "sprint-3"]
     paths:
       - "Backend/ProductService/**"
 
