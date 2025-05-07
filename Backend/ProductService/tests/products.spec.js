@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { app, startTestServer } from './testproducts.js';
+import { app, startTestServer } from './testProducts.js';
 
 const { expect } = chai;
 chai.use(chaiHttp);
