@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log(`Authentication service running on port ${PORT}`);
+  console.log(`leads service running on port ${PORT}`);
 });
 
 

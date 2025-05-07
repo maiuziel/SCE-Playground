@@ -9,7 +9,7 @@ export const create = async (leadData) => {
   }
 
   if (full_name.length > 255) {
-    throw new Error('Full name must be at most 255 characters');
+    throw new Error('Full name must be at most 255 character');
   }
 
   const nameRegex = /^[a-zA-Z\s]+$/;
