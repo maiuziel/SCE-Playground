@@ -4,11 +4,11 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "Backend/Product-Service/**"
+      - "Backend/ProductService/**"
   pull_request:
     branches: ["main"]
     paths:
-      - "Backend/Product-Service/**"
+      - "Backend/ProductService/**"
 
 jobs:
   build-and-test:
@@ -25,17 +25,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd Backend/Product-Service
+          cd Backend/ProductService
           npm install
 
       - name: Run Linter
         run: |
-          cd Backend/Product-Service
+          cd Backend/ProductService
           npm run lint
 
       - name: Run Tests
         run: |
-          cd Backend/Product-Service
+          cd Backend/ProductService
           npm test
         env:
           POSTGRES_URI: ${{ secrets.POSTGRES_URI }}

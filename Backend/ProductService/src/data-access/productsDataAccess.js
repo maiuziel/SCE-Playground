@@ -19,7 +19,7 @@ export async function initDb() {
     // Sync all defined models
     await sequelize.sync({ alter: true });
   } catch (err) {
-    console.error('Unable to connect to the products database:', err);
+    console.error('Unable to connect to the products database : ', err);
     throw err;
   }
 }
