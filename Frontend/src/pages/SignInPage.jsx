@@ -21,7 +21,7 @@ export default function SignInPage() {
 
     try {
       const { data } = await api.post('/auth/signin', { email, password });
-      signIn({ email, ...data.user }, data.token);
+      signIn(data.user, data.token);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Sign in failed');
@@ -30,29 +30,26 @@ export default function SignInPage() {
     }
   }
 
-  // On initial load, check if user is already logged in
   useEffect(() => {
+    if (!token) return;
     const validateToken = async () => {
-      if (token) {
-        try {
-          const { isValid } = await api.post('/auth/validate-token', { token });
-          if (isValid) {
-            // Token is valid, user is already logged in
-            console.log('Token is valid, user is already logged in'); 
-            navigate('/');
-            return;
-          }
-        } catch (err) {
-          console.error('Token validation failed:', err);
+      try {
+        const { data } = await api.post('/auth/validate-token', { token }); // ← POST במקום GET
+        if (data?.isValid) {
+          console.log('Token is valid, user is already logged in');
+          navigate('/');
+          return;
         }
+      } catch (err) {
+        console.error('Token validation failed:', err);
       }
-      // If token is invalid or not present, redirect to sign-in page
+  
       console.log('Token is invalid or not present, redirecting to sign-in page');
       signOut();
-      navigate('/signin');
     };
+  
     validateToken();
-  }, [token, signOut]);
+  }, [token, navigate, signOut]);
   
   return (
     <div className='auth-container'>

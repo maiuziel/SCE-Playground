@@ -11,10 +11,13 @@ import HomePage from './pages/HomePage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
+import AdminProductsPage from './pages/AdminProductsPage.jsx';
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ProductsAdminRoute from './components/ProductsAdminRoute';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
+
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
@@ -46,6 +49,7 @@ function Navbar() {
 
       <div className='nav-right'>
         <div className='nav-links'>
+
           <Link to='/'>Home</Link>
           {!user ? (
             <Link to='/signin'>Sign In</Link>
@@ -54,6 +58,10 @@ function Navbar() {
           )}
           <Link to='/signup'>Sign Up</Link>
           <Link to='/products'>Products</Link>
+          {user?.email === 'admin@gmail.com' && (
+            <Link to='/admin/products'>Manage-Products</Link>
+            )}
+          
         </div>
         {/* If logged in, show user circle */}
         {user && <div className='user-circle'>{userInitial}</div>}
@@ -80,6 +88,14 @@ function App() {
                   <ProductsPage />
                 </ProtectedRoute>
               }
+            />
+              <Route
+             path='/admin/products'
+             element={
+              <ProductsAdminRoute>
+                <AdminProductsPage />
+              </ProductsAdminRoute>
+            }
             />
           </Routes>
         </div>

@@ -61,30 +61,7 @@ export default function ProductsPage() {
 
   return (
     <div className='product-container'>
-      <form onSubmit={handleSubmit}>
-        <h1>Add Product</h1>
-        <div className='form-group'>
-          <label htmlFor='name'>Name:</label>
-          <input type='text' name='name' id='name' onChange={handleChange} />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='category'>Category:</label>
-          <input
-            type='text'
-            name='category'
-            id='category'
-            onChange={handleChange}
-          />
-        </div>
-        <button type='submit'>Add</button>
-        {success && (
-          <p style={{ color: 'green' }}>
-            {success && <p style={{ color: 'green' }}>{success}</p>}
-          </p>
-        )}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
-      {/* {products.length > 0 && (
+      {products.length > 0 && (
   <div className="product-list">
     <h2>Product List</h2>
     <ul>
@@ -95,7 +72,7 @@ export default function ProductsPage() {
       ))}
     </ul>
   </div>
-)} */}
+)}
     </div>
   );
 }

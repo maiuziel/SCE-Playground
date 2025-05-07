@@ -1,14 +1,14 @@
 // authentication-service/src/services/authService.js
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { User } from "../data-access/userModel.js";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { User } from '../data-access/userModel.js';
 
 export const authService = {
   async signup(email, password, firstName, lastName) {
     // Check if email already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      const err = new Error("Email already in use.");
+      const err = new Error('Email already in use.');
       err.status = 400;
       throw err;
     }
@@ -37,7 +37,7 @@ export const authService = {
     // Find user
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      const err = new Error("Invalid credentials");
+      const err = new Error('Invalid credentials');
       err.status = 401;
       throw err;
     }
@@ -45,7 +45,7 @@ export const authService = {
     // Check password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      const err = new Error("Invalid credentials");
+      const err = new Error('Invalid credentials');
       err.status = 401;
       throw err;
     }
@@ -59,7 +59,7 @@ export const authService = {
         lastName: user.lastName,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: '7d' }
     );
     // Return user without password
     // and with token
@@ -85,7 +85,7 @@ export const authService = {
 
   async deleteUser(email) {
     if (!email) {
-      const err = new Error("Email is required to delete user");
+      const err = new Error('Email is required to delete user');
       err.status = 400;
       throw err;
     }
