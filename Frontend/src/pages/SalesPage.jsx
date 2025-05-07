@@ -11,6 +11,11 @@ export default function SalesPage() {
   const [notes, setNotes] = useState('');
   const [result, setResult] = useState(null);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user) {
+    console.log('conected:', user.email);
+  }
+
   const handleSubmit = async (e) => {
     console.log('📦 Sending to backend:', {
       customerId:Number(customerId),
