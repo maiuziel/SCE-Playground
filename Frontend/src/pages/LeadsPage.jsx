@@ -25,56 +25,114 @@ export default function LeadsPage() {
       });
 
       console.log('✅ Gateway: lead added successfully', result.data);
-      setResponse({ name: fullName, phone });
-
+      console.log('✅ Response set to:', { fullName, phone });
+      setResponse({ fullName, phone });
     } catch (error) {
       console.error('❌ Error creating lead:', error);
-      alert('An error occurred while creating the lead. Please try again later.');
+    
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.statusText ||
+        'An error occurred while creating the lead. Please try again later.';
+    
+      alert(`❌ ${errorMessage}`);
     }
   };
 
+  const inputStyle = {
+    padding: '10px',
+    borderRadius: '8px',
+    border: '1px solid #ccc',
+    outline: 'none',
+    width: '45%', 
+    minWidth: '280px',
+    boxSizing: 'border-box',
+  };
+
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Create a New Lead</h2>
+    <div
+      style={{
+        marginTop: '50px',
+        padding: '50px',
+        maxWidth: '1000px',
+        
+        margin: 'auto',
+        background: '#f9f9f9',
+        borderRadius: '50px',
+        boxShadow: '0 0 15px rgba(245, 6, 6, 0.1)',
+      }}
+    >
+      <h2 style={{ textAlign: 'center', marginBottom: '25px', color: '#333' }}>
+      Share Your Contact Info
+      </h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        /><br /><br />
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+  <input
+    type="text"
+    placeholder="Full Name"
+    value={fullName}
+    onChange={(e) => setFullName(e.target.value)}
+    style={inputStyle}
+  />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        /><br /><br />
+  <input
+    type="email"
+    placeholder="Email - example@example.com"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    style={inputStyle}
+  />
 
-        <input
-          type="text"
-          placeholder="Phone Number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        /><br /><br />
+  <input
+    type="text"
+    placeholder="Phone Number - 05XXXXXXXX"
+    value={phone}
+    onChange={(e) => setPhone(e.target.value)}
+    style={inputStyle}
+  />
 
-        <input
-          type="text"
-          placeholder="Product Interest"
-          value={productInterest}
-          onChange={(e) => setProductInterest(e.target.value)}
-        /><br /><br />
+  <input
+    type="text"
+    placeholder="Product Interest"
+    value={productInterest}
+    onChange={(e) => setProductInterest(e.target.value)}
+    style={inputStyle}
+  />
 
-        <button type="submit">Submit</button>
-      </form>
+  <button
+    type="submit"
+    style={{
+      background: 'linear-gradient(to right, #6a11cb, #2575fc)',
+      color: 'white',
+      border: 'none',
+      padding: '12px 24px',
+      borderRadius: '25px',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      width: '100%',
+      maxWidth: '300px',
+      marginTop: '20px',
+    }}
+  >
+    Submit
+  </button>
+</form>
 
       {response && (
-  <div style={{ marginTop: '20px', color: 'white' }}>
-    ✅ Thank you, <strong>{response.full_name}</strong> (Phone: <strong>{response.phone}</strong>), for submitting your details. We will contact you shortly.
+  <div
+    style={{
+      marginTop: '20px',
+      background: '#28a745',
+      color: 'white',
+      padding: '15px',
+      borderRadius: '10px',
+      textAlign: 'center',
+    }}
+  >
+    ✅ Thank you, <strong>{response?.fullName ?? 'Unknown'}</strong> (Phone: <strong>{response?.phone ?? 'N/A'}</strong>), for submitting your details. We will contact you shortly.
   </div>
 )}
-
+      
     </div>
   );
 }
