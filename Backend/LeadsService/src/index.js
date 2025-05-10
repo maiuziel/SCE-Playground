@@ -20,7 +20,7 @@ app.use(express.json());
 // Authentication routes
 app.use('/', leadsRoutes);
 app.get('/', (req, res) => {
-  res.send('Welcome to the Leads Service');
+  res.send('Welcome to the Lead Service');
 });
 
 
