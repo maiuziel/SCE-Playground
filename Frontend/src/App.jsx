@@ -79,7 +79,7 @@ function App() {
     <StoreProvider>
       <BrowserRouter>
         <Navbar />
-        <div style={{ backgroundImage: 'url(/background.png)' }}>
+        <div style={{ backgroundImage: 'url(/background.png)'  }}>
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/signin' element={<SignInPage />} />
