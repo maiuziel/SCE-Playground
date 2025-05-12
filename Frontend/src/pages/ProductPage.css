@@ -15,3 +15,10 @@
   z-index: 10;
   
 }
+
+.button-row {
+  display: flex;
+  justify-content: flex-end; 
+  gap: 0.5rem;               
+  margin-top: 1rem;
+}

@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button, Image, Stack } from 'react-bootstrap';
+import { Container, Row, Col, Button, Image, Stack, Badge } from 'react-bootstrap';
 
 export default function ProductPageUI({ product }) {
 
@@ -7,7 +7,7 @@ export default function ProductPageUI({ product }) {
     };
 
     const handleDownloadProduct = () => {
-    alert("כפתור הורד קובץ נלחץ")
+     window.open(product.datasheet_url, '_blank');
     };
 
   return (
@@ -31,14 +31,16 @@ export default function ProductPageUI({ product }) {
           </Row>
           <Row>
             <Stack direction="horizontal" gap={3}>
-                <Button variant="primary" size="lg" onClick={handleAddToCart} >
+                
+                <Button className="btn btn-bg btn-primary" variant="primary" size="lg" onClick={handleAddToCart}>
                 הוסף לסל
                 </Button>
-
-                <Button variant="info" size="lg" onClick={handleDownloadProduct}>
+                
+                <Button className="btn btn-bg btn-primary" variant="info" size="lg" onClick={handleDownloadProduct}>
                 הורד קובץ
                 </Button>
-
+                
+                
             </Stack>
             
           </Row>
