@@ -3,13 +3,13 @@ const salesService = require('../services/sales-service');
 
 // Create a new sale
 exports.createSale = async (req, res) => {
-  console.log('📥 POST/sales');
-  console.log('🧾 Headers:', req.headers);
-  console.log('📦 Body:', req.body);
+  console.log('POST/sales');
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
   try {
     console.log("been here");
     const sale = await salesService.createSale(req.body);
-    console.log('🔍 New sale created:', sale); 
+    console.log('New sale created:', sale); 
     res.status(201).json(sale);
   } catch (err) {
     console.error('Error inserting sale:', err);

@@ -12,8 +12,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-app.use(express.json());
-//app.use('/sales', salesRoutes);
+//app.use(express.json());
+app.use('/sales', salesRoutes);
 
 app.post('/sales', salesController.createSale);
 
