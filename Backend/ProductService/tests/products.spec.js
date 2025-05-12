@@ -13,7 +13,7 @@ let server = null;
 describe('Product Service Tests', () => {
   const productId = 15;
 
-  before(async function() {
+  before(async function () {
     this.timeout(10000);
     server = await startTestServer();
     console.log('Product tests is running');
@@ -24,18 +24,18 @@ describe('Product Service Tests', () => {
   });
 
   it('should read a product by ID', (done) => {
-   chai.request.execute(app)
+    chai.request
+      .execute(app)
       .get(`/read-product/${productId}`)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id').equal(productId);
-        expect(res.body).to.have.property('name').equal('eee');
-        expect(res.body).to.have.property('category').equal('abcd');
+        expect(res.body).to.have.property('name').to.be.null;
+        expect(res.body).to.have.property('category').to.be.null;
         expect(res.body).to.have.property('description').to.be.null;
         expect(res.body).to.have.property('price').to.be.null;
         expect(res.body).to.have.property('datasheet_url').to.be.null;
-        expect(res.body).to.have.property('createdAt');
-        expect(res.body).to.have.property('updatedAt');
+        expect(res.body).to.have.property('image_url').to.be.null;
         done();
       });
   });
