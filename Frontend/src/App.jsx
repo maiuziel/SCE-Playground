@@ -17,6 +17,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ProductsAdminRoute from './components/ProductsAdminRoute';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
+import ProductPage from './pages/ProductPage.jsx';
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
