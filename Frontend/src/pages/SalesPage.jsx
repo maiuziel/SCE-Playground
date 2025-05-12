@@ -8,7 +8,7 @@ export default function SalesPage() {
   const [products, setProducts] = useState('');
   const [notes, setNotes] = useState('');
   const [result, setResult] = useState(null);
-  const [isSalesRep, setIsSalesRep] = useState(null); // שים לב: null כדי לדעת מתי הבדיקה עדיין לא הסתיימה
+  const [isSalesRep, setIsSalesRep] = useState(null); //null כדי לדעת מתי הבדיקה עדיין לא הסתיימה
 
   const user = JSON.parse(localStorage.getItem('user'));
   if (user) {
@@ -41,7 +41,7 @@ export default function SalesPage() {
     });
 
     try {
-      const res = await api.post('sales', {
+      const res = await api.post('sales/createConversation', {
         customerId: Number(customerId),
         date,
         time,

@@ -4,7 +4,7 @@ const router = express.Router();
 const controller = require('../controller/sales-controller');
 
 router.get('/representatives/is-rep', controller.isSalesRep);
-router.post('/', controller.createSale);
+router.post('/createConversation', controller.createSale);
 router.get('/', controller.getAllSales);
 router.get('/:id', controller.getSaleById);
 router.put('/:id', controller.updateSale);
