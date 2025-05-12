@@ -31,7 +31,7 @@ export default function SalesPage() {
     checkSalesRep();
   }, [user?.email]);
 
-  console.log("check : " ,isSalesRep);
+  console.log('check : ' ,isSalesRep);
 
 
   const handleSubmit = async (e) => {
