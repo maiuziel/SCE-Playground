@@ -68,8 +68,6 @@ export default function HomePage() {
             src="/LeadsGeneration.png"
             alt="Product Interest"
             style={imgStyle}
-            onMouseEnter={hoverIn}
-            onMouseLeave={hoverOut}
           />
           <button
             onClick={() => navigate('/createlead')}
@@ -87,8 +85,6 @@ export default function HomePage() {
             src="/lead_manager.png"
             alt="Lead Manager"
             style={imgStyle}
-            onMouseEnter={hoverIn}
-            onMouseLeave={hoverOut}
           />
           <button
             onClick={() => navigate('/lead-manager')}

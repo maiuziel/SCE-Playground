@@ -11,7 +11,6 @@ export default function LeadManager() {
   const statuses = [
     'New',
     'Contacted',
-    'In Progress',
     'Converted',
     'Disqualified'
   ];
