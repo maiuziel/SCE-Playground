@@ -39,15 +39,11 @@ exports.deleteSale = async (id) => {
   await pool.query('DELETE FROM sales WHERE id = $1', [id]);
 };
 
-//Retrieve all sales worker by mail
-exports.getWorker = async (mail) => {
-  const result = await pool.query('SELECT * FROM Sales_representatives WHERE mail = $1', [mail]);
-  return result.rows[0];
-}
+
 
 exports.checkIfSalesRep = async (email) => {
   const result = await pool.query(
-    'SELECT * FROM sales_representatives WHERE email = $1',
+    'SELECT * FROM Sales_representatives WHERE email = $1',
     [email]
   );
   return result.rows.length > 0;
