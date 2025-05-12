@@ -1,6 +1,7 @@
 // frontend/src/pages/HomePage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api.js';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -11,8 +12,11 @@ export default function HomePage() {
   useEffect(() => {
     async function checkSalesRep() {
       if (user?.email) {
+        const email = user.email;
         try {
-          const res = await api.get(`http://localhost:4000/sales/representatives/is-rep?email=${user.email}`);
+          const res = await api.get('/sales/representatives/is-rep', {
+            email,
+          });
           setIsSalesRep(res.data.isRep);
         } catch (err) {
           console.error('Failed to check if sales rep:', err);
