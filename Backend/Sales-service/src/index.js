@@ -14,7 +14,7 @@ app.use(cors({
 }));
 app.use(express.json());
 //app.use('/sales', salesRoutes);
-app.get('/sales/representatives/is-rep?', salesController.isSalesRep)
+app.get('/sales', salesController.isSalesRep)
 app.post('/sales', salesController.createSale);
 
 const PORT = process.env.PORT || 3000;
