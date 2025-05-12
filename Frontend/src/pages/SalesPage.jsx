@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function SalesPage() {
+
+  const navigate = useNavigate();
+
   const [customerId, setCustomerId] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
