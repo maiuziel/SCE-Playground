@@ -132,7 +132,7 @@ export const updateStatusByEmail = async (email, status) => {
     if (!status || status.trim() === '') {
         throw new Error('Status is required');
     }
-    const validStatuses = ['New', 'Contacted', 'Disqualified'];
+    const validStatuses = ['New', 'Contacted', 'Disqualified','Converted'];
     if (!validStatuses.includes(status)) {
         throw new Error('Invalid status');
     }
