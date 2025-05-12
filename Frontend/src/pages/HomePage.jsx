@@ -1,3 +1,4 @@
+// src/pages/HomePage.jsx
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../store/StoreContext';
@@ -5,7 +6,35 @@ import { StoreContext } from '../store/StoreContext';
 export default function HomePage() {
   const navigate = useNavigate();
   const { user } = useContext(StoreContext);
-  console.log('user:', user);
+
+  const tileStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '300px',
+  };
+  const imgStyle = {
+    width: '100%',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+    transition: 'transform 0.3s ease',
+  };
+  const btnStyle = {
+    marginTop: '15px',
+    background: 'linear-gradient(to right, #5BD40A, #E100FF)',
+    color: 'white',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '25px',
+    fontWeight: 'bold',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+    cursor: 'pointer',
+    transition: 'transform 0.3s ease',
+  };
+
+  const hoverIn = e => (e.currentTarget.style.transform = 'scale(1.03)');
+  const hoverOut = e => (e.currentTarget.style.transform = 'scale(1)');
 
   return (
     <div className="home-container">
@@ -22,73 +51,54 @@ export default function HomePage() {
         }}
       >
         {/* ── REPORTS TILE ── */}
-        <div style={{ textAlign: 'center' }}>
+        <div style={tileStyle}>
           <img
             src="/reports.jpg"
             alt="Reports"
             onClick={() => navigate('/reports')}
-            style={{
-              maxWidth: '300px',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-              transition: 'transform 0.3s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
-            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+            style={imgStyle}
+            onMouseEnter={hoverIn}
+            onMouseLeave={hoverOut}
           />
         </div>
 
-        {/* ── LEADS GENERATION TILE ── */}
-        <div style={{ textAlign: 'center' }}>
+        {/* ── PRODUCT INTEREST TILE ── */}
+        <div style={tileStyle}>
           <img
             src="/LeadsGeneration.png"
-            alt="Leads Generation"
-            style={{
-              maxWidth: '300px',
-              borderRadius: '20px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-              marginBottom: '15px',
-            }}
-            onClick={() => navigate('/createlead')}
+            alt="Product Interest"
+            style={imgStyle}
+            onMouseEnter={hoverIn}
+            onMouseLeave={hoverOut}
           />
           <button
             onClick={() => navigate('/createlead')}
-            style={{
-              background: 'linear-gradient(to right, #5BD40A, #E100FF)',
-              color: 'white',
-              padding: '10px 20px',
-              border: 'none',
-              borderRadius: '25px',
-              fontWeight: 'bold',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-              cursor: 'pointer',
-              transition: 'transform 0.3s ease',
-            }}
+            style={btnStyle}
             onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
             onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           >
             🚀 Go to Leads Generation
           </button>
         </div>
-        {/* ── MANAGE LEADS TILE ── */}
-        <div style={{ textAlign: 'center' }}>
-          <img
-            src="/lead_manager.png"               // make sure this exactly matches your file in public/
-            alt="Lead Manager"
-            onClick={() => navigate('/lead-manager')}
-            style={{
-              maxWidth: '300px',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-              transition: 'transform 0.3s'
-            }}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
-            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
-          />
-        </div>
 
+        {/* ── MANAGE LEADS TILE ── */}
+        <div style={tileStyle}>
+          <img
+            src="/lead_manager.png"
+            alt="Lead Manager"
+            style={imgStyle}
+            onMouseEnter={hoverIn}
+            onMouseLeave={hoverOut}
+          />
+          <button
+            onClick={() => navigate('/lead-manager')}
+            style={btnStyle}
+            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
+            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+          >
+            📋 Lead Manager
+          </button>
+        </div>
       </div>
     </div>
   );

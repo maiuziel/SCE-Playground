@@ -10,7 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
 import LeadsGeneration from './pages/LeadsGeneration.jsx';
-import LeadManager from './pages/LeadManager.jsx';
+import LeadManager     from './pages/LeadManager.jsx';  
 
 
 function Navbar() {
