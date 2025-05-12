@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
 import LeadsGeneration from './pages/LeadsGeneration.jsx';
+import LeadManager from './pages/LeadManager.jsx';
 
 
 function Navbar() {
@@ -87,6 +88,7 @@ function App() {
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
             <Route path='/createlead' element={<LeadsGeneration />} />
+            <Route path="/lead-manager" element={<LeadManager />} />
            
 
             <Route
