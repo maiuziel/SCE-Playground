@@ -17,6 +17,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ProductsAdminRoute from './components/ProductsAdminRoute';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
+import ProductPage from './pages/ProductPage.jsx';
 
 
 function Navbar() {
@@ -81,6 +82,7 @@ function App() {
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
+            {/* //todo <Route path='/dynamic route' */}
             <Route
               path='/products'
               element={
@@ -89,7 +91,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path='/products/:productId' element={<ProductPage />}/>
               <Route
+            
              path='/admin/products'
              element={
               <ProductsAdminRoute>
