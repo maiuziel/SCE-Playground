@@ -31,8 +31,13 @@ export const Products = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    image_url: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     tableName: 'products',
+    timestamps: false, 
   }
 );
