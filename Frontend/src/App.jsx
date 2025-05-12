@@ -91,7 +91,6 @@ function App() {
             />
             <Route path='/products/:id' element={<ProductPage />}/>
             
-
           </Routes>
         </div>
       </BrowserRouter>
