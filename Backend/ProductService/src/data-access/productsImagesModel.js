@@ -1,9 +1,9 @@
 // products-service/src/data-access/productsImagesModel.js
-import { DataTypes } from "sequelize";
-import { sequelize } from "./productsDataAccess.js";
+import { DataTypes } from 'sequelize';
+import { sequelize } from './productsDataAccess.js';
 
 export const ProductsImages = sequelize.define(
-  "ProductImage",
+  'ProductImage',
   {
     image_id: {
       type: DataTypes.INTEGER,
@@ -20,7 +20,7 @@ export const ProductsImages = sequelize.define(
     },
   },
   {
-    tableName: "products_images",
+    tableName: 'products_images',
     timestamps: false,
   }
 );
