@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../services/api.js';
 
@@ -16,8 +16,26 @@ export default function SalesPage() {
     console.log('conected:', user.email);
   }
 
+  
+  useEffect(() => {
+    async function checkSalesRep() {
+      if (user?.email) {
+        try {
+          const res = await api.get(`/sales/representatives/is-rep?email=${user.email}`);
+          setIsSalesRep(res.data.isRep);
+        } catch (err) {
+          console.error('Failed to check if sales rep:', err);
+        }
+      }
+    }
+    checkSalesRep();
+  }, [user?.email]);
+
+  console.log("check : " ,isSalesRep);
+
+
   const handleSubmit = async (e) => {
-    console.log('📦 Sending to backend:', {
+    console.log('Sending to backend:', {
       customerId:Number(customerId),
       date,
       time,
