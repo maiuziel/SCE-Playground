@@ -1,12 +1,19 @@
 import './ProductPage.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext} from 'react'
 import api from '../services/api.js';
 import '../App.css';
-import { useParams } from 'react-router-dom';
+import { StoreContext } from '../store/StoreContext.jsx';
+import { jwtDecode } from 'jwt-decode';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import ProductPageUI from '../components/prodDetailsAndBuyButton.jsx';
 
 export default function ProductPage() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const { user, token } = useContext(StoreContext);
+    const navigate = useNavigate();
+
+
 
     useEffect(() => {
         async function fetchProductById() {
@@ -15,40 +22,50 @@ export default function ProductPage() {
                 console.log("Product data from DB:", response.data);
                 setProduct(response.data);
             } catch (err) {
-                console.error("Eroor loading product", err);
+                console.error("Error loading product", err);
             }
         }
         fetchProductById();
     }, [id]);
+
+
+    
+        async function deleteProductById() {
+          const confirmDelete = window.confirm("האם אתה בטוח שברצונך למחוק את המוצר?");
+          if (!confirmDelete) return;
+
+          try {
+              const response = await api.delete(`/products/delete-product/${id}`);
+                alert("המוצר נמחק בהצלחה");
+                navigate('/products');
+            } catch (err) {
+                console.error("Error loading product", err);
+                alert("אירעה שגיאה במחיקת המוצר");
+            }
+          }
+
+        
     
     if (!product) return <div>Loading...</div>;
 
-    // const Flex = () => {
+    
     return (
-    //   <view
-    //     style={[
-    //       styles.container,
-    //       {
-    //         flexDirection: 'culomn',
-    //       },
-    //     ]}>
-    //       <view style={{flex: 1, backgroundColor: 'red'}} />
-          
-      
-      
-    //   >
-
-      // </view>
-        <div className="product-page">   
+        <div className="product-page">
+            {user?.email === 'admin@gmail.com' && (
+            <div className="admin-buttons">
+              <Link to={`/products/update-product/${id}`}>
+                <button className="btn btn-sm btn-primary">עריכת מוצר</button>
+              </Link>
+              <button className="btn btn-sm btn-danger" onClick={() => deleteProductById()}>מחיקת מוצר</button>
+              {/* <TODO>add leads page</TODO> */}
+              <button className="btn btn-sm btn-secondary" onClick={() => deleteProductById()}>Leads</button>
+            </div>
+            
+            
+      )}  
           <div className="product-container">
-            <img className="product-image" src='https://www.jiomart.com/images/product/original/590000454/banana-robusta-1-kg-product-images-o590000454-p590000454-0-202410011654.jpg?im=Resize=(1000,1000)' alt='Banana'/>
-              <div className="product-details">
-                <h1>{product.name}</h1>
-                <p><strong>קטגוריה:</strong> {product.category}</p>
-                <p><strong>מחיר:</strong> {product.price}</p>
-                <p>{product.description}</p>
-                <button className="buy-button">הוסף לעגלה</button>
-              </div>
+                <ProductPageUI
+                product={product}/>
           </div>
         </div>
     );

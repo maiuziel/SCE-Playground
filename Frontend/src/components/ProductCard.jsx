@@ -1,9 +1,10 @@
 import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
+import { Link, Routes , BrowserRouter } from 'react-router-dom';
 
+  
 function ProductCard(props) {
   return (
-    <Link to={props.id}>
+    <Link to={`/products/${props.id}`}>
       <Card style={{ width: '18rem' }}>
         <Card.Img variant="top" src={props.img} style={{ height: '200px' }} />
         <Card.Body>

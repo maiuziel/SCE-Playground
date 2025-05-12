@@ -24,6 +24,7 @@
     "jwt-decode": "^4.0.0",
     "rc-slider": "^11.1.8",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.10",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.1"
   },
