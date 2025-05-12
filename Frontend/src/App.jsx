@@ -59,6 +59,7 @@ function Navbar() {
           )}
           <Link to='/signup'>Sign Up</Link>
           <Link to='/products'>Products</Link>
+          
           {user?.email === 'admin@gmail.com' && (
             <Link to='/admin/products'>Manage-Products</Link>
             )}
@@ -82,7 +83,6 @@ function App() {
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
-            {/* //todo <Route path='/dynamic route' */}
             <Route
               path='/products'
               element={
@@ -91,7 +91,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path='/products/:productId' element={<ProductPage />}/>
+            <Route path='/products/:id' element={<ProductPage />}/>
               <Route
             
              path='/admin/products'
