@@ -18,6 +18,7 @@ import ProductsAdminRoute from './components/ProductsAdminRoute';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
+import EditProductPage from './pages/UpdateProductPage.jsx';
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
@@ -90,6 +91,11 @@ function App() {
               }
             />
             <Route path='/products/:id' element={<ProductPage />}/>
+
+            <Route
+             path="/products/update-product/:id"
+              element={<EditProductPage />}
+              />
             
           </Routes>
         </div>
