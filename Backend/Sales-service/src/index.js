@@ -13,9 +13,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json());
-//app.use('/sales', salesRoutes);
-app.get('/sales', salesController.isSalesRep)
-app.post('/sales', salesController.createSale);
+app.use('/sales', salesRoutes);
+//app.get('/sales', salesController.isSalesRep)
+//app.post('/sales', salesController.createSale);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
