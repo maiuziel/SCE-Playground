@@ -8,15 +8,11 @@ export default function HomePage() {
 
   const user = JSON.parse(localStorage.getItem('user'));
 
-  const api = axios.create({
-    baseURL: 'http://localhost:4000'
-  });
-
   useEffect(() => {
     async function checkSalesRep() {
       if (user?.email) {
         try {
-          const res = await api.get(`/sales/representatives/is-rep?email=${user.email}`);
+          const res = await api.get(`http://localhost:4000/sales/representatives/is-rep?email=${user.email}`);
           setIsSalesRep(res.data.isRep);
         } catch (err) {
           console.error('Failed to check if sales rep:', err);
