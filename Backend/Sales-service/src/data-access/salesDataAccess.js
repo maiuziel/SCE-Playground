@@ -18,10 +18,10 @@ exports.getAllSales = async () => {
   return result.rows;
 };
 
-// Retrieve a single sale by ID
+// Retrieve a single sale by customer_id
 exports.getSaleById = async (id) => {
-  const result = await pool.query('SELECT * FROM sales WHERE id = $1', [id]);
-  return result.rows[0];
+  const result = await pool.query('SELECT * FROM sales WHERE customer_id = $1', [id]);
+  return result.rows;
 };
 
 // Update a sale in the database

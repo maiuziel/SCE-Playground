@@ -67,70 +67,12 @@ export default function SalesPage() {
     return <p>You are not authorized to access this page.</p>; // לא איש מכירות
   }
 
-  return (
-    <div>
-      <h1>Sales Conversation Log</h1>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: 'flex', flexDirection: 'column', maxWidth: 350, gap: 14 }}
-      >
-        <input
-          type="number"
-          placeholder="Customer ID"
-          value={customerId}
-          onChange={e => setCustomerId(e.target.value)}
-          required
-        />
-        <input
-          type="date"
-          placeholder="Date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          required
-        />
-        <input
-          type="time"
-          placeholder="Time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Products"
-          value={products}
-          onChange={e => setProducts(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Notes"
-          value={notes}
-          onChange={e => setNotes(e.target.value)}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: '10px 0',
-            fontSize: 16,
-            background: '#1976d2',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 6,
-            marginTop: 8,
-            cursor: 'pointer',
-            fontWeight: 'bold',
-          }}
-        >
-          Save Conversation
-        </button>
-      </form>
-      {result && (
-        <div>
-          <h4>Saved successfully!</h4>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
-        </div>
-      )}
+  return(
+    <div className='sales-container'>
+      <h1>Welcome to Salse.</h1>
+
+      <button className="addSalesConverstaionBtn"
+      onClick={() => navigate('/salesConverstaion')}>Add converstaion</button>
     </div>
   );
 }
