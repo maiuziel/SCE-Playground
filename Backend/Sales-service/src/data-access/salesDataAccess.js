@@ -43,7 +43,7 @@ exports.deleteSale = async (id) => {
 
 exports.checkIfSalesRep = async (email) => {
   const result = await pool.query(
-    'SELECT * FROM Sales_representatives WHERE email = $1',
+    'SELECT * FROM sales_representatives WHERE email = $1',
     [email]
   );
   return result.rows.length > 0;
