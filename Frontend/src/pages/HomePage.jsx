@@ -1,13 +1,17 @@
 // frontend/src/pages/HomePage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [isSalesRep, setIsSalesRep] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user'));
+
+  const api = axios.create({
+    baseURL: 'http://localhost:4000'
+  });
+
   useEffect(() => {
     async function checkSalesRep() {
       if (user?.email) {
