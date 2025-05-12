@@ -4,7 +4,14 @@ import { Button, Offcanvas, Form } from 'react-bootstrap';
 import PriceSlider from './PriceSlider';
 import './buttons.css';
 
-const FilterOffcanvas = ({ onApplyFilters }) => {
+const FilterOffcanvas = ({
+  onApplyFilters,
+  categories,
+  minPrice,
+  maxPrice,
+  filterByCategory,
+  filterByPrice,
+}) => {
   const [show, setShow] = useState(false);
   const [filters, setFilters] = useState({
     category: '',
@@ -20,18 +27,35 @@ const FilterOffcanvas = ({ onApplyFilters }) => {
   };
 
   const handleApply = () => {
-    onApplyFilters(filters);
+    const { category, minPrice, maxPrice } = filters;
+
+    if (category) {
+      filterByCategory(category);
+    }
+
+    if (minPrice && maxPrice) {
+      filterByPrice(Number(minPrice), Number(maxPrice));
+    }
+
     handleClose();
+  };
+
+  const handlePriceChange = (newPriceRange) => {
+    setFilters({
+      ...filters,
+      minPrice: newPriceRange[0],
+      maxPrice: newPriceRange[1],
+    });
   };
 
   return (
     <>
       <Button
         className="filter-sort-search"
-        variant="primary"
+        variant="outline-primary"
         onClick={handleShow}
       >
-        Filter by
+        Filter by <i class="bi bi-funnel"></i>
       </Button>
 
       <Offcanvas show={show} onHide={handleClose} placement="end">
@@ -43,14 +67,20 @@ const FilterOffcanvas = ({ onApplyFilters }) => {
             <Form.Group className="mb-3">
               <Form.Label>Category</Form.Label>
               <Form.Select name="category" onChange={handleChange}>
-                <option value="">בחר קטגוריה</option>
-                <option value="electronics">אלקטרוניקה</option>
-                <option value="clothing">ביגוד</option>
-                <option value="home">מוצרים לבית</option>
+                <option value=""> Choose Category</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-4">
-              <PriceSlider />
+              <PriceSlider
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+                onPriceChange={handlePriceChange}
+              />
             </Form.Group>
             <Form.Group className="d-flex justify-content-center mt-3">
               <Button variant="success" onClick={handleApply} className="me-2">

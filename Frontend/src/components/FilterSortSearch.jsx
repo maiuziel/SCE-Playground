@@ -5,9 +5,18 @@ import Search from './Search';
 function FilterSortSearch(props) {
   return (
     <>
-      <Search products={props.products} />
-      <FilterOffcanvas products={props.products} />
-      <SortDropdown products={props.products} />
+      <Search search={props.search} />
+      <FilterOffcanvas
+        categories={props.categories}
+        minPrice={props.minPrice}
+        maxPrice={props.maxPrice}
+        filterByCategory={props.filterByCategory}
+        filterByPrice={props.filterByPrice}
+      />
+      <SortDropdown
+        sortHighToLow={props.sortHighToLow}
+        sortLowToHigh={props.sortLowToHigh}
+      />
     </>
   );
 }
