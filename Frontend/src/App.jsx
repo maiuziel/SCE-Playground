@@ -55,10 +55,6 @@ function Navbar() {
           ) : (
             <a onClick={signUserOut}>Sign out</a>
           )}
-<<<<<<< HEAD
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">Products</Link>
-=======
           <Link to='/signup'>Sign Up</Link>
           <Link to='/products'>Products</Link>
           
@@ -66,7 +62,6 @@ function Navbar() {
             <Link to='/admin/products'>Manage-Products</Link>
             )}
           
->>>>>>> d98df7886f4c45bf7452b6811060fb88dc39ac22
         </div>
         {/* If logged in, show user circle */}
         {user && <div className="user-circle">{userInitial}</div>}
@@ -82,17 +77,10 @@ function App() {
         <Navbar />
         <div style={{ backgroundImage: 'url(/background.png)' }}>
           <Routes>
-<<<<<<< HEAD
-            <Route path="/" element={<HomePage />} />
-            <Route path="/signin" element={<SignInPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/reports" element={<ReportsPage />} />
-=======
             <Route path='/' element={<HomePage />} />
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
->>>>>>> d98df7886f4c45bf7452b6811060fb88dc39ac22
             <Route
               path="/products"
               element={
@@ -101,19 +89,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
-<<<<<<< HEAD
-=======
             <Route path='/products/:id' element={<ProductPage />}/>
-              <Route
             
-             path='/admin/products'
-             element={
-              <ProductsAdminRoute>
-                <AdminProductsPage />
-              </ProductsAdminRoute>
-            }
-            />
->>>>>>> d98df7886f4c45bf7452b6811060fb88dc39ac22
+
           </Routes>
         </div>
       </BrowserRouter>
