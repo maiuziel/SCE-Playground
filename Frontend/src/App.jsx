@@ -9,7 +9,8 @@ import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
-import LeadsPage from './pages/LeadsPage.jsx';
+import LeadsGeneration from './pages/LeadsGeneration.jsx';
+
 
 function Navbar() {
   const { user, signOut, isLoading, isValidating } = useContext(StoreContext);
@@ -85,7 +86,8 @@ function App() {
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
-            <Route path='/createlead' element={<LeadsPage />} />
+            <Route path='/createlead' element={<LeadsGeneration />} />
+           
 
             <Route
               path='/products'

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function LeadsPage() {
+export default function LeadsGeneration() {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -74,7 +74,7 @@ export default function LeadsPage() {
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           <input
             type="text"
-            placeholder="Full Name"
+            placeholder="Full Name-Max 255 characters(a-zA-Z)"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             style={inputStyle}
