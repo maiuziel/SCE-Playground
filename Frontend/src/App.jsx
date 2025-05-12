@@ -6,7 +6,6 @@ import SignInPage from './pages/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
 import SalesPage from './pages/SalesPage.jsx';
-import SalesConverstaionPage from './pages/SalesConverstaionPage.jsx';
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
@@ -61,7 +60,6 @@ function App() {
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
             <Route path='/sales' element={<SalesPage />} />
-            <Route path='/salesConverstaion' element={<SalesConverstaionPage />} />
             <Route
               path='/products'
               element={
