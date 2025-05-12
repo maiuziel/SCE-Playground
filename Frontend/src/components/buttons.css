@@ -1,0 +1,11 @@
+.filter-sort-search {
+  width: 100px;
+  background-color: blue;
+  color: white;
+  border: none;
+}
+
+.filter-sort-search:hover {
+  background-color: white; /* צבע כחול למשל */
+  color: blue;
+}

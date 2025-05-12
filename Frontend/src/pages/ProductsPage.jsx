@@ -1,16 +1,21 @@
 // frontend/src/pages/ProductsPage.jsx
-import React, { useEffect, useState } from "react";
-import api from "../services/api.js";
-import "../App.css";
-import { StoreContext } from "../store/StoreContext.jsx";
-import { useContext } from "react";
-import { jwtDecode } from "jwt-decode";
-import ProductCard from "../components/ProductCard.jsx";
+import './ProductsPage.css';
+import React, { useEffect, useState } from 'react';
+import api from '../services/api.js';
+import '../App.css';
+import { StoreContext } from '../store/StoreContext.jsx';
+import { useContext } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import ProductCard from '../components/ProductCard.jsx';
+import FilterSortSearch from '../components/FilterSortSearch.jsx';
+import SortDropdown from '../components/SortDropdown.jsx';
+import FilterOffcanvas from '../components/FilterOffcanvas.jsx';
+import Search from '../components/Search.jsx';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({ name: "", category: "" });
+  const [formData, setFormData] = useState({ name: '', category: '' });
   const [success, setSuccess] = useState(null);
   const { user, token } = useContext(StoreContext);
   const decoded = jwtDecode(token);
@@ -18,10 +23,10 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get("/products/read-all-products");
+        const response = await api.get('/products/read-all-products');
         setProducts(response.data);
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch products");
+        setError(err.response?.data?.message || 'Failed to fetch products');
       }
     };
     fetchProducts();
@@ -29,7 +34,7 @@ export default function ProductsPage() {
 
   if (error) {
     return (
-      <p style={{ color: "red", textAlign: "center", marginTop: "1rem" }}>
+      <p style={{ color: 'red', textAlign: 'center', marginTop: '1rem' }}>
         {error}
       </p>
     );
@@ -50,36 +55,30 @@ export default function ProductsPage() {
     setSuccess(null);
 
     try {
-      const response = await api.post("/products/create-product", formData);
+      const response = await api.post('/products/create-product', formData);
       const newProduct = response.data;
       setSuccess(
         `Created new item with ID ${newProduct.id}. Welcome, ${decoded.firstName}`
       );
-      setFormData({ name: "", category: "" });
+      setFormData({ name: '', category: '' });
       setProducts((prev) => [...prev, newProduct]);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to create product");
+      setError(err.response?.data?.message || 'Failed to create product');
     }
   };
-
   return (
     <div className="product-container">
+      <div className="display-buttons-wrapper">
+        <h2 className="products-page-title">Products</h2>
+        <div className="display-buttons">
+          <FilterSortSearch products={products} />
+        </div>
+      </div>
       {products.length > 0 && (
         <div className="product-list">
-          <h2 style={{ color: "white", textAlign: "center" }}>Products</h2>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "1rem",
-              justifyContent: "center",
-              margin: "4rem auto",
-              maxWidth: "90%",
-            }}
-          >
+          <div className="products-catalog">
             {products.map((product) => (
               <div key={product.id}>
-                {console.log(product.image_url)}
                 <ProductCard
                   id={product.id}
                   name={product.name}
