@@ -48,3 +48,26 @@ exports.checkIfSalesRep = async (email) => {
   );
   return result.rows.length > 0;
 };
+
+exports.getSalesRepType = async (email) => {
+  const result = await pool.query(
+    'SELECT title FROM sales_representatives WHERE email = $1',
+    [email]
+  );
+  return result.rows;
+};
+
+exports.getConversationsByCustomerId = async (customerId) => {
+  const result = await pool.query(
+    'SELECT * FROM sales_conversations WHERE customer_id = $1',
+    [customerId]
+  );
+  return result.rows;
+};
+
+exports.getAllConversations = async () => {
+  const result = await pool.query(
+    'SELECT * FROM sales_conversations'
+    );
+  return result.rows;
+};

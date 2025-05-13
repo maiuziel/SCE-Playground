@@ -4,11 +4,15 @@ const router = express.Router();
 const controller = require('../controller/sales-controller');
 
 router.get('/representatives/is-rep', controller.isSalesRep);
+router.get('/getSalesRepType', controller.getSalesRepType)
 router.post('/createConversation', controller.createSale);
-router.get('/', controller.getAllSales);
-router.get('/:id', controller.getSaleById);
+router.get('/getAllConversation', controller.getAllSales);
+router.get('/getConverstaion', controller.getSaleById);
 router.put('/:id', controller.updateSale);
-router.delete('/:id', controller.deleteSale);
+router.delete('/deleteConverstation', controller.deleteSale);
+router.get('/AllConversations', controller.getAllConversations);
+router.get('/conversations/:customerId', controller.getConversationsByCustomerId);
+
 
 
 

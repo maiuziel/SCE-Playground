@@ -31,3 +31,15 @@ exports.deleteSale = async (id) => {
 exports.isSalesRep = async (email) => {
   return await salesDataAccess.checkIfSalesRep(email);
 };
+
+exports.getSalesRepType = async (email) => {
+  return await salesDataAccess.getSalesRepType(email);
+};
+
+exports.getConversationsByCustomerId = async (id) => {
+  return await salesDataAccess.getConversationsByCustomerId(id);
+};
+
+exports.getAllConversations = async () => {
+  return await salesDataAccess.getAllConversations();
+};
