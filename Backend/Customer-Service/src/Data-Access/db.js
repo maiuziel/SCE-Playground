@@ -1,10 +1,24 @@
-const {Pool}=require('pg');
-require('dotenv').config();
-console.log('Connecting to DB:',process.env.DB_CONNECTION_STRING);
-const pool=new pool({
-    connectionString: process.env.DB_CONNECTION_STRING,
-    ssl:{
-        rejectUnauthorized:false
+import { Sequelize } from 'sequelize';
+import 'dotenv/config';
+
+
+export const sequelize = new Sequelize(process.env.POSTGRES_URI, {
+    dialect: 'postgres',
+    logging: false,
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false,
+        },
     }
 });
-module.exports=pool;
+
+export async function initDb() {
+    try {
+        await sequelize.authenticate();
+        await sequelize.sync({ alter: true });
+    } catch (err) {
+        console.error('Unable to connect to the database:', err);
+        throw err;
+    }
+}
