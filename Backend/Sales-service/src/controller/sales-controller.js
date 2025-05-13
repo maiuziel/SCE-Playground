@@ -89,9 +89,16 @@ exports.getSalesRepType = async (req, res) => {
 
 exports.getConversationsByCustomerId = async (req, res) => {
   try {
+    if(req.params.customerId === ''){
+      const customerId = null;
+      const data = await salesService.getConversationsByCustomerId(customerId);
+      res.json(data);
+    }
+    else{
     const customerId = parseInt(req.params.customerId);
     const data = await salesService.getConversationsByCustomerId(customerId);
     res.json(data);
+    }
   } catch (err) {
     console.error('Error retrieving conversations:', err);
     res.status(500).json({ error: 'Failed to fetch data' });

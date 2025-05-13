@@ -58,7 +58,7 @@ exports.getSalesRepType = async (email) => {
 };
 
 exports.getConversationsByCustomerId = async (customerId) => {
-  if(customerId == null){
+  if(customerId === null){
     const result = await pool.query(
       'SELECT * FROM sales_conversations'
     );
