@@ -13,12 +13,9 @@ export default function ProductPageUI({ product }) {
   return (
     <Container className="my-5">
       <Row>
-        {/* תמונה */}
         <Col md={6}>
           <Image src={product.image_url} className='w-100' fluid rounded />
         </Col>
-
-        {/* פרטים */}
         <Col md={6}>
           <Row>
             <h2>{product.name}</h2>

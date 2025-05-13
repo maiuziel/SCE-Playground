@@ -1,5 +1,5 @@
-import './ProductPage.css'
-import { useEffect, useState, useContext} from 'react'
+import './ProductPage.css';
+import { useEffect, useState, useContext} from 'react';
 import api from '../services/api.js';
 import '../App.css';
 import { StoreContext } from '../store/StoreContext.jsx';
@@ -44,6 +44,17 @@ export default function ProductPage() {
             }
           }
 
+      function EditProduct(){
+        const confirmEdit = window.confirm("האם אתה בטוח שברצונך לערוך את המוצר?");
+        if (!confirmEdit) return;
+        
+        navigate(`/products/update-product/${id}`);
+      }
+
+      function ProductLeads(){
+        navigate(`/products/${id}/leads`);
+      }
+
         
     
     if (!product) return <div>Loading...</div>;
@@ -53,12 +64,10 @@ export default function ProductPage() {
         <div className="product-page">
             {user?.email === 'admin@gmail.com' && (
             <div className="admin-buttons">
-              <Link to={`/products/update-product/${id}`}>
-                <button className="btn btn-sm btn-primary">עריכת מוצר</button>
-              </Link>
+              <button className="btn btn-sm btn-primary" onClick={EditProduct}>עריכת מוצר</button>
               <button className="btn btn-sm btn-danger" onClick={() => deleteProductById()}>מחיקת מוצר</button>
               {/* <TODO>add leads page</TODO> */}
-              <button className="btn btn-sm btn-secondary" onClick={() => deleteProductById()}>Leads</button>
+              <button className="btn btn-sm btn-secondary" onClick={ProductLeads}>Leads</button>
             </div>
             
             

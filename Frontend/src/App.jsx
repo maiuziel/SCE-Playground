@@ -19,6 +19,7 @@ import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
 import EditProductPage from './pages/UpdateProductPage.jsx';
+import LeadsPage from './pages/LeadsPage.jsx';
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
@@ -96,6 +97,8 @@ function App() {
              path="/products/update-product/:id"
               element={<EditProductPage />}
               />
+            
+            <Route path="/products/:id/leads" element={<LeadsPage />}></Route>
             
           </Routes>
         </div>
