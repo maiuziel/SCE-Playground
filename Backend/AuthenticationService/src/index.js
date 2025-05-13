@@ -1,4 +1,5 @@
-// Backend/authentication-service/src/index.js
+
+// authentication-service/src/index.js
 import 'dotenv/config';
 import express, { json } from 'express';
 import authRoutes from './routes/authRoutes.js';

@@ -1,5 +1,4 @@
 // Backend/Customer-Service/src/Data-Access/supportRequest.model.js
-/*
 
 import { DataTypes } from 'sequelize';
 import { sequelize } from './db.js';
@@ -28,4 +27,3 @@ export const SupportRequest = sequelize.define('SupportRequest', {
     tableName: 'support_requests',
     timestamps: true,
 });
-*/
