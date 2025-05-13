@@ -1,6 +1,7 @@
 // frontend/src/App.jsx
 import React, { useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import {
   BrowserRouter,
   Routes,
@@ -57,13 +58,12 @@ function Navbar() {
           ) : (
             <a onClick={signUserOut}>Sign out</a>
           )}
-          <Link to='/signup'>Sign Up</Link>
-          <Link to='/products'>Products</Link>
-          
+          <Link to="/signup">Sign Up</Link>
+          <Link to="/products">Products</Link>
+
           {user?.email === 'admin@gmail.com' && (
-            <Link to='/admin/products'>Manage-Products</Link>
-            )}
-          
+            <Link to="/admin/products">Manage-Products</Link>
+          )}
         </div>
         {/* If logged in, show user circle */}
         {user && <div className="user-circle">{userInitial}</div>}
@@ -79,10 +79,10 @@ function App() {
         <Navbar />
         <div style={{ backgroundImage: 'url(/background.png)' }}>
           <Routes>
-            <Route path='/' element={<HomePage />} />
-            <Route path='/signin' element={<SignInPage />} />
-            <Route path='/signup' element={<SignUpPage />} />
-            <Route path='/reports' element={<ReportsPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/signin" element={<SignInPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
             <Route
               path="/products"
               element={
@@ -91,10 +91,10 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path='/products/:id' element={<ProductPage />}/>
+            <Route path="/products/:id" element={<ProductPage />} />
 
             <Route
-             path="/products/update-product/:id"
+              path="/products/update-product/:id"
               element={<EditProductPage />}
               />
             
