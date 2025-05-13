@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/EveHackmon/SCE-Playground/issues"
   },
-  "homepage": "https://github.com/EveHackmon/SCE-Playground#readme", 
+  "homepage": "https://github.com/EveHackmon/SCE-Playground#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "chai-http": "^5.1.1",
