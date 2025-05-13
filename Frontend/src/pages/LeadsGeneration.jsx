@@ -24,17 +24,17 @@ export default function LeadsGeneration() {
     e.preventDefault();
 
     if (!fullName || !phone || !email || !productInterest || !leadSource) {
-      alert('נא למלא את כל השדות כולל מקור הליד!');
+      alert('Please fill in all fields including lead source!');
       return;
     }
     let finalSource = leadSource;
     if (leadSource === 'Other') {
       if (!otherSource) {
-        alert('נא לציין מקור אחר');
+        alert('Please specify the other source.');
         return;
       }
       if (!/^[A-Za-z]+$/.test(otherSource)) {
-        alert('ניתן להזין אותיות בלבד בשדה מקור אחר');
+        alert('Only letters are allowed in the other source field.');
         return;
       }
       finalSource = otherSource;
@@ -58,6 +58,16 @@ export default function LeadsGeneration() {
         'An error occurred while creating the lead. Please try again later.';
       alert(`❌ ${errorMessage}`);
     }
+  };
+
+  // Styles matching the "Update Status" button in LeadManager:
+  const submitBtnStyle = {
+    padding: '8px 12px',
+    borderRadius: '6px',
+    border: 'none',
+    backgroundColor: '#2196F3',
+    color: '#fff',
+    cursor: 'pointer',
   };
 
   return (
@@ -146,19 +156,7 @@ export default function LeadsGeneration() {
           )}
 
           <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
-            <button
-              type="submit"
-              style={{
-                background: 'linear-gradient(to right, #6a11cb, #2575fc)',
-                color: 'white',
-                border: 'none',
-                padding: '14px 40px',
-                borderRadius: '30px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: '16px',
-              }}
-            >
+            <button type="submit" style={submitBtnStyle}>
               Submit
             </button>
           </div>
