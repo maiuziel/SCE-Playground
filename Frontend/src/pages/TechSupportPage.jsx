@@ -49,9 +49,6 @@ export default function TechSupportPage() {
   useEffect(() => {
     async function fetchRequests() {
 
-      if (pageState === loadingScreen)
-        return;
-
       if (pageState === agentPage) {
         try {
           const res = await api.get("/ts/techsupport");
@@ -256,7 +253,7 @@ export default function TechSupportPage() {
 
           {error && <p className="tech-error">{error}</p>}
 
-          {requests.length === 0 ? (
+          {requests?.length === 0 ? (
             <p className="tech-no-requests">No requests yet.</p>
           ) : (
             <div className="tech-requests-list">
