@@ -78,7 +78,7 @@ export default function TechSupportPage() {
     }
 
     fetchRequests();
-  }, [pageState != loadingScreen]);
+  }, [pageState]);
 
   // Function to determine color by content
   const getStatusColor = (status) => {
@@ -88,11 +88,6 @@ export default function TechSupportPage() {
       return 'orange';
     else 
     return 'red';
-  };
-
-  // Clicking the Add Request button
-  const handleAddRequest = () => {
-    setPageState(addRequestPage);
   };
 
   // convert urgency level into text
@@ -112,22 +107,154 @@ export default function TechSupportPage() {
     alert("Send button was clicked");
   };
 
-  // handle creat new request button.
-  const handleCreateNewTicket = () => {
-    const [userType, setUserType] = 0; // 1-> user, 2-> lead
-    const [issueCategory, setIssueCategory] = "";
-    const [desc, setDesc] = ""; // max 2000, min 10 chars
-    const [imgs, setImgs] = ""; // max 4 imgs
-
-    const res = api.post("/ts/techsupportadd?type=" + userType + "&name=" + user?.firstName + "&email=" + user?.email + "&catagory=" + issueCategory + "&description=" + desc + "&images=" + imgs);
-
-    if (res.data.success === true) {
-      return res.data.ticket;
+  //form fields
+  const [userType, setUserType] = useState('');
+  const [issueCategory, setIssueCategory] = useState('');
+  const [description, setDescription] = useState('');
+  const [files, setFiles] = useState([]);
+  const [images, setImages] = useState([]);
+ 
+  const [previews, setPreviews] = useState([]);
+  const [messageText, setMessageText] = useState('');
+  const [messageColor, setMessageColor] = useState('');
+ 
+ 
+ 
+// Handle file change and preview
+const handleFileChange = (e) => {
+  const newFiles = Array.from(e.target.files);
+ 
+  if (files.length + newFiles.length > 4) {
+    setMessageText("You can upload up to 4 images only.");
+    setMessageColor("red");
+    return;
+  }
+ 
+  const updatedFiles = [...files, ...newFiles];
+  setFiles(updatedFiles);
+  const newPreviews = [];
+  newFiles.forEach((file) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      newPreviews.push(reader.result);
+      if (newPreviews.length === newFiles.length) {
+        setPreviews(prev => [...prev, ...newPreviews]);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+};
+ 
+ 
+// Get urgency based on category
+const getUrgency = (category) => {
+  const urgencyMap = {
+    "Security concern": "High",
+    "Crash or freezing issue": "High",
+    "Installation issue": "High",
+    "Update or version issue": "Medium",
+    "Integration issue with third-party software": "Medium",
+    "Bug report": "Medium",
+    "Performance issue": "Low",
+    "Other": "Low"
+  };
+  return urgencyMap[category] || "Low";
+};
+ 
+const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
+ 
+// Handle form submit
+const handleSubmit = async (e) => {
+  e.preventDefault();
+ 
+  if (!userType || !issueCategory || description.length < 10) {
+    setMessageText("Please fill out all required fields correctly.");
+    setMessageColor("red");
+    return;
+  }
+ 
+  if (files.length > 4) {
+    setMessageText("You can upload up to 4 images only.");
+    setMessageColor("red");
+    return;
+  }
+ 
+  for (let file of files) {
+    if (file.size > 3 * 1024 * 1024) {
+      setMessageText("Each image must be under 3MB.");
+      setMessageColor("red");
+      return;
     }
-    else {
-      return false;
+ 
+    if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
+      setMessageText("Only JPG, PNG, and GIF files are allowed.");
+      setMessageColor("red");
+      return;
     }
   }
+ 
+  const base64Images = await Promise.all(
+    files.map((file) =>
+      new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      })
+    )
+  );
+ 
+  const requestId = `REQ-${Date.now()}`;
+  const submissionTime = new Date().toLocaleString();
+ 
+  const requestData = {
+    requestId,
+    userType,
+    issueCategory,
+    description,
+    urgency: getUrgency(issueCategory),
+    submissionTime,
+    images: base64Images
+  };
+
+  let uType = 0;
+
+  if (userType === "before") {
+    uType = 2;
+  }
+  else {
+    uType = 1;
+  }
+
+  const res = await api.post("/ts/techsupportadd?type=" + uType + "&name=" + user?.firstName + "&email=" + user?.email + "&category=" + issueCategory + "&description=" + description + "&images=" + images);
+
+  //setMessageText(`Request ${requestId} submitted successfully!`);
+  //setMessageColor("green");
+  setFormSubmittedSuccessfully(true);
+ 
+  // Reset the form
+  setUserType('');
+  setIssueCategory('');
+  setDescription('');
+  setFiles([]);
+  setPreviews([]);
+};
+ 
+// Reset form manually
+const resetForm = () => {
+  setUserType('');
+  setIssueCategory('');
+  setDescription('');
+  setFiles([]);
+  setPreviews([]);
+  setMessageText('');
+  setFormSubmittedSuccessfully(false);
+  setPageState(userPage); // חזרה לעמוד הראשי
+};
+ 
+const handleAddRequest = () => {
+  setFormSubmittedSuccessfully(false); 
+  setPageState(addRequestPage);
+};
 
   if (pageState === agentPage) {
     return (
@@ -223,42 +350,102 @@ export default function TechSupportPage() {
     return (
       <div className="tech-form-container">
         <h1>Contact Technical Support</h1>
-        <form id="tech-supportForm">
-          <label>User Type:</label>
-          <select id="tech-userType" required>
-            <option value="">Select...</option>
-            <option value="2">Before Purchase</option>
-            <option value="1">After Purchase</option>
-          </select>
-  
-          <label>Issue Category:</label>
-          <select id="tech-issueCategory" required>
-            <option value="">Select an issue</option>
-            <option value="Security concern">Security concern</option>
-            <option value="Crash or freezing issue">Crash or freezing issue</option>
-            <option value="Installation issue">Installation issue</option>
-            <option value="Update or version issue">Update or version issue</option>
-            <option value="Integration issue with third-party software">Integration issue with third-party software</option>
-            <option value="Performance issue">Performance issue</option>
-            <option value="Bug report">Bug report</option>
-            <option value="Other">Other</option>
-          </select>
-  
-          <label>Description: (Max 2000 letters)</label>
-          <textarea id="tech-description" minLength="10" maxLength="2000" required></textarea>
-  
-          <label>Upload Images (up to 4):</label>
-          <input type="file" id="tech-fileUpload" multiple accept=".jpg,.jpeg,.png" />
-  
-          <div id="tech-filePreview"></div>
-  
-          <div className="tech-button-group">
-            <button className='tech-buttons' type="submit" onClick={() => handleCreateNewTicket()}>Submit</button>
-            <button className='tech-buttons' type="button" onClick={() => setPageState(userPage)}>Back</button>
+ 
+        {formSubmittedSuccessfully ? (
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <h2 style={{ color: 'green' }}>Thank you for contacting us!</h2>
+            <p>We have received your request and will get back to you shortly.</p>
+            <button className="tech-buttons" onClick={resetForm}>
+              Back to My Requests
+            </button>
           </div>
-        </form>
-  
-        <div id="tech-message"></div>
+        ) : (
+ 
+ 
+          <form onSubmit={handleSubmit}>
+            {/* User Type */}
+            <label>User Type:</label>
+            <select
+              value={userType}
+              onChange={(e) => setUserType(e.target.value)}
+              required
+            >
+              <option value="">Select...</option>
+              <option value="before">Before Purchase</option>
+              <option value="after">After Purchase</option>
+            </select>
+ 
+            {/* Issue Category */}
+            <label>Issue Category:</label>
+            <select
+              value={issueCategory}
+              onChange={(e) => setIssueCategory(e.target.value)}
+              required
+            >
+              <option value="">Select an issue</option>
+              <option value="Security concern">Security concern</option>
+              <option value="Crash or freezing issue">Crash or freezing issue</option>
+              <option value="Installation issue">Installation issue</option>
+              <option value="Update or version issue">Update or version issue</option>
+              <option value="Integration issue with third-party software">Integration issue with third-party software</option>
+              <option value="Performance issue">Performance issue</option>
+              <option value="Bug report">Bug report</option>
+              <option value="Other">Other</option>
+            </select>
+ 
+            {/* Description */}
+            <label>Description:</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              minLength={10}
+              maxLength={2000}
+              required
+            />
+ 
+            {/* Upload Images */}
+            <label>Upload Images (up to 4):</label>
+            <input
+              type="file"
+              multiple
+              accept=".jpg,.jpeg,.png,.gif"
+              onChange={handleFileChange}
+            />
+ 
+            {/* Previews */}
+            <div id="tech-filePreview">
+              {previews.map((src, idx) => (
+                <img
+                  key={idx}
+                  src={src}
+                  alt={`Preview ${idx + 1}`}
+                  style={{ width: '100px', margin: '5px' }}
+                />
+              ))}
+            </div>
+ 
+            {/* Buttons */}
+            <div className="tech-button-group">
+              <button className="tech-buttons" type="submit">
+                Submit
+              </button>
+              <button
+                className="tech-buttons"
+                type="button"
+                onClick={resetForm}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
+ 
+        {/* Message display */}
+        {!formSubmittedSuccessfully && (
+          <div id="tech-message" style={{ color: messageColor }}>
+            {messageText}
+          </div>
+        )}
       </div>
     );
   }
