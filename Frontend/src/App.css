@@ -14,11 +14,14 @@ body {
   /* subtle fallback color */
   background-color: #f3f5f7;
 
-  /* full‐screen background image */
+  /* full-screen background image */
   background-image: url('/Background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  /* keep the background fixed when scrolling */
+  background-attachment: fixed;
 
   color: #f1ebeb; /* default font color */
 }

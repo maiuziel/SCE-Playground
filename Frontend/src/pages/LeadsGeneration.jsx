@@ -1,44 +1,15 @@
+// src/pages/LeadsGeneration.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
 export default function LeadsGeneration() {
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [fullName, setFullName]       = useState('');
+  const [phone, setPhone]             = useState('');
+  const [email, setEmail]             = useState('');
   const [productInterest, setProductInterest] = useState('');
-  const [leadSource, setLeadSource] = useState('');
-  const [response, setResponse] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!fullName || !phone || !email || !productInterest || !leadSource) {
-      alert('נא למלא את כל השדות כולל מקור הליד!');
-      return;
-    }
-
-    try {
-      const result = await axios.post('/leads/createlead', {
-        full_name: fullName,
-        phone,
-        email,
-        product_interest: productInterest,
-        lead_source: leadSource,
-      });
-
-      console.log('✅ Gateway: lead added successfully', result.data);
-      setResponse({ fullName, phone });
-    } catch (error) {
-      console.error('❌ Error creating lead:', error);
-
-      const errorMessage =
-        error.response?.data?.message ||
-        error.response?.statusText ||
-        'An error occurred while creating the lead. Please try again later.';
-
-      alert(`❌ ${errorMessage}`);
-    }
-  };
+  const [leadSource, setLeadSource]   = useState('');
+  const [otherSource, setOtherSource] = useState('');
+  const [response, setResponse]       = useState(null);
 
   const inputStyle = {
     padding: '12px',
@@ -47,6 +18,46 @@ export default function LeadsGeneration() {
     outline: 'none',
     width: '100%',
     fontSize: '16px',
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    if (!fullName || !phone || !email || !productInterest || !leadSource) {
+      alert('נא למלא את כל השדות כולל מקור הליד!');
+      return;
+    }
+    let finalSource = leadSource;
+    if (leadSource === 'Other') {
+      if (!otherSource) {
+        alert('נא לציין מקור אחר');
+        return;
+      }
+      if (!/^[A-Za-z]+$/.test(otherSource)) {
+        alert('ניתן להזין אותיות בלבד בשדה מקור אחר');
+        return;
+      }
+      finalSource = otherSource;
+    }
+
+    try {
+      const result = await axios.post('/leads/createlead', {
+        full_name: fullName,
+        phone,
+        email,
+        product_interest: productInterest,
+        lead_source: finalSource,
+      });
+      console.log('✅ Gateway: lead added successfully', result.data);
+      setResponse({ fullName, phone });
+    } catch (error) {
+      console.error('❌ Error creating lead:', error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.statusText ||
+        'An error occurred while creating the lead. Please try again later.';
+      alert(`❌ ${errorMessage}`);
+    }
   };
 
   return (
@@ -73,38 +84,46 @@ export default function LeadsGeneration() {
           Share Your Contact Info
         </h2>
 
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '20px',
+          }}
+        >
           <input
             type="text"
-            placeholder="Full Name - Max 255 characters"
+            placeholder="Full Name – Max 255 characters"
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={e => setFullName(e.target.value)}
             style={inputStyle}
           />
           <input
             type="email"
-            placeholder="Email - example@example.com"
+            placeholder="Email – example@example.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             style={inputStyle}
           />
           <input
             type="text"
-            placeholder="Phone Number - 05XXXXXXXX"
+            placeholder="Phone Number – 05XXXXXXXX"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={e => setPhone(e.target.value)}
             style={inputStyle}
           />
           <input
             type="text"
             placeholder="Product Interest"
             value={productInterest}
-            onChange={(e) => setProductInterest(e.target.value)}
+            onChange={e => setProductInterest(e.target.value)}
             style={inputStyle}
           />
+
           <select
             value={leadSource}
-            onChange={(e) => setLeadSource(e.target.value)}
+            onChange={e => setLeadSource(e.target.value)}
             style={inputStyle}
           >
             <option value="">Select Lead Source</option>
@@ -115,6 +134,16 @@ export default function LeadsGeneration() {
             <option value="Website">Website</option>
             <option value="Other">Other</option>
           </select>
+
+          {leadSource === 'Other' && (
+            <input
+              type="text"
+              placeholder="Specify other source"
+              value={otherSource}
+              onChange={e => setOtherSource(e.target.value)}
+              style={inputStyle}
+            />
+          )}
 
           <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
             <button
@@ -146,7 +175,7 @@ export default function LeadsGeneration() {
               textAlign: 'center',
             }}
           >
-            ✅ Thank you, <strong>{response?.fullName ?? 'Unknown'}</strong> (Phone: <strong>{response?.phone ?? 'N/A'}</strong>), for submitting your details. We will contact you shortly.
+            ✅ Thank you, <strong>{response.fullName}</strong> (Phone: <strong>{response.phone}</strong>), for submitting your details. We will contact you shortly.
           </div>
         )}
       </div>
