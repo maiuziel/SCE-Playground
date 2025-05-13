@@ -68,6 +68,7 @@ export default function SalesPage() {
   }
 
   if (!isSalesRep) {
+    console.log(user.email);
     return <p>You are not authorized to access this page.</p>; // לא איש מכירות
   }
 
