@@ -22,7 +22,7 @@ export default function HomePage() {
   };
   const btnStyle = {
     marginTop: '15px',
-    background: 'linear-gradient(to right, #5BD40A, #E100FF)',
+    background: '#FF9992', 
     color: 'white',
     padding: '10px 20px',
     border: 'none',
@@ -75,7 +75,7 @@ export default function HomePage() {
             onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
             onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           >
-            🚀 Go to Leads Generation
+            Go to Leads Generation
           </button>
         </div>
 
@@ -92,7 +92,7 @@ export default function HomePage() {
             onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
             onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           >
-            📋 Lead Manager
+            Lead Manager
           </button>
         </div>
       </div>
