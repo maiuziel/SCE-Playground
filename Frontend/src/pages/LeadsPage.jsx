@@ -1,4 +1,3 @@
-import './LeadsPage.css';
 import '../App.css';
 import { useParams, useNavigate, Link, Navigate } from 'react-router-dom';
 import LeadsTable from '../components/LeadsPageComponent';
