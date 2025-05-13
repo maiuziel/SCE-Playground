@@ -3,8 +3,11 @@ import { Router } from 'express';
 import {
     createSupportRequest,
     getSupportRequests,
-    updateSupportRequestStatus
+    updateSupportRequestStatus,
+    respondToSupportRequest,
+    getUnreadSupportRequests
 } from '../controllers/supportController.js';
+
 
 const router = Router();
 
