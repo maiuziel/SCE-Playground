@@ -48,3 +48,11 @@ exports.checkIfSalesRep = async (email) => {
   );
   return result.rows.length > 0;
 };
+
+exports.getSalesRepType = async (email) => {
+  const result = await pool.query(
+    'SELECT title FROM sales_representatives WHERE email = $1',
+    [email]
+  );
+  return result.rows;
+};

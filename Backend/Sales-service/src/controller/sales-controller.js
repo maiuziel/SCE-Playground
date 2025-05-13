@@ -59,16 +59,7 @@ exports.deleteSale = async (req, res) => {
   }
 };
 
-//get worker by mail 
-exports.get = async (req, res) => {
-  try {
-    const sale = await salesService.getSaleById(req.params.id);
-    if (!sale) return res.status(404).json({ error: 'Sale not found' });
-    res.status(200).json(sale);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to get sale' });
-  }
-};
+
 
 exports.isSalesRep = async (req, res) => {
   const { email } = req.query;
@@ -77,6 +68,19 @@ exports.isSalesRep = async (req, res) => {
   try {
     const isRep = await salesService.isSalesRep(email);
     res.status(200).json({ isRep });
+  } catch (error) {
+    console.error('DB error in isSalesRep:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+exports.getSalesRepType = async (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ error: 'Missing email' });
+
+  try {
+    const type = await salesService.getSalesRepType(email);
+    res.status(200).json({ type });
   } catch (error) {
     console.error('DB error in isSalesRep:', error);
     res.status(500).json({ error: 'Internal server error' });
