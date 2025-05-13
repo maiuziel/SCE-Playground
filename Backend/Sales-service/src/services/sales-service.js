@@ -35,3 +35,7 @@ exports.isSalesRep = async (email) => {
 exports.getSalesRepType = async (email) => {
   return await salesDataAccess.getSalesRepType(email);
 };
+
+exports.getConversationsByCustomerId = async (email) => {
+  return await salesDataAccess.getConversationsByCustomerId(email);
+};

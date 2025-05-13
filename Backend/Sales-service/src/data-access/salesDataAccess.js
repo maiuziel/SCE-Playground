@@ -56,3 +56,11 @@ exports.getSalesRepType = async (email) => {
   );
   return result.rows;
 };
+
+exports.getConversationsByCustomerId = async (customerId) => {
+  const result = await pool.query(
+    'SELECT * FROM sales_conversations WHERE customer_id = $1',
+    [customerId]
+  );
+  return result.rows;
+};
