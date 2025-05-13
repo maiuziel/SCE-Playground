@@ -10,8 +10,8 @@ router.get('/getAllConversation', controller.getAllSales);
 router.get('/getConverstaion', controller.getSaleById);
 router.put('/:id', controller.updateSale);
 router.delete('/deleteConverstation', controller.deleteSale);
-router.get('/conversations/:customerId', controller.getConversationsByCustomerId);
 router.get('/AllConversations', controller.getAllConversations);
+router.get('/conversations/:customerId', controller.getConversationsByCustomerId);
 
 
 
