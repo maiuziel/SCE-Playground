@@ -8,7 +8,7 @@ const forwardAuthRequests = async (req, res, next) => {
     const path = req.originalUrl.replace('/auth', '');
     const url = `${authServiceUrl}${path}`;
 
-    console.log(`Forwarding request to ${  url}`, ` body: ${  req.body}`);
+    console.log(`Forwarding request to ${url}`, ` body: ${req.body}`);
 
     // Forward the exact method and body
     const response = await axios({
@@ -39,7 +39,7 @@ const forwardProductsRequests = async (req, res, next) => {
     const path = req.originalUrl.replace('/products', '');
     const url = `${productsServiceUrl}${path}`;
 
-    console.log(`Forwarding request to ${  url}`, ` body: ${  req.body}`);
+    console.log(`Forwarding request to ${url}`, ` body: ${req.body}`);
 
     // Forward the exact method and body
     const response = await axios({

@@ -38,6 +38,6 @@ export const Products = sequelize.define(
   },
   {
     tableName: 'products',
-    timestamps: false, 
+    timestamps: false,
   }
 );
