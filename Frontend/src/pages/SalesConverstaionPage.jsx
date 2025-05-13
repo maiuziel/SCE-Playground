@@ -36,7 +36,7 @@ export default function SalesConversationPage() {
     try {
         const endpoint = customerId
         ? `/sales/conversation/${customerId}`
-        : `/sales/AllConversations`;  
+        : '/sales/AllConversations';  
 
         const res = await api.get(endpoint);
         setConversations(res.data);
