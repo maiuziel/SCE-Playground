@@ -125,7 +125,7 @@ export default function SalesConversationPage() {
               marginTop: 10
             }}
           >
-            <thead style={{ backgroundColor: '#f0f0f0' }}>
+            <thead style={{ backgroundColor: 'green' }}>
               <tr>
                 <th style={th}>ID</th>
                 <th style={th}>Customer ID</th>
