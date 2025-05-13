@@ -1,0 +1,13 @@
+{
+    "name": "sce-playground",
+    "version": "1.0.0",
+    "scripts": {
+        "start:gateway": "cd Backend/GatewayService && npm start",
+        "start:auth": "cd Backend/AuthenticationService && npm start",
+        "start:frontend": "cd Frontend && npm run dev",
+        "start:all": "concurrently \"npm run start:gateway\" \"npm run start:auth\" \"npm run start:frontend\""
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}
