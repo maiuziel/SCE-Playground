@@ -29,7 +29,7 @@ export default function LeadManager() {
 
   useEffect(() => {
     loadLeads();
-    const iv = setInterval(loadLeads, 5000);
+    const iv = setInterval(loadLeads, 60000);
     return () => clearInterval(iv);
   }, [loadLeads]);
 
@@ -87,7 +87,7 @@ export default function LeadManager() {
       if (updates.length) {
         await Promise.all(
           updates.map(u =>
-            fetch('/leads/status',{
+            fetch('/leads/status',{ 
               method:'PUT',
               headers:{'Content-Type':'application/json'},
               body:JSON.stringify(u)
@@ -106,20 +106,22 @@ export default function LeadManager() {
   };
 
   const S = {
-    page:        { padding:20, fontFamily:'Arial,sans-serif' },
-    header:      { marginBottom:16 },
-    toolbar:     { display:'flex',gap:12,marginBottom:16,alignItems:'center' },
-    input:       { padding:'8px 12px',borderRadius:6,border:'1px solid #ccc',flexGrow:1,minWidth:200 },
-    editAllBtn:  { padding:'8px 12px',borderRadius:6,border:'none',backgroundColor:'#2196F3',color:'#fff',cursor:'pointer' },
-    saveAllBtn:  { padding:'8px 12px',borderRadius:6,border:'none',backgroundColor:'#4CAF50',color:'#fff',cursor:'pointer' },
-    tableWrap:   { overflowX:'auto',backgroundColor:'#fff',borderRadius:8,padding:16,boxShadow:'0 2px 8px rgba(0,0,0,0.1)' },
-    table:       { width:'100%',borderCollapse:'collapse' },
-    th:          { textAlign:'left',padding:'10px',borderBottom:'2px solid #ddd',backgroundColor:'#f0f0f0',color:'#000' },
-    td:          { padding:'10px',borderBottom:'1px solid #eee',backgroundColor:'#fff',color:'#000' },
-    statusBadge: { padding:'4px 8px',borderRadius:12,backgroundColor:'#ddd',color:'#333',fontWeight:'bold',fontSize:'0.9em',display:'inline-block' },
-    select:      { padding:'4px 8px',borderRadius:4,border:'1px solid #ccc' },
-    deleteBtn:   { marginLeft:8,padding:'4px 8px',borderRadius:4,border:'none',backgroundColor:'#F44336',color:'#fff',cursor:'pointer' },
-    successMsg:  { color:'#4CAF50', marginBottom:12, fontWeight:'bold' }
+    page:           { padding:20, fontFamily:'Arial, sans-serif' },
+    header:         { marginBottom:16 },
+    toolbar:        { display:'flex', gap:12, marginBottom:16, alignItems:'center' },
+    input:          { padding:'8px 12px', borderRadius:6, border:'1px solid #ccc', flexGrow:1, minWidth:200 },
+    editAllBtn:     { padding:'8px 12px', borderRadius:6, border:'none', backgroundColor:'#2196F3', color:'#fff', cursor:'pointer' },
+    saveAllBtn:     { padding:'8px 12px', borderRadius:6, border:'none', backgroundColor:'#4CAF50', color:'#fff', cursor:'pointer' },
+    tableWrap:      { width:'100%', overflowX:'auto', backgroundColor:'#fff', borderRadius:8, padding:16, boxShadow:'0 2px 8px rgba(0,0,0,0.1)' },
+    table:          { width:'100%', borderCollapse:'collapse', tableLayout:'fixed' },
+    numCol:         { width:'5%', textAlign:'center', padding:'10px', borderBottom:'2px solid #ddd', backgroundColor:'#f0f0f0', color:'#000' },
+    th:             { textAlign:'left', padding:'10px', borderBottom:'2px solid #ddd', backgroundColor:'#f0f0f0', color:'#000' },
+    td:             { padding:'10px', borderBottom:'1px solid #eee', backgroundColor:'#fff', color:'#000', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' },
+    statusBadge:    { padding:'4px 8px', borderRadius:12, backgroundColor:'#ddd', color:'#333', fontWeight:'bold', fontSize:'0.9em', display:'inline-block' },
+    select:         { padding:'4px 8px', borderRadius:4, border:'1px solid #ccc' },
+    deleteBtn:      { marginLeft:8, padding:'4px 8px', borderRadius:4, border:'none', backgroundColor:'#F44336', color:'#fff', cursor:'pointer' },
+    deletePlaceholder:{ visibility:'hidden', marginLeft:8, padding:'4px 8px', borderRadius:4, border:'none', backgroundColor:'#F44336', color:'#fff' },
+    successMsg:     { color:'#4CAF50', marginBottom:12, fontWeight:'bold' }
   };
 
   return (
@@ -137,9 +139,7 @@ export default function LeadManager() {
           {isEditingAll ? 'Cancel' : 'Update Status'}
         </button>
         {isEditingAll && (
-          <button onClick={onSaveAll} style={S.saveAllBtn}>
-            Save
-          </button>
+          <button onClick={onSaveAll} style={S.saveAllBtn}>Save</button>
         )}
       </div>
 
@@ -149,6 +149,7 @@ export default function LeadManager() {
         <table style={S.table}>
           <thead>
             <tr>
+              <th style={S.numCol}>#</th>
               <th style={S.th}>Name</th>
               <th style={S.th}>Email</th>
               <th style={S.th}>Phone</th>
@@ -161,14 +162,15 @@ export default function LeadManager() {
           <tbody>
             {filtered
               .filter(l => !(isEditingAll && toDelete.has(l.email)))
-              .map(l => (
+              .map((l,i) => (
                 <tr key={l.email}>
+                  <td style={S.numCol}>{i+1}</td>
                   <td style={S.td}>{l.full_name}</td>
                   <td style={S.td}>{l.email}</td>
                   <td style={S.td}>{formatPhone(l.phone)}</td>
                   <td style={S.td}>{new Date(l.submission_date).toLocaleDateString()}</td>
                   <td style={S.td}>{l.product_interest||'—'}</td>
-                  <td style={S.td}>{l.lead_source||'—'}</td> {/* use correct field */}
+                  <td style={S.td}>{l.lead_source||'—'}</td>
                   <td style={S.td}>
                     <div style={{ display:'flex', alignItems:'center' }}>
                       {isEditingAll ? (
@@ -178,23 +180,23 @@ export default function LeadManager() {
                             onChange={e=>onTempChange(l.email,e.target.value)}
                             style={S.select}
                           >
-                            {statuses.map(s=> <option key={s}>{s}</option>)}
+                            {statuses.map(s=><option key={s}>{s}</option>)}
                           </select>
                           <button
                             onClick={()=>toggleDelete(l.email)}
                             style={S.deleteBtn}
-                          >
-                            Delete
-                          </button>
+                          >Delete</button>
                         </>
                       ) : (
-                        <span style={S.statusBadge}>{l.status}</span>
+                        <>
+                          <span style={S.statusBadge}>{l.status}</span>
+                          <button style={S.deletePlaceholder}>Delete</button>
+                        </>
                       )}
                     </div>
                   </td>
                 </tr>
-              ))
-            }
+              ))}
           </tbody>
         </table>
       </div>
