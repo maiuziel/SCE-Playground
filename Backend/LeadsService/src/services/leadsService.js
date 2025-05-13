@@ -1,7 +1,7 @@
 import * as data from '../data-access/leadsDataAccess.js';
 
 export const create = async (leadData) => {
-  const { full_name, phone, email, product_interest } = leadData;
+  const { full_name, phone, email, product_interest,lead_source } = leadData;
 
  
   if (!full_name || full_name.trim() === '') {
@@ -20,6 +20,7 @@ export const create = async (leadData) => {
   if (!phone || phone.trim() === '') {
     throw new Error('Phone is required');
   }
+  
 
   
   const phoneRegex = /^05\d{8}$/;
@@ -49,6 +50,7 @@ export const create = async (leadData) => {
   if (product_interest.length > 255) {
     throw new Error('Product interest must be at most 255 characters');
   }
+  
 
  
   const allLeads = await data.getAllLeads();

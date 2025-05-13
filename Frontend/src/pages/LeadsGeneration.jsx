@@ -6,13 +6,14 @@ export default function LeadsGeneration() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [productInterest, setProductInterest] = useState('');
+  const [leadSource, setLeadSource] = useState('');
   const [response, setResponse] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!fullName || !phone || !email || !productInterest) {
-      alert('נא למלא את כל השדות!');
+    if (!fullName || !phone || !email || !productInterest || !leadSource) {
+      alert('נא למלא את כל השדות כולל מקור הליד!');
       return;
     }
 
@@ -22,6 +23,7 @@ export default function LeadsGeneration() {
         phone,
         email,
         product_interest: productInterest,
+        lead_source: leadSource,
       });
 
       console.log('✅ Gateway: lead added successfully', result.data);
@@ -70,11 +72,11 @@ export default function LeadsGeneration() {
         <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#222' }}>
           Share Your Contact Info
         </h2>
-  
+
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           <input
             type="text"
-            placeholder="Full Name-Max 255 characters(a-zA-Z)"
+            placeholder="Full Name - Max 255 characters"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             style={inputStyle}
@@ -100,6 +102,20 @@ export default function LeadsGeneration() {
             onChange={(e) => setProductInterest(e.target.value)}
             style={inputStyle}
           />
+          <select
+            value={leadSource}
+            onChange={(e) => setLeadSource(e.target.value)}
+            style={inputStyle}
+          >
+            <option value="">Select Lead Source</option>
+            <option value="Facebook">Facebook</option>
+            <option value="Google">Google</option>
+            <option value="Friend">Friend</option>
+            <option value="Event">Event</option>
+            <option value="Website">Website</option>
+            <option value="Other">Other</option>
+          </select>
+
           <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
             <button
               type="submit"
@@ -118,7 +134,7 @@ export default function LeadsGeneration() {
             </button>
           </div>
         </form>
-  
+
         {response && (
           <div
             style={{

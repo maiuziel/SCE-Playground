@@ -1,11 +1,11 @@
 import pool from './db.js';
 
-export const createLead = async ({ full_name, phone, email, product_interest }) => {
+export const createLead = async ({ full_name, phone, email, product_interest,lead_source }) => {
   const result = await pool.query(
-    `INSERT INTO leads (full_name, phone, email, product_interest)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO leads (full_name, phone, email, product_interest,lead_source)
+     VALUES ($1, $2, $3, $4,$5)
      RETURNING *`,
-    [full_name, phone, email, product_interest]
+    [full_name, phone, email, product_interest,lead_source]
   );
   return result.rows[0]; 
 };

@@ -4,8 +4,8 @@ export const createLead = async (req, res) => {
     console.log('🟢 נכנסתי ל־createLead');
     console.log('📥 body:', req.body);
     try {
-      const { full_name, email, phone, product_interest } = req.body;
-      const lead = await leadsService.create({ full_name, email, phone, product_interest });
+      const { full_name, email, phone, product_interest,lead_source } = req.body;
+      const lead = await leadsService.create({ full_name, email, phone, product_interest,lead_source });
   
       res.status(201).json(lead);
     } catch (error) {
