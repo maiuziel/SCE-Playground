@@ -401,7 +401,7 @@ export default function LeadManager() {
       </div>
 
       <div style={S.chartBox}>
-        <h3 style={{ marginBottom: 16 }}>Conversion Analytics</h3>
+        <h3 style={{ marginBottom: 16,color:'#333' }}>Conversion Analytics</h3>
         <div style={S.chartRow}>
           <div style={S.chartColumn}>
             <Line data={getCampaignPerformanceData()} options={chartOptions} />
