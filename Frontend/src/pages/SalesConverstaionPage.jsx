@@ -35,7 +35,7 @@ export default function SalesConversationPage() {
   const fetchConversations = async () => {
     try {
         const endpoint = customerId
-        ? `/sales/conversation/${customerId}`
+        ? `/sales/conversations/${customerId}`
         : '/sales/AllConversations';  
 
         const res = await api.get(endpoint);
@@ -158,7 +158,7 @@ export default function SalesConversationPage() {
       {result && (
         <div style={{ marginTop: 20 }}>
           <h4 style={{ color: 'green' }}>Saved successfully!</h4>
-          <pre style={{ background: '#f7f7f7', padding: 10, borderRadius: 4 }}>{JSON.stringify(result, null, 2)}</pre>
+          <pre style={{ padding: 10, borderRadius: 4 }}>{JSON.stringify(result, null, 2)}</pre>
         </div>
       )}
     </div>
