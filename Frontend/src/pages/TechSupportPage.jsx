@@ -43,7 +43,7 @@ export default function TechSupportPage() {
     }
 
     getPageType();
-  }, [user?.email, requests?.length]);
+  }, [user?.email, requests?.length, costumerReq?.length]);
 
   // Loading requests from the DB
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function TechSupportPage() {
           setError("Failed to load support requests");
         }
       }
-      else { 
+      else { // if is user.
         try {
           const res = await api.get("/ts/techsupportfetchuserrequests/?email=" + user?.email);
           setRequests(res.data.userRequest);
@@ -95,6 +95,7 @@ export default function TechSupportPage() {
     setPageState(addRequestPage);
   };
 
+  // convert urgency level into text
   const getUrgencyText = (level) => {
     if (level === 1)
       return 'high';
@@ -110,6 +111,23 @@ export default function TechSupportPage() {
   const handleSendMessage = () => {
     alert("Send button was clicked");
   };
+
+  // handle creat new request button.
+  const handleCreateNewTicket = () => {
+    const [userType, setUserType] = 0; // 1-> user, 2-> lead
+    const [issueCategory, setIssueCategory] = "";
+    const [desc, setDesc] = ""; // max 2000, min 10 chars
+    const [imgs, setImgs] = ""; // max 4 imgs
+
+    const res = api.post("/ts/techsupportadd?type=" + userType + "&name=" + user?.firstName + "&email=" + user?.email + "&catagory=" + issueCategory + "&description=" + desc + "&images=" + imgs);
+
+    if (res.data.success === true) {
+      return res.data.ticket;
+    }
+    else {
+      return false;
+    }
+  }
 
   if (pageState === agentPage) {
     return (
@@ -209,8 +227,8 @@ export default function TechSupportPage() {
           <label>User Type:</label>
           <select id="tech-userType" required>
             <option value="">Select...</option>
-            <option value="before">Before Purchase</option>
-            <option value="after">After Purchase</option>
+            <option value="2">Before Purchase</option>
+            <option value="1">After Purchase</option>
           </select>
   
           <label>Issue Category:</label>
@@ -226,16 +244,16 @@ export default function TechSupportPage() {
             <option value="Other">Other</option>
           </select>
   
-          <label>Description:</label>
+          <label>Description: (Max 2000 letters)</label>
           <textarea id="tech-description" minLength="10" maxLength="2000" required></textarea>
   
           <label>Upload Images (up to 4):</label>
-          <input type="file" id="tech-fileUpload" multiple accept=".jpg,.jpeg,.png,.gif" />
+          <input type="file" id="tech-fileUpload" multiple accept=".jpg,.jpeg,.png" />
   
           <div id="tech-filePreview"></div>
   
           <div className="tech-button-group">
-            <button className='tech-buttons' type="submit">Submit</button>
+            <button className='tech-buttons' type="submit" onClick={() => handleCreateNewTicket()}>Submit</button>
             <button className='tech-buttons' type="button" onClick={() => setPageState(userPage)}>Back</button>
           </div>
         </form>
