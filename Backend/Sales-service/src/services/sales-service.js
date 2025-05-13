@@ -36,6 +36,10 @@ exports.getSalesRepType = async (email) => {
   return await salesDataAccess.getSalesRepType(email);
 };
 
-exports.getConversationsByCustomerId = async (email) => {
-  return await salesDataAccess.getConversationsByCustomerId(email);
+exports.getConversationsByCustomerId = async (id) => {
+  return await salesDataAccess.getConversationsByCustomerId(id);
+};
+
+exports.getAllConversations = async () => {
+  return await salesDataAccess.getAllConversations();
 };

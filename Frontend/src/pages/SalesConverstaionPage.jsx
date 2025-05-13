@@ -34,8 +34,12 @@ export default function SalesConversationPage() {
 
   const fetchConversations = async () => {
     try {
-      const res = await api.get(`/sales/conversations/${customerId}`);
-      setConversations(res.data);
+        const endpoint = customerId
+        ? `/sales/conversation/${customerId}`
+        : `/sales/AllConversations`;  
+
+        const res = await api.get(endpoint);
+        setConversations(res.data);
     } catch (err) {
       alert('Failed to fetch conversations');
     }
