@@ -27,6 +27,7 @@ export default function LeadsGeneration() {
       alert('Please fill in all fields including lead source!');
       return;
     }
+    
     let finalSource = leadSource;
     if (leadSource === 'Other') {
       if (!otherSource) {
