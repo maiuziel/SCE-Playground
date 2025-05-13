@@ -1,0 +1,12 @@
+.filter-sort-search {
+  width: 120px;
+  background-color: blue;
+  color: white;
+  border: none;
+  font-weight: bolder;
+}
+
+.filter-sort-search:hover {
+  background-color: white;
+  color: blue;
+}

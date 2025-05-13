@@ -1,0 +1,28 @@
+.display-buttons-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 1rem 2rem;
+}
+
+.products-page-title {
+  margin: 0;
+}
+
+.display-buttons {
+  position: absolute;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.products-catalog {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 4rem auto;
+  max-width: 90%;
+}

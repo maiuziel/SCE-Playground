@@ -4,7 +4,7 @@ import api from '../services/api';
 import { handleMainImageChange, handlePdfUpload } from '../utils/fileHandlers';
 import { uploadFiles } from '../utils/uploadFiles';
 
-function AddProductForm() {
+function AddProductForm({ onProductAdded }) {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -45,6 +45,10 @@ function AddProductForm() {
 
       const response = await api.post('/products/create-product', fullProduct);
       setSuccess(`Product "${response.data.name}" was created successfully.`);
+
+      if (onProductAdded) {
+        onProductAdded();
+      }
 
       setFormData({
         name: '',

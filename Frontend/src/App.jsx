@@ -1,5 +1,7 @@
 // frontend/src/App.jsx
 import React, { useContext } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import {
   BrowserRouter,
   Routes,
@@ -11,13 +13,14 @@ import HomePage from './pages/HomePage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
-import AdminProductsPage from './pages/AdminProductsPage.jsx';
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ProductsAdminRoute from './components/ProductsAdminRoute';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import ProductPage from './pages/ProductPage.jsx';
+import EditProductPage from './pages/UpdateProductPage.jsx';
+import LeadsPage from './pages/LeadsPage.jsx';
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
@@ -58,7 +61,6 @@ function Navbar() {
           <Link to="/signup">Sign Up</Link>
           <Link to="/products">Products</Link>
         </div>
-        {/* If logged in, show user circle */}
         {user && <div className="user-circle">{userInitial}</div>}
       </div>
     </div>
@@ -84,6 +86,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/products/:id" element={<ProductPage />} />
+
+            <Route
+              path="/products/update-product/:id"
+              element={<EditProductPage />}
+            />
+
+            <Route path="/products/:id/leads" element={<LeadsPage />}></Route>
           </Routes>
         </div>
       </BrowserRouter>
