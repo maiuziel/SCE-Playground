@@ -33,8 +33,8 @@ export default function HomePage() {
     transition: 'transform 0.3s ease',
   };
 
-  const hoverIn = e => (e.currentTarget.style.transform = 'scale(1.03)');
-  const hoverOut = e => (e.currentTarget.style.transform = 'scale(1)');
+  
+  
 
   return (
     <div className="home-container">
@@ -56,35 +56,18 @@ export default function HomePage() {
             src="/reports.jpg"
             alt="Reports"
             onClick={() => navigate('/reports')}
-            style={imgStyle}
-            onMouseEnter={hoverIn}
-            onMouseLeave={hoverOut}
+            
+            
           />
         </div>
 
-        {/* ── PRODUCT INTEREST TILE ── */}
-        <div style={tileStyle}>
-          <img
-            src="/LeadsGeneration.png"
-            alt="Product Interest"
-            style={imgStyle}
-          />
-          <button
-            onClick={() => navigate('/createlead')}
-            style={btnStyle}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
-          >
-            Go to Leads Generation
-          </button>
-        </div>
-
+        
         {/* ── MANAGE LEADS TILE ── */}
         <div style={tileStyle}>
           <img
             src="/lead_manager.png"
             alt="Lead Manager"
-            style={imgStyle}
+            
           />
           <button
             onClick={() => navigate('/lead-manager')}

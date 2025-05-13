@@ -18,7 +18,9 @@ function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !isValidating && !user) {
+        const publicPaths = [ '/createlead'];
+
+    if (!isLoading && !isValidating && !user  && !publicPaths.includes(location.pathname)) {
       console.log('No valid user found after validation. Redirecting to /signin');
       navigate('/signin');
     }
@@ -61,6 +63,7 @@ function Navbar() {
         <div className='nav-links'>
           <Link to='/'>Home</Link>
           <Link to='/products'>Products</Link>
+          <Link to='/createlead'>Leads Generation</Link>
           {!user ? (
              <div className='nav-links'>
                <Link to='/signin'>Sign In</Link>
