@@ -84,15 +84,15 @@ export default function SalesLeadsPage() {
     setLoading(true);
     try {
       const res = await api.post('/sales/assignLead', {
-        leadId: leadId,
+        leadId,
         email: user.email
       });
 
       if (res.data) {
-        // Update the leads array to reflect the assignment
+        // Update the leads array to reflect both the assignment AND status change
         const updatedLeads = leads.map(lead => 
           lead.lead_id === leadId 
-            ? { ...lead, rep_mail: user.email, status: "In progress" } 
+            ? { ...lead, rep_mail: user.email, status: 'In progress' } 
             : lead
         );
         setLeads(processLeads(updatedLeads));
@@ -105,6 +105,7 @@ export default function SalesLeadsPage() {
       setLoading(false);
     }
   };
+
 
   // Filter leads by status if showActiveOnly is true
   const filteredLeads = showActiveOnly
