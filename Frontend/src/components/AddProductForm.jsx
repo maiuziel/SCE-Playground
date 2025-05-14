@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Container, Alert, Spinner } from 'react-bootstrap';
 import api from '../services/api';
 import { handleMainImageChange, handlePdfUpload } from '../utils/fileHandlers';
 import { uploadFiles } from '../utils/uploadFiles';
 
-function AddProductForm({ onProductAdded }) {
+function AddProductForm({ onProductAdded, initialData = null, onSubmit }) {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -29,6 +29,12 @@ function AddProductForm({ onProductAdded }) {
     }));
   };
 
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess('');
@@ -41,27 +47,31 @@ function AddProductForm({ onProductAdded }) {
         extra_images: formData.extra_images.map((f) => f.url),
       };
 
-      console.log(fullProduct);
-
-      const response = await api.post('/products/create-product', fullProduct);
-      setSuccess(`Product "${response.data.name}" was created successfully.`);
-
-      if (onProductAdded) {
-        onProductAdded();
+      if (onSubmit) {
+        await onSubmit(fullProduct);
+        setSuccess('Product updated successfully.');
+      } else {
+        const response = await api.post(
+          '/products/create-product',
+          fullProduct
+        );
+        setSuccess(`Product "${response.data.name}" was created successfully.`);
+        if (onProductAdded) onProductAdded();
       }
 
-      setFormData({
-        name: '',
-        category: '',
-        description: '',
-        price: '',
-        image_url: '',
-        datasheet_url: '',
-        extra_images: [],
-      });
-
-      if (mainImageInputRef.current) mainImageInputRef.current.value = null;
-      if (pdfInputRef.current) pdfInputRef.current.value = null;
+      if (!onSubmit) {
+        setFormData({
+          name: '',
+          category: '',
+          description: '',
+          price: '',
+          image_url: '',
+          datasheet_url: '',
+          extra_images: [],
+        });
+        if (mainImageInputRef.current) mainImageInputRef.current.value = null;
+        if (pdfInputRef.current) pdfInputRef.current.value = null;
+      }
 
       setTimeout(() => setSuccess(''), 4000);
       console.log('Server response:', response.data);
@@ -279,7 +289,7 @@ function AddProductForm({ onProductAdded }) {
               />
             </>
           ) : (
-            'Add Product'
+            <span>{onSubmit ? 'Update Product' : 'Add Product'}</span>
           )}
         </Button>
       </Form>
