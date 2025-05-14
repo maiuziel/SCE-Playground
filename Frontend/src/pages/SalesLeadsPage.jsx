@@ -13,34 +13,10 @@ export default function SalesLeadsPage() {
     fetchAllLeads();
   }, []);
 
-  const isOlderThan3Days = (datestring) => {
-    if (!datestring) return false;
-    const leadDate = new Date(datestring);
-    const today = new Date();
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(today.getDate() - 3);
-    return leadDate < threeDaysAgo;
-  };
-
-  const processLeads = (leadsData) => {
-    return [...leadsData].sort((a, b) => {
-      const aIsOld = isOlderThan3Days(a.application_date);
-      const bIsOld = isOlderThan3Days(b.application_date);
-
-      if (aIsOld && !bIsOld) return -1;
-      if (!aIsOld && bIsOld) return 1;
-
-      if (a.application_date && b.application_date) {
-        return new Date(a.application_date) - new Date(b.application_date);
-      }
-      return 0;
-    });
-  };
-
   const fetchAllLeads = async () => {
     try {
       const res = await api.get('sales/getAllLeads');
-      setLeads(processLeads(res.data));
+      setLeads(res.data);
       setIsPersonalView(false);
       setShowActiveOnly(false);
     } catch (error) {
@@ -51,7 +27,7 @@ export default function SalesLeadsPage() {
   const fetchMyLeads = async () => {
     try {
       const res = await api.get(`sales/getMyLeads/${user.email}`);
-      setLeads(processLeads(res.data));
+      setLeads(res.data);
       setIsPersonalView(true);
       setShowActiveOnly(false);
     } catch (error) {
@@ -66,7 +42,7 @@ export default function SalesLeadsPage() {
         const status = lead.status?.toLowerCase();
         return status !== 'done' && status !== 'canceled';
       });
-      setLeads(processLeads(activeLeads));
+      setLeads(activeLeads);
       setIsPersonalView(false);
       setShowActiveOnly(true);
     } catch (error) {
@@ -105,7 +81,17 @@ export default function SalesLeadsPage() {
     }
   };
 
-  const filteredLeads = showActiveOnly
+  // Check if a lead is "new" and older than 3 days
+  const isNewAndOld = (lead) => {
+    if (lead.status?.toLowerCase() !== 'new') return false;
+    const applicationDate = new Date(lead.application_date);
+    const now = new Date();
+    const diffDays = (now - applicationDate) / (1000 * 60 * 60 * 24);
+    return diffDays > 3;
+  };
+
+  // Filter and sort leads so that "new and old" leads come first
+  const filteredLeads = (showActiveOnly
     ? leads.filter((lead) => {
         const status = lead.status?.toLowerCase();
         return status !== 'done' && status !== 'canceled';
@@ -160,48 +146,57 @@ export default function SalesLeadsPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredLeads.map((lead) => {
-              const isOld = isOlderThan3Days(lead.application_date);
-              return (
-                <tr
-                  key={lead.lead_id}
-                  style={isOld ? {
-                    backgroundColor: 'red',
-                    color: 'black',
-                    fontWeight: 'bold'
-                  } : {}}
-                >
-                  <td>{lead.lead_id}</td>
-                  <td>{lead.contact_number}</td>
-                  <td>{lead.status}</td>
-                  <td>{lead.rep_mail}</td>
-                  <td>{lead.application_date}</td>
-                  <td>{lead.closing_date ?? '-'}</td>
-                  <td>
-                    {!lead.rep_mail && (
-                      <button
-                        onClick={() => assignLeadToMe(lead.lead_id)}
-                        disabled={loading}
-                        style={{
-                          backgroundColor: '#4CAF50',
-                          color: 'white',
-                          border: 'none',
-                          padding: '5px 10px',
-                          borderRadius: '3px',
-                          cursor: loading ? 'not-allowed' : 'pointer',
-                          opacity: loading ? 0.7 : 1
-                        }}
-                      >
-                        {loading ? 'Assigning...' : 'Assign to me'}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+            {filteredLeads.map((lead) => (
+              <tr
+                key={lead.lead_id}
+                style={{
+                  backgroundColor: isNewAndOld(lead) ? 'red' : 'transparent'
+                }}
+              >
+                <td>{lead.lead_id}</td>
+                <td>{lead.contact_number}</td>
+                <td>{lead.status}</td>
+                <td>{lead.rep_mail}</td>
+                <td>{lead.application_date}</td>
+                <td>{lead.closing_date ?? '-'}</td>
+                <td>
+                  {!lead.rep_mail && (
+                    <button
+                      onClick={() => assignLeadToMe(lead.lead_id)}
+                      disabled={loading}
+                      style={{
+                        backgroundColor: '#4CAF50',
+                        color: 'white',
+                        border: 'none',
+                        padding: '5px 10px',
+                        borderRadius: '3px',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        opacity: loading ? 0.7 : 1
+                      }}
+                    >
+                      {loading ? 'Assigning...' : 'Assign to me'}
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}
     </div>
   );
+}
+
+// Helper style function for button reuse
+function buttonStyle(bgColor, color) {
+  return {
+    backgroundColor: bgColor,
+    color,
+    border: 'none',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    fontSize: '16px',
+    marginRight: '10px',
+    cursor: 'pointer'
+  };
 }
