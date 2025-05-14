@@ -63,7 +63,7 @@ export default function TechSupportPage() {
       const res = await api.get("/ts/techsupportisagent/?email=" + user?.email);
 
       if (res?.data.agent === true)
-        setPageState(agentPage); // change here to switch mode
+        setPageState(agentPage);
       else setPageState(userPage);
     }
 
@@ -544,7 +544,7 @@ export default function TechSupportPage() {
   if (pageState === addRequestPage) {
     return (
       <div className="tech-form-container">
-        <h1>Contact Technical Support</h1>
+        <h1 className="tech-form-container-title">Contact Technical Support</h1>
 
         {formSubmittedSuccessfully ? (
           <div style={{ textAlign: "center", marginTop: "40px" }}>
@@ -704,12 +704,19 @@ export default function TechSupportPage() {
                 Date 31.3.25 | Time 14:00
               </p>
               <div className="tech-view-request-history">
-                {forumMessages.map((msg, idx) => (
-                  <p key={idx} className="tech-view-request-message">
-                    <span className="tech-bold-label">{msg.name}:</span>{" "}
-                    {msg.content}
-                  </p>
-                ))}
+                {isLoadingMessages ? (
+                  <div className="tech-loading-messages">
+                    <div className="spinner"></div>
+                    <p className="tech-loading-text">Loading messages...</p>
+                  </div>
+                ) : (
+                  forumMessages.map((msg, idx) => (
+                    <p key={idx} className="tech-view-request-message">
+                      <span className="tech-bold-label">{msg.name}:</span>{" "}
+                      {msg.content}
+                    </p>
+                  ))
+                )}
               </div>
 
               {selectedRequest.status !== 3 ? (
