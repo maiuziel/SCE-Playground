@@ -35,8 +35,19 @@ export default function SalesLeadsPage() {
     }
   };
 
-  const showActiveLeads = () => {
-    setShowActiveOnly(true);
+  const showActiveLeads = async () => {
+    try {
+      const res = await api.get('sales/getAllLeads');
+      const activeLeads = res.data.filter((lead) => {
+        const status = lead.status?.toLowerCase();
+        return status !== 'done' && status !== 'canceled';
+      });
+      setLeads(activeLeads);
+      setIsPersonalView(false);
+      setShowActiveOnly(true);
+    } catch (error) {
+      console.error('Failed to fetch active leads:', error);
+    }
   };
 
   // Function to assign a lead to the current user
