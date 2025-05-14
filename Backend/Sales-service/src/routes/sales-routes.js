@@ -12,6 +12,8 @@ router.put('/:id', controller.updateSale);
 router.delete('/deleteConverstation', controller.deleteSale);
 router.get('/AllConversations', controller.getAllConversations);
 router.get('/conversations/:customerId', controller.getConversationsByCustomerId);
+router.get('/getSalesByCostumer/:customerId', controller.getSalesByCostumerId);
+router.get('getAllSales', controller.getAllSales);
 
 
 

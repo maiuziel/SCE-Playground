@@ -71,3 +71,11 @@ exports.getAllConversations = async () => {
     );
   return result.rows;
 };
+
+exports.getSalesByCostumerId = async(customerId) => {
+  const result = await pool.query(
+    'SELECT * FROM sales WHERE customer_id = $1',
+    [customerId]
+  );
+  return result.rows;
+}

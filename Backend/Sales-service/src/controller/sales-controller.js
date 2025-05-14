@@ -59,7 +59,16 @@ exports.deleteSale = async (req, res) => {
   }
 };
 
-
+exports.getSalesByCostumerId = async (req, res) => {
+  try {
+    const customerId = parseInt(req.params.customerId);
+    const data = await salesService.getSalesByCustomerId(customerId);
+    res.json(data);
+  } catch (err) {
+    console.error('Error retrieving cusomer sales:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+};
 
 exports.isSalesRep = async (req, res) => {
   const { email } = req.query;

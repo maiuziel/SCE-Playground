@@ -78,7 +78,8 @@ export default function SalesPage() {
 
       <button className="addSalesConverstaionBtn"
       onClick={() => navigate('/salesConverstaion')}>Add converstaion</button>
-
+      <button className= "searchSaleHistorybtn"
+      onClick={()=> navigate('/salesSearchHistory')}>Search Sale History</button>
     </div>
   );
 

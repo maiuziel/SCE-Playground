@@ -27,6 +27,9 @@ exports.deleteSale = async (id) => {
   await salesDataAccess.deleteSale(id);
 };
 
+exports.getSalesByCustomerId = async (id) => {
+  return await salesDataAccess.getSalesByCustomerId(id);
+};
 
 exports.isSalesRep = async (email) => {
   return await salesDataAccess.checkIfSalesRep(email);
