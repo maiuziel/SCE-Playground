@@ -71,7 +71,7 @@ export default function SalesLeadsPage() {
         // Update UI state
         setLeads(leads.map(lead =>
           lead.lead_id === leadId
-            ? { ...lead, rep_mail: user.email, status: 'InProgress' }
+            ? { ...lead, rep_mail: user.email, status: 'in progress' }
             : lead
         ));
 
