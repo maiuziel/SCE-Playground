@@ -110,54 +110,33 @@ export default function SalesLeadsPage() {
         const status = lead.status?.toLowerCase();
         return status !== 'done' && status !== 'canceled';
       })
-    : leads;
+    : leads
+  ).sort((a, b) => {
+    const aOld = isNewAndOld(a);
+    const bOld = isNewAndOld(b);
+    return bOld - aOld; // true > false
+  });
 
   return (
     <div style={{ padding: '20px' }}>
       <div style={{ marginBottom: '15px' }}>
         <button
           onClick={fetchAllLeads}
-          style={{
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            fontSize: '16px',
-            marginRight: '10px',
-            cursor: 'pointer'
-          }}
+          style={buttonStyle('#007bff', 'white')}
         >
           all the leads
         </button>
 
         <button
           onClick={fetchMyLeads}
-          style={{
-            backgroundColor: '#28a745',
-            color: 'white',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            fontSize: '16px',
-            marginRight: '10px',
-            cursor: 'pointer'
-          }}
+          style={buttonStyle('#28a745', 'white')}
         >
           my leads
         </button>
 
         <button
           onClick={showActiveLeads}
-          style={{
-            backgroundColor: '#ffc107',
-            color: 'black',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            fontSize: '16px',
-            cursor: 'pointer'
-          }}
+          style={buttonStyle('#ffc107', 'black')}
         >
           active leads
         </button>
