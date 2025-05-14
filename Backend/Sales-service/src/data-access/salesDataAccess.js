@@ -107,9 +107,10 @@ exports.assignLead = async (leadId, email) => {
 
 exports.updateLeadToInProgress = async (number) => {
   const newStatus = 'in progress';
+  const oldStatus = 'new'
   const result = await pool.query(
-    'UPDATE leads_table SET status = $1 WHERE contact_number = $2 RETURNING *',
-    [newStatus,number]
+    'UPDATE leads_table SET status = $1 WHERE status = $2 AND rep_mail IS NOT NULL',
+    [newStatus,oldStatus]
   );
   return result.rows[0];
 };
