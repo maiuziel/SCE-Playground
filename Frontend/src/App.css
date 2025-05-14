@@ -493,6 +493,14 @@ body {
   font-weight: bold;
 }
 
+.tech-view-request-closed-msg {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 16px;
+}
+
+
 /* =====================
    Tech-Sup Pages END
 ===================== */

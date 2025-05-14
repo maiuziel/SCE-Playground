@@ -1,4 +1,5 @@
-import { addDbAgent, isDbAgent } from '../data-access/db.js';
+import { addDbAgent, isDbAgent, getForumMessagesFromDb,
+  postForumMessageToDb, closeSupportRequestInDb} from '../data-access/db.js';
 import { getAllTechReports, deleteDbTicket, addDbTicket, editDbTicket, isDbAgentexist, addOneDbAgent, getDbRequestFromOneUser } from '../services/techSupportService.js';
 
 // get all tickets.
@@ -159,5 +160,77 @@ export async function getRequestsFromOneUser(req, res) {
         console.error('Error getting requests:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
+}
+
+
+// get forum messages
+export async function getForumMessages(req, res) {
+  const pid = parseInt(req.query.pid, 10);
+
+  if (!pid) {
+    return res.status(400).json({ error: 'pid must be a valid number.' });
+  }
+
+  try {
+    const result = await getForumMessagesFromDb(pid);
+
+    if (result.success) {
+      return res.status(200).json({ messages: result.messages });
+    } else {
+      return res.status(404).json({ error: result.error });
+    }
+
+  } catch (error) {
+    console.error('Error getting forum messages:', error.message);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+// post a forum message
+export async function postForumMessage(req, res) {
+  const pid = parseInt(req.query.pid, 10);
+  const name = req.query.name;
+  const content = req.query.content;
+  const isAgent = req.query.isAgent === 'true';
+
+  if (!pid || !name || !content) {
+    return res.status(400).json({ error: 'pid, name and content must be provided.' });
+  }
+
+  try {
+    const result = await postForumMessageToDb(pid, name, content, isAgent);
+
+    if (result.success) {
+      return res.status(200).json({ success: true });
+    } else {
+      return res.status(404).json({ error: result.error });
+    }
+
+  } catch (error) {
+    console.error('Error posting forum message:', error.message);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+// close a support request
+export async function closeSupportRequest(req, res) {
+  const id = parseInt(req.query.id, 10);
+
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'id must be a valid number.' });
+  }
+
+  try {
+    const result = await closeSupportRequestInDb(id);
+
+    if (result.success) {
+      return res.status(200).json(result);
+    } else {
+      return res.status(404).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('Error closing ticket:', error.message);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
