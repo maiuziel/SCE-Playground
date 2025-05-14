@@ -315,6 +315,8 @@ body {
   color: #555;
 }
 
+
+
 .tech-request-id {
   color: #007bff;
   font-weight: bold;
@@ -411,7 +413,6 @@ body {
   margin-top: 15px;
   display: flex;
   gap: 10px;
-  display: flex;
   justify-content: space-between;
 }
 
@@ -446,7 +447,7 @@ body {
   color: black;
   padding: 2%;
   border-radius: 30px;
-  width: 420px;
+  width: 500px;
   z-index: 1000;
   box-shadow: 0 0 5px 3px #007bff;
 }
@@ -497,6 +498,7 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
 
 .tech-bold-label {
   font-weight: bold;

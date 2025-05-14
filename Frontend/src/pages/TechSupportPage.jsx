@@ -46,7 +46,7 @@ export default function TechSupportPage() {
       } catch (err) {
         console.error("Failed to fetch messages", err);
       } finally {
-        setIsLoadingMessages(false); // סיום טעינה
+        setIsLoadingMessages(false); // Stop loading
       }
     }
 
@@ -63,7 +63,7 @@ export default function TechSupportPage() {
       const res = await api.get("/ts/techsupportisagent/?email=" + user?.email);
 
       if (res?.data.agent === true)
-        setPageState(agentPage);
+        setPageState(userPage); 
       else setPageState(userPage);
     }
 
@@ -353,7 +353,7 @@ export default function TechSupportPage() {
     setPreviews([]);
     setMessageText("");
     setFormSubmittedSuccessfully(false);
-    setPageState(userPage); // חזרה לעמוד הראשי
+    setPageState(userPage); // Go back to the user page
   };
 
   const handleAddRequest = () => {
