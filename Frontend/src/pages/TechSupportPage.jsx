@@ -13,6 +13,7 @@ export default function TechSupportPage() {
   const addRequestPage = 3;
   const loadingScreen = 5;
 
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState(null);
@@ -36,6 +37,7 @@ export default function TechSupportPage() {
     if (!selectedRequest) return;
 
     async function fetchMessages() {
+      setIsLoadingMessages(true); // Start loading
       try {
         const res = await api.get(
           `/ts/gettechsupportforum?pid=${selectedRequest.id}`
@@ -43,6 +45,8 @@ export default function TechSupportPage() {
         setForumMessages(res.data.messages);
       } catch (err) {
         console.error("Failed to fetch messages", err);
+      } finally {
+        setIsLoadingMessages(false); // סיום טעינה
       }
     }
 
@@ -360,175 +364,182 @@ export default function TechSupportPage() {
   if (pageState === agentPage) {
     return (
       <>
-      <div className="tech-agent-requests-page">
-        <h2 className="tech-client-requests-page-title">
-          Welcome agent: {user?.firstName}.
-        </h2>
+        <div className="tech-agent-requests-page">
+          <h2 className="tech-client-requests-page-title">
+            Welcome agent: {user?.firstName}.
+          </h2>
 
-        <div className="tech-agent-content">
-          {/* LEFT PANEL: type === 1 */}
-          <div className="tech-left-agent-panel">
-            <h2 className="tech-panel-title">Customers</h2>
+          <div className="tech-agent-content">
+            {/* LEFT PANEL: type === 1 */}
+            <div className="tech-left-agent-panel">
+              <h2 className="tech-panel-title">Customers</h2>
 
-            <div className="tech-request-header-row">
-              <span className="tech-request-cell">Status</span>
-              <span className="tech-request-cell">Category</span>
-              <span className="tech-request-cell">Urgency</span>
-              <span className="tech-request-cell">ID</span>
+              <div className="tech-request-header-row">
+                <span className="tech-request-cell">Status</span>
+                <span className="tech-request-cell">Category</span>
+                <span className="tech-request-cell">Urgency</span>
+                <span className="tech-request-cell">ID</span>
+              </div>
+
+              {costumerReq
+                .filter((req) => req.type === 1)
+                .map((req) => (
+                  <div
+                    key={req.id}
+                    className="tech-request-row"
+                    onClick={() => setSelectedRequest(req)}
+                  >
+                    <span className="tech-request-cell">
+                      <span
+                        className={`tech-status-circle ${getStatusColor(
+                          req.status
+                        )}`}
+                        style={{ marginRight: "8px" }}
+                      ></span>
+                    </span>
+
+                    <span className="tech-request-cell">{req.category}</span>
+
+                    <span className="tech-request-cell">
+                      {getUrgencyText(req.urgency)}
+                    </span>
+
+                    <span className="tech-request-cell tech-request-id">
+                      Request #{req.id}
+                    </span>
+                  </div>
+                ))}
             </div>
 
-            {costumerReq
-              .filter((req) => req.type === 1)
-              .map((req) => (
-                <div
-                  key={req.id}
-                  className="tech-request-row"
-                  onClick={() => setSelectedRequest(req)}
-                >
-                  <span className="tech-request-cell">
-                    <span
-                      className={`tech-status-circle ${getStatusColor(
-                        req.status
-                      )}`}
-                      style={{ marginRight: "8px" }}
-                    ></span>
-                  </span>
+            {/* RIGHT PANEL: type === 2 */}
+            <div className="tech-right-agent-panel">
+              <h2 className="tech-panel-title">Leads</h2>
 
-                  <span className="tech-request-cell">{req.category}</span>
+              <div className="tech-request-header-row">
+                <span className="tech-request-cell">Status</span>
+                <span className="tech-request-cell">Category</span>
+                <span className="tech-request-cell">Urgency</span>
+                <span className="tech-request-cell">ID</span>
+              </div>
 
-                  <span className="tech-request-cell">
-                    {getUrgencyText(req.urgency)}
-                  </span>
+              {costumerReq
+                .filter((req) => req.type === 2)
+                .map((req) => (
+                  <div
+                    key={req.id + "-lead"}
+                    className="tech-request-row"
+                    onClick={() => setSelectedRequest(req)}
+                  >
+                    <span className="tech-request-cell">
+                      <span
+                        className={`tech-status-circle ${getStatusColor(
+                          req.status
+                        )}`}
+                        style={{ marginRight: "8px" }}
+                      ></span>
+                    </span>
 
-                  <span className="tech-request-cell tech-request-id">
-                    Request #{req.id}
-                  </span>
-                </div>
-              ))}
-          </div>
+                    <span className="tech-request-cell">{req.category}</span>
 
-          {/* RIGHT PANEL: type === 2 */}
-          <div className="tech-right-agent-panel">
-            <h2 className="tech-panel-title">Leads</h2>
+                    <span className="tech-request-cell">
+                      {getUrgencyText(req.urgency)}
+                    </span>
 
-            <div className="tech-request-header-row">
-              <span className="tech-request-cell">Status</span>
-              <span className="tech-request-cell">Category</span>
-              <span className="tech-request-cell">Urgency</span>
-              <span className="tech-request-cell">ID</span>
+                    <span className="tech-request-cell tech-request-id">
+                      Request #{req.id}
+                    </span>
+                  </div>
+                ))}
             </div>
-
-            {costumerReq
-              .filter((req) => req.type === 2)
-              .map((req) => (
-                <div
-                  key={req.id + "-lead"}
-                  className="tech-request-row"
-                  onClick={() => setSelectedRequest(req)}
-                >
-                  <span className="tech-request-cell">
-                    <span
-                      className={`tech-status-circle ${getStatusColor(
-                        req.status
-                      )}`}
-                      style={{ marginRight: "8px" }}
-                    ></span>
-                  </span>
-
-                  <span className="tech-request-cell">{req.category}</span>
-
-                  <span className="tech-request-cell">
-                    {getUrgencyText(req.urgency)}
-                  </span>
-
-                  <span className="tech-request-cell tech-request-id">
-                    Request #{req.id}
-                  </span>
-                </div>
-              ))}
           </div>
         </div>
-      </div>
-    {/* POPUP OUTSIDE THE PANEL */}
-      {selectedRequest && (
-        <>
-          <div
-            className="tech-view-request-overlay"
-            onClick={() => setSelectedRequest(null)}
-          ></div>
+        {/* POPUP OUTSIDE THE PANEL */}
+        {selectedRequest && (
+          <>
+            <div
+              className="tech-view-request-overlay"
+              onClick={() => setSelectedRequest(null)}
+            ></div>
 
-          <div className="tech-view-request">
-            <h3 className="tech-view-request-title">
-              {selectedRequest.category || "Request Category"}
-            </h3>
-            <p className="tech-view-request-subtitle">
-              Date: {selectedRequest.date || "Unknown"} | Urgency:{" "}
-              {getUrgencyText(selectedRequest.urgency)}
-            </p>
+            <div className="tech-view-request">
+              <h3 className="tech-view-request-title">
+                {selectedRequest.category || "Request Category"}
+              </h3>
+              <p className="tech-view-request-subtitle">
+                Date: {selectedRequest.date || "Unknown"} | Urgency:{" "}
+                {getUrgencyText(selectedRequest.urgency)}
+              </p>
 
-            <div className="tech-view-request-history">
-              {forumMessages.map((msg, idx) => (
-                <p key={idx} className="tech-view-request-message">
-                  <span className="tech-bold-label">{msg.name}:</span>{" "}
-                  {msg.content}
-                </p>
-              ))}
+              <div className="tech-view-request-history">
+                {isLoadingMessages ? (
+                  <div className="tech-loading-messages">
+                    <div className="spinner"></div>
+                    <p className="tech-loading-text">Loading messages...</p>
+                  </div>
+                ) : (
+                  forumMessages.map((msg, idx) => (
+                    <p key={idx} className="tech-view-request-message">
+                      <span className="tech-bold-label">{msg.name}:</span>{" "}
+                      {msg.content}
+                    </p>
+                  ))
+                )}
+              </div>
+
+              {selectedRequest.status !== 3 ? (
+                <>
+                  <textarea
+                    className="tech-view-request-textbox"
+                    placeholder="Write your reply here..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                  />
+
+                  <div className="tech-view-request-buttons">
+                    <button
+                      className="tech-buttons"
+                      onClick={handleSendMessage}
+                      disabled={!newMessage.trim()}
+                    >
+                      Send
+                    </button>
+
+                    <button
+                      className="tech-buttons"
+                      onClick={handleCloseRequest}
+                    >
+                      Mark Request as Closed
+                    </button>
+
+                    <button
+                      className="tech-buttons"
+                      onClick={() => setSelectedRequest(null)}
+                    >
+                      Back
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="tech-view-request-closed-msg">
+                    This request is closed. No further messages can be sent.
+                  </p>
+                  <div className="tech-view-request-buttons">
+                    <button
+                      className="tech-buttons"
+                      onClick={() => setSelectedRequest(null)}
+                    >
+                      Back
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
-
-            {selectedRequest.status !== 3 ? (
-              <>
-                <textarea
-                  className="tech-view-request-textbox"
-                  placeholder="Write your reply here..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                />
-
-                <div className="tech-view-request-buttons">
-                  <button
-                    className="tech-buttons"
-                    onClick={handleSendMessage}
-                    disabled={!newMessage.trim()}
-                  >
-                    Send
-                  </button>
-
-                  <button
-                    className="tech-buttons"
-                    onClick={handleCloseRequest}
-                  >
-                    Mark Request as Closed
-                  </button>
-
-                  <button
-                    className="tech-buttons"
-                    onClick={() => setSelectedRequest(null)}
-                  >
-                    Back
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="tech-view-request-closed-msg">
-                  This request is closed. No further messages can be sent.
-                </p>
-                <div className="tech-view-request-buttons">
-                  <button
-                    className="tech-buttons"
-                    onClick={() => setSelectedRequest(null)}
-                  >
-                    Back
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </>
-      )}
-    </>
-  );
-}
+          </>
+        )}
+      </>
+    );
+  }
 
   if (pageState === addRequestPage) {
     return (
@@ -679,73 +690,72 @@ export default function TechSupportPage() {
 
         {/* view request popup */}
         {selectedRequest && (
-  <>
-    <div
-      className="tech-view-request-overlay"
-      onClick={() => setSelectedRequest(null)}
-    ></div>
-
-    <div className="tech-view-request">
-      <h3 className="tech-view-request-title">
-        {selectedRequest.category || "Request Category"}
-      </h3>
-      <p className="tech-view-request-subtitle">
-        Date 31.3.25 | Time 14:00
-      </p>
-      <div className="tech-view-request-history">
-        {forumMessages.map((msg, idx) => (
-          <p key={idx} className="tech-view-request-message">
-            <span className="tech-bold-label">{msg.name}:</span>{" "}
-            {msg.content}
-          </p>
-        ))}
-      </div>
-
-      {selectedRequest.status !== 3 ? (
-        <>
-          <textarea
-            className="tech-view-request-textbox"
-            placeholder="Write your reply here..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-
-          <div className="tech-view-request-buttons">
-            <button
-              className="tech-buttons"
-              onClick={handleSendMessage}
-              disabled={!newMessage.trim()}
-            >
-              Send
-            </button>
-
-            <button
-              className="tech-buttons"
+          <>
+            <div
+              className="tech-view-request-overlay"
               onClick={() => setSelectedRequest(null)}
-            >
-              Back
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          <p className="tech-view-request-closed-msg">
-            This request is closed. No further messages can be sent.
-          </p>
-          <div className="tech-view-request-buttons">
-            <button
-              className="tech-buttons"
-              onClick={() => setSelectedRequest(null)}
-            >
-              Back
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-  </>
-)}
+            ></div>
 
+            <div className="tech-view-request">
+              <h3 className="tech-view-request-title">
+                {selectedRequest.category || "Request Category"}
+              </h3>
+              <p className="tech-view-request-subtitle">
+                Date 31.3.25 | Time 14:00
+              </p>
+              <div className="tech-view-request-history">
+                {forumMessages.map((msg, idx) => (
+                  <p key={idx} className="tech-view-request-message">
+                    <span className="tech-bold-label">{msg.name}:</span>{" "}
+                    {msg.content}
+                  </p>
+                ))}
+              </div>
+
+              {selectedRequest.status !== 3 ? (
+                <>
+                  <textarea
+                    className="tech-view-request-textbox"
+                    placeholder="Write your reply here..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                  />
+
+                  <div className="tech-view-request-buttons">
+                    <button
+                      className="tech-buttons"
+                      onClick={handleSendMessage}
+                      disabled={!newMessage.trim()}
+                    >
+                      Send
+                    </button>
+
+                    <button
+                      className="tech-buttons"
+                      onClick={() => setSelectedRequest(null)}
+                    >
+                      Back
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="tech-view-request-closed-msg">
+                    This request is closed. No further messages can be sent.
+                  </p>
+                  <div className="tech-view-request-buttons">
+                    <button
+                      className="tech-buttons"
+                      onClick={() => setSelectedRequest(null)}
+                    >
+                      Back
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        )}
       </>
     );
   }

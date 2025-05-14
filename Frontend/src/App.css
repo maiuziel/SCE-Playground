@@ -500,6 +500,20 @@ body {
   margin-top: 16px;
 }
 
+.tech-loading-messages {
+   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  height: 150px; 
+  text-align: center;
+}
+
+.tech-loading-text {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
 
 /* =====================
    Tech-Sup Pages END
