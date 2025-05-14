@@ -72,6 +72,22 @@ exports.getAllConversations = async () => {
   return result.rows;
 };
 
+
+exports.getMyLeads = async (email) => {
+  const result = await pool.query(
+    'SELECT * FROM Leads_table WHERE rep_mail = $1',
+    [email]
+    );
+  return result.rows;
+};
+
+exports.getAllLeads = async () => {
+  const result = await pool.query(
+    'SELECT * FROM Leads_table'
+    );
+  return result.rows;
+};
+
 exports.getSalesByCostumerId = async(customerId) => {
   const result = await pool.query(
     'SELECT * FROM sales WHERE customer_id = $1',

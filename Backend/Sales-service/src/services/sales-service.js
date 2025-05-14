@@ -46,3 +46,12 @@ exports.getConversationsByCustomerId = async (id) => {
 exports.getAllConversations = async () => {
   return await salesDataAccess.getAllConversations();
 };
+
+exports.getMyLeads = async (email) => {
+  return await salesDataAccess.getMyLeads(email);
+};
+
+exports.getAllLeads = async () => {
+  return await salesDataAccess.getAllLeads();
+};
+

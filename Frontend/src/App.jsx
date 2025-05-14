@@ -12,7 +12,6 @@ import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
-import LeadsPage from './pages/LeadsPage.jsx';
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
@@ -36,12 +35,15 @@ function Navbar() {
           alt='University Icon'
         />
       </div>
-      <div className='nav-links'>
-        <Link to='/'>Home</Link>
-        {!user ? <Link to='/signin'>Sign In</Link> : <a onClick={signUserOut}>Sign out</a>}
-        <Link to='/signup'>Sign Up</Link>
-        <Link to='/products'>Products</Link>
-        {user && <Link to='/leads'>Leads</Link>} {/* Only show to logged-in users */}
+      <div className='nav-right'>
+        <div className='nav-links'>
+          <Link to='/'>Home</Link>
+          {!user ? <Link to='/signin'>Sign In</Link> : <a onClick={signUserOut}>Sign out</a>}
+          <Link to='/signup'>Sign Up</Link>
+          <Link to='/products'>Products</Link>
+        </div>
+        {/* If logged in, show user circle */}
+        {user && <div className='user-circle'>{userInitial}</div>}
       </div>
 
     </div>
@@ -60,7 +62,6 @@ function App() {
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
             <Route path='/sales' element={<SalesPage />} />
-            <Route path='/leads' element={<LeadsPage />}/>
 
             <Route path='/salesConverstaion' element={<SalesConverstaionPage />} />
             <Route path='/salesSearchHistory' element={<SalesSearchHistoryPage />}/>

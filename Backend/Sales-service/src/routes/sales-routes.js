@@ -15,6 +15,9 @@ router.get('/conversations/:customerId', controller.getConversationsByCustomerId
 router.get('/getSalesByCostumer/:customerId', controller.getSalesByCostumerId);
 router.get('getAllSales', controller.getAllSales);
 
+router.get('/getMyLeads/:email', controller.getMyLeads);
+router.get('/getAllLeads',controller.getAllLeads);
+
 
 
 
