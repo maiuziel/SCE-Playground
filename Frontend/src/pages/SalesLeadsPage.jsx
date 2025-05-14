@@ -6,7 +6,6 @@ import { StoreContext } from '../store/StoreContext';
 export default function SalesLeadsPage() {
   const [leads, setLeads] = useState([]);
   const [isPersonalView, setIsPersonalView] = useState(false);
-  const [showActiveOnly, setShowActiveOnly] = useState(false);
   const { user } = useContext(StoreContext);
   const [loading, setLoading] = useState(false);
 
@@ -50,7 +49,6 @@ export default function SalesLeadsPage() {
       const processedLeads = processLeads(res.data);
       setLeads(processedLeads);
       setIsPersonalView(false);
-      setShowActiveOnly(false);
     } catch (error) {
       console.error('Failed to fetch all leads:', error);
     }
@@ -63,57 +61,10 @@ export default function SalesLeadsPage() {
       const processedLeads = processLeads(res.data);
       setLeads(processedLeads);
       setIsPersonalView(true);
-      setShowActiveOnly(false);
     } catch (error) {
       console.error('Failed to fetch my leads:', error);
     }
   };
-
-  // Show only active leads
-  const showActiveLeads = () => {
-    setShowActiveOnly(true);
-  };
-
-  // Assign a lead to the current user
-  const assignLeadToMe = async (leadId) => {
-    if (!user?.email) {
-      alert('You must be logged in to assign leads');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await api.post('/sales/assignLead', {
-        leadId,
-        email: user.email
-      });
-
-      if (res.data) {
-        // Update the leads array to reflect both the assignment AND status change
-        const updatedLeads = leads.map(lead => 
-          lead.lead_id === leadId 
-            ? { ...lead, rep_mail: user.email, status: 'In progress' } 
-            : lead
-        );
-        setLeads(processLeads(updatedLeads));
-        alert('Lead assigned successfully!');
-      }
-    } catch (error) {
-      console.error('Error assigning lead:', error);
-      alert('Error assigning lead. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  // Filter leads by status if showActiveOnly is true
-  const filteredLeads = showActiveOnly
-    ? leads.filter((lead) => {
-        const status = lead.status?.toLowerCase();
-        return status !== 'done' && status !== 'canceled';
-      })
-    : leads;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -143,30 +94,14 @@ export default function SalesLeadsPage() {
             padding: '10px 20px',
             borderRadius: '5px',
             fontSize: '16px',
-            marginRight: '10px',
             cursor: 'pointer'
           }}
         >
           Show my leads
         </button>
-
-        <button
-          onClick={showActiveLeads}
-          style={{
-            backgroundColor: '#ffc107',
-            color: 'black',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            fontSize: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          Show active leads
-        </button>
       </div>
 
-      {isPersonalView && filteredLeads.length === 0 ? (
+      {isPersonalView && leads.length === 0 ? (
         <p style={{ color: 'red', fontWeight: 'bold', fontSize: '18px' }}>
           You have no leads assigned to you.
         </p>
@@ -184,47 +119,16 @@ export default function SalesLeadsPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredLeads.map((lead) => {
-              // Check if the lead is older than 3 days
-              const isOld = isOlderThan3Days(lead.application_date);
-              
-              return (
-                <tr 
-                  key={lead.lead_id}
-                  style={{
-                    fontWeight: isOld ? 'bold' : 'normal',
-                    backgroundColor: isOld ? '#ffcccc' : 'transparent',
-                    borderBottom: '1px solid #ddd'
-                  }}
-                >
-                  <td style={{ padding: '10px' }}>{lead.lead_id}</td>
-                  <td style={{ padding: '10px' }}>{lead.contact_number}</td>
-                  <td style={{ padding: '10px' }}>{lead.status}</td>
-                  <td style={{ padding: '10px' }}>{lead.rep_mail || '-'}</td>
-                  <td style={{ padding: '10px' }}>{lead.application_date}</td>
-                  <td style={{ padding: '10px' }}>{lead.closing_date || '-'}</td>
-                  <td style={{ padding: '10px' }}>
-                    {!lead.rep_mail && (
-                      <button
-                        onClick={() => assignLeadToMe(lead.lead_id)}
-                        disabled={loading}
-                        style={{
-                          backgroundColor: '#4CAF50',
-                          color: 'white',
-                          border: 'none',
-                          padding: '5px 10px',
-                          borderRadius: '3px',
-                          cursor: loading ? 'not-allowed' : 'pointer',
-                          opacity: loading ? 0.7 : 1
-                        }}
-                      >
-                        {loading ? 'Assigning...' : 'Assign to me'}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+            {leads.map((lead) => (
+              <tr key={lead.lead_id}>
+                <td>{lead.lead_id}</td>
+                <td>{lead.contact_number}</td>
+                <td>{lead.status}</td>
+                <td>{lead.rep_mail}</td>
+                <td>{lead.application_date}</td>
+                <td>{lead.closing_date ?? '-'}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}
