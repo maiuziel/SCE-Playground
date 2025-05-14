@@ -18,6 +18,7 @@ router.get('getAllSales', controller.getAllSales);
 router.get('/getMyLeads/:email', controller.getMyLeads);
 router.get('/getAllLeads',controller.getAllLeads);
 router.post('/assignLead', controller.assignLead);
+router.put('/updateLeadToInProgress/:contact_number', controller.updateLeadToInProgress);
 
 
 

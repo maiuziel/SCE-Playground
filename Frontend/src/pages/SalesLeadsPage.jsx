@@ -50,7 +50,7 @@ export default function SalesLeadsPage() {
     }
   };
 
-  const assignLeadToMe = async (leadId) => {
+  const assignLeadToMe = async (leadId, contactNumber) => {
     if (!user?.email) {
       alert('You must be logged in to assign leads');
       return;
@@ -58,18 +58,24 @@ export default function SalesLeadsPage() {
 
     setLoading(true);
     try {
+      // Assign the lead to the user
       const res = await api.post('sales/assignLead', {
         leadId,
         email: user.email
       });
 
       if (res.data.success) {
+        // Update the lead's status to InProgress
+        await api.put(`sales/updateLeadToInProgress/${contactNumber}`);
+
+        // Update UI state
         setLeads(leads.map(lead =>
           lead.lead_id === leadId
-            ? { ...lead, rep_mail: user.email }
+            ? { ...lead, rep_mail: user.email, status: 'InProgress' }
             : lead
         ));
-        alert('Lead assigned successfully!');
+
+        alert('Lead assigned and status updated!');
       } else {
         alert('Failed to assign lead');
       }
@@ -81,7 +87,6 @@ export default function SalesLeadsPage() {
     }
   };
 
-  // Check if a lead is "new" and older than 3 days
   const isNewAndOld = (lead) => {
     if (lead.status?.toLowerCase() !== 'new') return false;
     const applicationDate = new Date(lead.application_date);
@@ -90,7 +95,6 @@ export default function SalesLeadsPage() {
     return diffDays > 3;
   };
 
-  // Filter and sort leads so that "new and old" leads come first
   const filteredLeads = (showActiveOnly
     ? leads.filter((lead) => {
         const status = lead.status?.toLowerCase();
@@ -100,7 +104,7 @@ export default function SalesLeadsPage() {
   ).sort((a, b) => {
     const aOld = isNewAndOld(a);
     const bOld = isNewAndOld(b);
-    return bOld - aOld; // true > false
+    return bOld - aOld;
   });
 
   return (
@@ -162,7 +166,9 @@ export default function SalesLeadsPage() {
                 <td>
                   {!lead.rep_mail && (
                     <button
-                      onClick={() => assignLeadToMe(lead.lead_id)}
+                      onClick={() =>
+                        assignLeadToMe(lead.lead_id, lead.contact_number)
+                      }
                       disabled={loading}
                       style={{
                         backgroundColor: '#4CAF50',
@@ -187,7 +193,6 @@ export default function SalesLeadsPage() {
   );
 }
 
-// Helper style function for button reuse
 function buttonStyle(bgColor, color) {
   return {
     backgroundColor: bgColor,

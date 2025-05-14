@@ -150,3 +150,14 @@ exports.assignLead = async(req, res) => {
 }
 
 
+exports.updateLeadToInProgress = async(req, res) => {
+  try {
+    const number = req.params.number;
+    const data = await salesService.updateLeadToInProgress(number);
+    res.json(data);
+  } catch (err) {
+    console.error('Error retrieving leads:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+}
+
