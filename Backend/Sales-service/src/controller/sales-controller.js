@@ -138,3 +138,15 @@ exports.getAllLeads = async(req, res) => {
   }
 }
 
+exports.assignLead = async(req, res) => {
+  try {
+    const { leadId, email } = req.body;
+    const data = await salesService.assignLead(leadId, email);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error assigning lead:', err);
+    res.status(500).json({ success: false, error: 'Failed to assign lead' });
+  }
+}
+
+

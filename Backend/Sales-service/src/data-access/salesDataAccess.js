@@ -95,3 +95,11 @@ exports.getSalesByCostumerId = async(customerId) => {
   );
   return result.rows;
 }
+
+exports.assignLead = async (leadId, email) => {
+  const result = await pool.query(
+    'UPDATE Leads_table SET rep_mail = $1 WHERE lead_id = $2 RETURNING *',
+    [email, leadId]
+  );
+  return result.rows[0];
+};

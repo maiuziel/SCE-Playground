@@ -7,6 +7,7 @@ export default function SalesLeadsPage() {
   const [isPersonalView, setIsPersonalView] = useState(false);
   const [showActiveOnly, setShowActiveOnly] = useState(false);
   const { user } = useContext(StoreContext);
+  const [loading, setLoading] = useState(false); // Added for tracking API calls
 
   useEffect(() => {
     fetchAllLeads();
@@ -38,14 +39,47 @@ export default function SalesLeadsPage() {
     setShowActiveOnly(true);
   };
 
-  // סינון לפי מצב
-  const filteredLeads = showActiveOnly
-  ? leads.filter((lead) => {
-      const status = lead.status?.toLowerCase();
-      return status !== 'done' && status !== 'canceled';
-    })
-  : leads;
+  // Function to assign a lead to the current user
+  const assignLeadToMe = async (leadId) => {
+    if (!user?.email) {
+      alert('You must be logged in to assign leads');
+      return;
+    }
 
+    setLoading(true);
+    try {
+      // You'll need to create this endpoint in your backend
+      const res = await api.post('sales/assignLead', {
+        leadId,
+        email: user.email
+      });
+
+      if (res.data.success) {
+        // Update the leads array to reflect the assignment
+        setLeads(leads.map(lead => 
+          lead.lead_id === leadId 
+            ? { ...lead, rep_mail: user.email } 
+            : lead
+        ));
+        alert('Lead assigned successfully!');
+      } else {
+        alert('Failed to assign lead');
+      }
+    } catch (error) {
+      console.error('Error assigning lead:', error);
+      alert('Error assigning lead. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter leads by status
+  const filteredLeads = showActiveOnly
+    ? leads.filter((lead) => {
+        const status = lead.status?.toLowerCase();
+        return status !== 'done' && status !== 'canceled';
+      })
+    : leads;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -112,6 +146,7 @@ export default function SalesLeadsPage() {
               <th>Rep Email</th>
               <th>Application Date</th>
               <th>Closing Date</th>
+              <th>Actions</th> {/* New column for the assign button */}
             </tr>
           </thead>
           <tbody>
@@ -123,6 +158,25 @@ export default function SalesLeadsPage() {
                 <td>{lead.rep_mail}</td>
                 <td>{lead.application_date}</td>
                 <td>{lead.closing_date ?? '-'}</td>
+                <td>
+                  {!lead.rep_mail && (
+                    <button
+                      onClick={() => assignLeadToMe(lead.lead_id)}
+                      disabled={loading}
+                      style={{
+                        backgroundColor: '#4CAF50',
+                        color: 'white',
+                        border: 'none',
+                        padding: '5px 10px',
+                        borderRadius: '3px',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        opacity: loading ? 0.7 : 1
+                      }}
+                    >
+                      {loading ? 'Assigning...' : 'Assign to me'}
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
