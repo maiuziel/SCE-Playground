@@ -13,6 +13,9 @@ router.delete('/deleteConverstation', controller.deleteSale);
 router.get('/AllConversations', controller.getAllConversations);
 router.get('/conversations/:customerId', controller.getConversationsByCustomerId);
 
+router.get('/getMyLeads/:email', controller.getMyLeads);
+router.get('/getAllLeads',controller.getAllLeads);
+
 
 
 

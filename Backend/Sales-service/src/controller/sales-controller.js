@@ -108,3 +108,24 @@ exports.getAllConversations = async (req, res) => {
   }
 };
 
+exports.getMyLeads = async(req, res) => {
+  try {
+    const email = req.params.email;
+    const data = await salesService.getMyLeads(email);
+    res.json(data);
+  } catch (err) {
+    console.error('Error retrieving leads:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+}
+
+exports.getAllLeads = async(req, res) => {
+  try {
+    const data = await salesService.getAllLeads();
+    res.json(data);
+  } catch (err) {
+    console.error('Error retrieving leads:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+}
+
