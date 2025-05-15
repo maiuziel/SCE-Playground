@@ -34,7 +34,7 @@ export default function RevenueChecker() {
 
   return (
     <div style={{ padding: 20, color: '#333' }}>
-      <h2>Revenue Checker</h2>
+      <h2 style={{ color: 'white' }}>Revenue Checker</h2>
       <input
         type="text"
         placeholder="Enter ID"
@@ -58,19 +58,19 @@ export default function RevenueChecker() {
       {error && <p style={{ color: 'red', marginTop: 10 }}>{error}</p>}
       {averageRevenue != null && (
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 20 }}>
-          <thead>
-            <tr>
-              <th style={{ border: '1px solid #ccc', padding: 8 }}>ID</th>
-              <th style={{ border: '1px solid #ccc', padding: 8 }}>Revenue</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style={{ border: '1px solid #ccc', padding: 8 }}>{leadId}</td>
-              <td style={{ border: '1px solid #ccc', padding: 8 }}>{averageRevenue}</td>
-            </tr>
-          </tbody>
-        </table>
+        <thead>
+          <tr>
+            <th style={{ border: '1px solid #ccc', padding: 8, color: 'white' }}>ID</th>
+            <th style={{ border: '1px solid #ccc', padding: 8, color: 'white' }}>Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={{ border: '1px solid #ccc', padding: 8, color: 'white' }}>{leadId}</td>
+            <td style={{ border: '1px solid #ccc', padding: 8, color: 'white' }}>{averageRevenue}</td>
+          </tr>
+        </tbody>
+      </table>
       )}
     </div>
   );
