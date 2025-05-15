@@ -195,85 +195,110 @@ export default function SalesLeadsPage() {
           You have no leads assigned to you.
         </p>
       ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '16px' }}>
-          <thead>
-            <tr>
-              <th>Lead ID</th>
-              <th>Contact Number</th>
-              <th>Status</th>
-              <th>Rep Email</th>
-              <th>Application Date</th>
-              <th>Closing Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLeads.map((lead) => (
-              <tr
-                key={lead.lead_id}
+      <table
+        style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          fontSize: '16px',
+          backgroundColor: 'rgba(34, 33, 33, 0.35)'
+        }}
+      >
+        <thead>
+          <tr>
+            <th>Lead ID</th>
+            <th>Contact Number</th>
+            <th>Status</th>
+            <th>Rep Email</th>
+            <th>Application Date</th>
+            <th>Closing Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredLeads.map((lead) => (
+            <tr
+              key={lead.lead_id}
+              style={{
+                backgroundColor: isNewAndOld(lead) ? 'red' : 'transparent',
+                color: isNewAndOld(lead) ? 'black' : 'inherit',
+                fontWeight: isNewAndOld(lead) ? 'bold' : 'normal',
+                height: '60px'
+              }}
+            >
+              <td style={cellStyle}>{lead.lead_id}</td>
+              <td style={cellStyle}>{lead.contact_number}</td>
+
+              {/* This is the updated status column */}
+              <td
                 style={{
-                  backgroundColor: isNewAndOld(lead) ? 'red' : 'transparent',
-                  color: isNewAndOld(lead) ? 'black' : 'inherit',
-                  fontWeight: isNewAndOld(lead) ? 'bold' : 'normal',
-                  height: '60px'
+                  ...cellStyle,
+                  color:
+                    lead.status?.toLowerCase() === 'new' ? 'gold' :
+                    lead.status?.toLowerCase() === 'in progress' ? '#007bff' :
+                    lead.status?.toLowerCase() === 'done' ? 'green' :
+                    lead.status?.toLowerCase() === 'canceled' ? 'red' :
+                    'black'
                 }}
               >
-                <td style={cellStyle}>{lead.lead_id}</td>
-                <td style={cellStyle}>{lead.contact_number}</td>
-                <td style={cellStyle}>{lead.status}</td>
-                <td style={cellStyle}>{lead.rep_mail}</td>
-                <td style={cellStyle}>{lead.application_date}</td>
-                <td style={cellStyle}>{lead.closing_date ?? '-'}</td>
-                <td style={{ ...cellStyle, display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  {lead.status?.toLowerCase() === 'new' && (
-                    <>
-                      <button
-                        onClick={() => assignLeadToMe(lead.lead_id, lead.contact_number)}
-                        disabled={loading}
-                        style={actionButtonStyle('#4CAF50')}
-                      >
-                        Assign
-                      </button>
-                      <button
-                        onClick={() => cancelLead(lead.lead_id)}
-                        disabled={loading}
-                        style={actionButtonStyle('#dc3545')}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
+                {lead.status}
+              </td>
 
-                  {lead.status?.toLowerCase() === 'in progress' && (
-                    <>
-                      <button
-                        onClick={() => markLeadAsDone(lead.lead_id)}
-                        disabled={loading}
-                        style={actionButtonStyle('#17a2b8')}
-                      >
-                        Done
-                      </button>
-                      <button
-                        onClick={() => unassignLead(lead.lead_id)}
-                        disabled={loading}
-                        style={actionButtonStyle('#ffc107')}
-                      >
-                        Unassign
-                      </button>
-                      <button
-                        onClick={() => cancelLead(lead.lead_id)}
-                        disabled={loading}
-                        style={actionButtonStyle('#dc3545')}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <td style={cellStyle}>{lead.rep_mail}</td>
+              <td style={cellStyle}>{lead.application_date}</td>
+              <td style={cellStyle}>{lead.closing_date ?? '-'}</td>
+
+              {/* Your Actions column stays the same */}
+              <td style={{ ...cellStyle, display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                {lead.status?.toLowerCase() === 'new' && (
+                  <>
+                    <button
+                      onClick={() => assignLeadToMe(lead.lead_id, lead.contact_number)}
+                      disabled={loading}
+                      style={actionButtonStyle('#4CAF50')}
+                    >
+                      Assign
+                    </button>
+                    <button
+                      onClick={() => cancelLead(lead.lead_id)}
+                      disabled={loading}
+                      style={actionButtonStyle('#dc3545')}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+
+                {lead.status?.toLowerCase() === 'in progress' && (
+                  <>
+                    <button
+                      onClick={() => markLeadAsDone(lead.lead_id)}
+                      disabled={loading}
+                      style={actionButtonStyle('#17a2b8')}
+                    >
+                      Done
+                    </button>
+                    <button
+                      onClick={() => unassignLead(lead.lead_id)}
+                      disabled={loading}
+                      style={actionButtonStyle('#ffc107')}
+                    >
+                      Unassign
+                    </button>
+                    <button
+                      onClick={() => cancelLead(lead.lead_id)}
+                      disabled={loading}
+                      style={actionButtonStyle('#dc3545')}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
       )}
     </div>
   );
