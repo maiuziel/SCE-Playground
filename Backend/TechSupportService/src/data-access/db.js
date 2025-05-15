@@ -92,12 +92,27 @@ export async function addOneDbTicket(
   const lead = 2;
 
   // img format
-  const imagesJSON = [
-    images.img1 ? Buffer.from(images.img1, "hex") : null,
-    images.img2 ? Buffer.from(images.img2, "hex") : null,
-    images.img3 ? Buffer.from(images.img3, "hex") : null,
-    images.img4 ? Buffer.from(images.img4, "hex") : null,
-  ];
+  // const imagesJSON = [
+  //   images.img1 ? Buffer.from(images.img1, "hex") : null,
+  //   images.img2 ? Buffer.from(images.img2, "hex") : null,
+  //   images.img3 ? Buffer.from(images.img3, "hex") : null,
+  //   images.img4 ? Buffer.from(images.img4, "hex") : null,
+  // ];
+
+  const imagesJSON = Array.isArray(images)
+  ? images.map((img) => {
+      if (!img || typeof img !== "string" || !img.startsWith("data:image/")) {
+        return null;
+      }
+
+      try {
+        const base64 = img.split(",")[1]; // remove the "data:image/...;base64," part
+        return Buffer.from(base64, "base64");
+      } catch (err) {
+        return null;
+      }
+    })
+  : [null, null, null, null];
 
   if (
     category === "Security concern" ||

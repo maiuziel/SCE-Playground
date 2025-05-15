@@ -24,6 +24,8 @@ export default function TechSupportPage() {
 
   const [requests, setRequests] = useState([]);
 
+  const [enlargedImage, setEnlargedImage] = useState(null);
+
   // agent page requests.
   const [costumerReq, setCostumerReq] = useState([]);
 
@@ -212,29 +214,58 @@ export default function TechSupportPage() {
   const [messageText, setMessageText] = useState("");
   const [messageColor, setMessageColor] = useState("");
 
+
+  const handleRemoveImage = (indexToRemove) => {
+    setFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToRemove));
+    setPreviews(prevPreviews => prevPreviews.filter((_, index) => index !== indexToRemove));
+  };
+
   // Handle file change and preview
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
-
-    if (files.length + newFiles.length > 4) {
-      setMessageText("You can upload up to 4 images only.");
-      setMessageColor("red");
-      return;
-    }
-
-    const updatedFiles = [...files, ...newFiles];
-    setFiles(updatedFiles);
+    const validFiles = [];
     const newPreviews = [];
-    newFiles.forEach((file) => {
+  
+    for (let file of newFiles) {
+      // Stop if we already have 4 images total
+      if (files.length + validFiles.length >= 4) {
+        setMessageText("You can upload up to 4 images only.");
+        setMessageColor("red");
+        break;
+      }
+  
+      // Validate size
+      if (file.size > 3 * 1024 * 1024) {
+        setMessageText("Each image must be under 3MB.");
+        setMessageColor("red");
+        continue;
+      }
+  
+      // Validate type
+      if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
+        setMessageText("Only JPG, PNG, and GIF files are allowed.");
+        setMessageColor("red");
+        continue;
+      }
+  
+      validFiles.push(file);
+  
+      // Load preview
       const reader = new FileReader();
       reader.onloadend = () => {
         newPreviews.push(reader.result);
-        if (newPreviews.length === newFiles.length) {
+        if (newPreviews.length === validFiles.length) {
           setPreviews((prev) => [...prev, ...newPreviews]);
         }
       };
       reader.readAsDataURL(file);
-    });
+    }
+  
+    if (validFiles.length > 0) {
+      setFiles((prev) => [...prev, ...validFiles]);
+      setMessageText("");
+      setMessageColor("");
+    }
   };
 
   // Get urgency based on category
@@ -317,20 +348,29 @@ export default function TechSupportPage() {
       uType = 1;
     }
 
-    const res = await api.post(
-      "/ts/techsupportadd?type=" +
-        uType +
-        "&name=" +
-        user?.firstName +
-        "&email=" +
-        user?.email +
-        "&category=" +
-        issueCategory +
-        "&description=" +
-        description +
-        "&images=" +
-        images
-    );
+    const res = await api.post("/ts/techsupportadd", {
+      type: uType,
+      name: user?.firstName,
+      email: user?.email,
+      category: issueCategory,
+      description,
+      images: base64Images,
+    });
+
+    // const res = await api.post(
+    //   "/ts/techsupportadd?type=" +
+    //     uType +
+    //     "&name=" +
+    //     user?.firstName +
+    //     "&email=" +
+    //     user?.email +
+    //     "&category=" +
+    //     issueCategory +
+    //     "&description=" +
+    //     description +
+    //     "&images=" +
+    //     images
+    // );
 
     //setMessageText(`Request ${requestId} submitted successfully!`);
     //setMessageColor("green");
@@ -368,19 +408,19 @@ export default function TechSupportPage() {
           <h2 className="tech-client-requests-page-title">
             Welcome agent: {user?.firstName}.
           </h2>
-
+  
           <div className="tech-agent-content">
             {/* LEFT PANEL: type === 1 */}
             <div className="tech-left-agent-panel">
               <h2 className="tech-panel-title">Customers</h2>
-
+  
               <div className="tech-request-header-row">
                 <span className="tech-request-cell">Status</span>
                 <span className="tech-request-cell">Category</span>
                 <span className="tech-request-cell">Urgency</span>
                 <span className="tech-request-cell">ID</span>
               </div>
-
+  
               {costumerReq
                 .filter((req) => req.type === 1)
                 .map((req) => (
@@ -397,31 +437,29 @@ export default function TechSupportPage() {
                         style={{ marginRight: "8px" }}
                       ></span>
                     </span>
-
+  
                     <span className="tech-request-cell">{req.category}</span>
-
                     <span className="tech-request-cell">
                       {getUrgencyText(req.urgency)}
                     </span>
-
                     <span className="tech-request-cell tech-request-id">
                       Request #{req.id}
                     </span>
                   </div>
                 ))}
             </div>
-
+  
             {/* RIGHT PANEL: type === 2 */}
             <div className="tech-right-agent-panel">
               <h2 className="tech-panel-title">Leads</h2>
-
+  
               <div className="tech-request-header-row">
                 <span className="tech-request-cell">Status</span>
                 <span className="tech-request-cell">Category</span>
                 <span className="tech-request-cell">Urgency</span>
                 <span className="tech-request-cell">ID</span>
               </div>
-
+  
               {costumerReq
                 .filter((req) => req.type === 2)
                 .map((req) => (
@@ -438,13 +476,11 @@ export default function TechSupportPage() {
                         style={{ marginRight: "8px" }}
                       ></span>
                     </span>
-
+  
                     <span className="tech-request-cell">{req.category}</span>
-
                     <span className="tech-request-cell">
                       {getUrgencyText(req.urgency)}
                     </span>
-
                     <span className="tech-request-cell tech-request-id">
                       Request #{req.id}
                     </span>
@@ -453,23 +489,31 @@ export default function TechSupportPage() {
             </div>
           </div>
         </div>
+  
         {/* POPUP OUTSIDE THE PANEL */}
         {selectedRequest && (
           <>
             <div
               className="tech-view-request-overlay"
-              onClick={() => setSelectedRequest(null)}
+              onClick={() => {
+                setSelectedRequest(null);
+                setEnlargedImage(null);
+              }}
             ></div>
-
+  
             <div className="tech-view-request">
               <h3 className="tech-view-request-title">
                 {selectedRequest.category || "Request Category"}
               </h3>
               <p className="tech-view-request-subtitle">
-                Date: {selectedRequest.date.replace("T", " At ").replace("Z", "").replace(/\.\d+$/, '') || "Unknown"} | Urgency:{" "}
-                {getUrgencyText(selectedRequest.urgency)}
+                Date:{" "}
+                {selectedRequest.date
+                  .replace("T", " At ")
+                  .replace("Z", "")
+                  .replace(/\.\d+$/, "") || "Unknown"}{" "}
+                | Urgency: {getUrgencyText(selectedRequest.urgency)}
               </p>
-
+  
               <div className="tech-view-request-history">
                 {isLoadingMessages ? (
                   <div className="tech-loading-messages">
@@ -485,7 +529,54 @@ export default function TechSupportPage() {
                   ))
                 )}
               </div>
-
+  
+              {selectedRequest.imgs && selectedRequest.imgs.length > 0 && (
+                <div className="tech-view-request-images">
+                  {selectedRequest.imgs.map((img, index) => {
+                    if (!img || !img.data) return null;
+                    const base64String = btoa(
+                      new Uint8Array(img.data).reduce(
+                        (data, byte) => data + String.fromCharCode(byte),
+                        ""
+                      )
+                    );
+                    return (
+                      <img
+                        key={index}
+                        src={`data:image/jpeg;base64,${base64String}`}
+                        alt={`Uploaded ${index + 1}`}
+                        className="tech-view-request-image"
+                        onClick={() => setEnlargedImage(base64String)}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+  
+              {enlargedImage && (
+                <div
+                  className="tech-image-modal"
+                  onClick={() => setEnlargedImage(null)}
+                >
+                  <div
+                    className="tech-image-modal-content"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <img
+                      src={`data:image/jpeg;base64,${enlargedImage}`}
+                      alt="Enlarged"
+                      className="tech-image-enlarged"
+                    />
+                    <button
+                      className="tech-image-close-btn"
+                      onClick={() => setEnlargedImage(null)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              )}
+  
               {selectedRequest.status !== 3 ? (
                 <>
                   <textarea
@@ -494,7 +585,7 @@ export default function TechSupportPage() {
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                   />
-
+  
                   <div className="tech-view-request-buttons">
                     <button
                       className="tech-buttons"
@@ -503,19 +594,22 @@ export default function TechSupportPage() {
                     >
                       Send
                     </button>
-
+  
+                    <button
+                      className="tech-buttons"
+                      onClick={() => {
+                        setSelectedRequest(null);
+                        setEnlargedImage(null);
+                      }}
+                    >
+                      Back
+                    </button>
+  
                     <button
                       className="tech-buttons"
                       onClick={handleCloseRequest}
                     >
                       Mark Request as Closed
-                    </button>
-
-                    <button
-                      className="tech-buttons"
-                      onClick={() => setSelectedRequest(null)}
-                    >
-                      Back
                     </button>
                   </div>
                 </>
@@ -527,7 +621,10 @@ export default function TechSupportPage() {
                   <div className="tech-view-request-buttons">
                     <button
                       className="tech-buttons"
-                      onClick={() => setSelectedRequest(null)}
+                      onClick={() => {
+                        setSelectedRequest(null);
+                        setEnlargedImage(null);
+                      }}
                     >
                       Back
                     </button>
@@ -540,18 +637,17 @@ export default function TechSupportPage() {
       </>
     );
   }
+  
 
   if (pageState === addRequestPage) {
     return (
       <div className="tech-form-container">
-        <h1 className="tech-form-container-title">Contact Technical Support</h1>
-
+        <h1 className="tech-client-requests-page-title">Contact Technical Support</h1>
+ 
         {formSubmittedSuccessfully ? (
-          <div style={{ textAlign: "center", marginTop: "40px" }}>
-            <h2 style={{ color: "green" }}>Thank you for contacting us!</h2>
-            <p>
-              We have received your request and will get back to you shortly.
-            </p>
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <h2 style={{ color: 'green' }}>Thank you for contacting us!</h2>
+            <p>We have received your request and will get back to you shortly.</p>
             <button className="tech-buttons" onClick={resetForm}>
               Back to My Requests
             </button>
@@ -569,7 +665,7 @@ export default function TechSupportPage() {
               <option value="before">Before Purchase</option>
               <option value="after">After Purchase</option>
             </select>
-
+ 
             {/* Issue Category */}
             <label>Issue Category:</label>
             <select
@@ -579,13 +675,9 @@ export default function TechSupportPage() {
             >
               <option value="">Select an issue</option>
               <option value="Security concern">Security concern</option>
-              <option value="Crash or freezing issue">
-                Crash or freezing issue
-              </option>
+              <option value="Crash or freezing issue">Crash or freezing issue</option>
               <option value="Installation issue">Installation issue</option>
-              <option value="Update or version issue">
-                Update or version issue
-              </option>
+              <option value="Update or version issue">Update or version issue</option>
               <option value="Integration issue with third-party software">
                 Integration issue with third-party software
               </option>
@@ -593,7 +685,7 @@ export default function TechSupportPage() {
               <option value="Bug report">Bug report</option>
               <option value="Other">Other</option>
             </select>
-
+ 
             {/* Description */}
             <label>Description:</label>
             <textarea
@@ -603,28 +695,32 @@ export default function TechSupportPage() {
               maxLength={2000}
               required
             />
-
+ 
             {/* Upload Images */}
-            <label>Upload Images (up to 4):</label>
+            <label>Upload Images (up to 4, each img max 3 mb's):</label>
             <input
               type="file"
               multiple
               accept=".jpg,.jpeg,.png,.gif"
               onChange={handleFileChange}
             />
-
+ 
             {/* Previews */}
             <div id="tech-filePreview">
               {previews.map((src, idx) => (
-                <img
-                  key={idx}
-                  src={src}
-                  alt={`Preview ${idx + 1}`}
-                  style={{ width: "100px", margin: "5px" }}
-                />
+                <div key={idx} className="tech-image-preview-container">
+                  <img src={src} alt={`Preview ${idx + 1}`} />
+                  <button
+                    type="button"
+                    className="tech-remove-image-btn"
+                    onClick={() => handleRemoveImage(idx)}
+                  >
+                    ×
+                  </button>
+                </div>
               ))}
             </div>
-
+ 
             {/* Buttons */}
             <div className="tech-button-group">
               <button className="tech-buttons" type="submit">
@@ -640,7 +736,7 @@ export default function TechSupportPage() {
             </div>
           </form>
         )}
-
+ 
         {/* Message display */}
         {!formSubmittedSuccessfully && (
           <div id="tech-message" style={{ color: messageColor }}>
@@ -693,7 +789,10 @@ export default function TechSupportPage() {
           <>
             <div
               className="tech-view-request-overlay"
-              onClick={() => setSelectedRequest(null)}
+              onClick={() => {
+                setSelectedRequest(null);
+                setEnlargedImage(null);
+              }}
             ></div>
 
             <div className="tech-view-request">
@@ -718,6 +817,53 @@ export default function TechSupportPage() {
                   ))
                 )}
               </div>
+              {selectedRequest.imgs && selectedRequest.imgs.length > 0 && (
+                <div className="tech-view-request-images">
+                  {selectedRequest.imgs.map((img, index) => {
+                    if (!img || !img.data) return null;
+
+                    const base64String = btoa(
+                      new Uint8Array(img.data).reduce(
+                        (data, byte) => data + String.fromCharCode(byte),
+                        ""
+                      )
+                    );
+
+                    return (
+                      <img
+                        key={index}
+                        src={`data:image/jpeg;base64,${base64String}`}
+                        alt={`Uploaded ${index + 1}`}
+                        className="tech-view-request-image"
+                        onClick={() => setEnlargedImage(base64String)}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+              {enlargedImage && (
+                <div
+                  className="tech-image-modal"
+                  onClick={() => setEnlargedImage(null)} // click outside closes modal
+                >
+                  <div
+                    className="tech-image-modal-content"
+                    onClick={(e) => e.stopPropagation()} // prevent click inside modal from closing it
+                  >
+                    <img
+                      src={`data:image/jpeg;base64,${enlargedImage}`}
+                      alt="Enlarged"
+                      className="tech-image-enlarged"
+                    />
+                    <button
+                      className="tech-image-close-btn"
+                      onClick={() => setEnlargedImage(null)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {selectedRequest.status !== 3 ? (
                 <>

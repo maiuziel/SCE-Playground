@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 13250;
 
 app.use(cors());
-app.use(json());
+app.use(json({ limit: '12mb' }));
 
 // add here routes.
 app.get('/techsupport', getTechSuppot);

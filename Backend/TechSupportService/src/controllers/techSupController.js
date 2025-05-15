@@ -26,12 +26,14 @@ export async function getTechSuppot(req, res) {
 // add single ticket.
 export async function addTicket(req, res) {
     
-    const type = req.query.type;
-    const name = req.query.name;
-    const email = req.query.email;
-    const category = req.query.category;
-    const description = req.query.description;
-    const images = req.query.images;
+    // const type = req.query.type;
+    // const name = req.query.name;
+    // const email = req.query.email;
+    // const category = req.query.category;
+    // const description = req.query.description;
+    // const images = req.query.images;
+
+    const { type, name, email, category, description, images } = req.body;
 
     console.log("", name, email, category, description, images);
 
