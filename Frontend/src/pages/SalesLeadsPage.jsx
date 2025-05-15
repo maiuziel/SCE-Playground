@@ -195,78 +195,54 @@ export default function SalesLeadsPage() {
           You have no leads assigned to you.
         </p>
       ) : (
-      <table
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          fontSize: '16px',
-          backgroundColor: 'rgba(34, 33, 33, 0.35)'
-        }}
-      >
-        <thead>
-          <tr>
-            <th>Lead ID</th>
-            <th>Contact Number</th>
-            <th>Status</th>
-            <th>Rep Email</th>
-            <th>Application Date</th>
-            <th>Closing Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredLeads.map((lead) => (
-            <tr
-              key={lead.lead_id}
-              style={{
-                backgroundColor: isNewAndOld(lead) ? 'red' : 'transparent',
-                color: isNewAndOld(lead) ? 'black' : 'inherit',
-                fontWeight: isNewAndOld(lead) ? 'bold' : 'normal',
-                height: '60px'
-              }}
-            >
-              <td style={cellStyle}>{lead.lead_id}</td>
-              <td style={cellStyle}>{lead.contact_number}</td>
-
-              {/* This is the updated status column */}
-              <td
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '16px' }}>
+          <thead>
+            <tr>
+              <th>Lead ID</th>
+              <th>Contact Number</th>
+              <th>Status</th>
+              <th>Rep Email</th>
+              <th>Application Date</th>
+              <th>Closing Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredLeads.map((lead) => (
+              <tr
+                key={lead.lead_id}
                 style={{
-                  ...cellStyle,
-                  color:
-                    lead.status?.toLowerCase() === 'new' ? 'gold' :
-                    lead.status?.toLowerCase() === 'in progress' ? '#007bff' :
-                    lead.status?.toLowerCase() === 'done' ? 'green' :
-                    lead.status?.toLowerCase() === 'canceled' ? 'red' :
-                    'black'
+                  backgroundColor: isNewAndOld(lead) ? 'red' : 'transparent',
+                  color: isNewAndOld(lead) ? 'black' : 'inherit',
+                  fontWeight: isNewAndOld(lead) ? 'bold' : 'normal',
+                  height: '60px'
                 }}
               >
-                {lead.status}
-              </td>
-
-              <td style={cellStyle}>{lead.rep_mail}</td>
-              <td style={cellStyle}>{lead.application_date}</td>
-              <td style={cellStyle}>{lead.closing_date ?? '-'}</td>
-
-              {/* Your Actions column stays the same */}
-              <td style={{ ...cellStyle, display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                {lead.status?.toLowerCase() === 'new' && (
-                  <>
-                    <button
-                      onClick={() => assignLeadToMe(lead.lead_id, lead.contact_number)}
-                      disabled={loading}
-                      style={actionButtonStyle('#4CAF50')}
-                    >
-                      Assign
-                    </button>
-                    <button
-                      onClick={() => cancelLead(lead.lead_id)}
-                      disabled={loading}
-                      style={actionButtonStyle('#dc3545')}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
+                <td style={cellStyle}>{lead.lead_id}</td>
+                <td style={cellStyle}>{lead.contact_number}</td>
+                <td style={getStatusStyle(lead.status)}>{lead.status}</td>
+                <td style={cellStyle}>{lead.rep_mail}</td>
+                <td style={cellStyle}>{lead.application_date}</td>
+                <td style={cellStyle}>{lead.closing_date ?? '-'}</td>
+                <td style={{ ...cellStyle, display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  {lead.status?.toLowerCase() === 'new' && (
+                    <>
+                      <button
+                        onClick={() => assignLeadToMe(lead.lead_id, lead.contact_number)}
+                        disabled={loading}
+                        style={actionButtonStyle('#4CAF50')}
+                      >
+                        Assign
+                      </button>
+                      <button
+                        onClick={() => cancelLead(lead.lead_id)}
+                        disabled={loading}
+                        style={actionButtonStyle('#dc3545')}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  )}
 
                 {lead.status?.toLowerCase() === 'in progress' && (
                   <>
@@ -304,6 +280,8 @@ export default function SalesLeadsPage() {
   );
 }
 
+// ----- STYLES -----
+
 function buttonStyle(bgColor, color) {
   return {
     backgroundColor: bgColor,
@@ -331,4 +309,19 @@ const cellStyle = {
   textAlign: 'center',
   padding: '12px',
   fontSize: '16px'
+};
+
+const getStatusStyle = (status) => {
+  const color = {
+    new: '#ffc107',         // צהוב
+    'in progress': '#007bff', // כחול
+    done: '#28a745',        // ירוק
+    canceled: '#dc3545'     // אדום
+  }[status?.toLowerCase()] || 'black';
+
+  return {
+    ...cellStyle,
+    color,
+    fontWeight: 'bold'
+  };
 };
