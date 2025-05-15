@@ -690,11 +690,21 @@ export default function TechSupportPage() {
             <label>Description:</label>
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 2000) setDescription(e.target.value);
+              }}
               minLength={10}
               maxLength={2000}
               required
             />
+            <p style={{ fontSize: "12px", color: description.length >= 2000 ? "red" : "#555" }}>
+              {description.length}/2000 characters
+            </p>
+            {description.length >= 2000 && (
+              <p style={{ color: "red", fontSize: "13px" }}>
+                You've reached the maximum character limit.
+              </p>
+            )}
  
             {/* Upload Images */}
             <label>Upload Images (up to 4, each img max 3 mb's):</label>
