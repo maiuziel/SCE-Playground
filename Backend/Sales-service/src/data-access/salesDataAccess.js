@@ -74,9 +74,11 @@ exports.getAllConversations = async () => {
 
 
 exports.getMyLeads = async (email) => {
+  const done = 'done';
+  const canceled = 'canceled';
   const result = await pool.query(
-    'SELECT * FROM Leads_table WHERE rep_mail = $1',
-    [email]
+    'SELECT * FROM Leads_table WHERE rep_mail = $1 AND status != $2 AND status != $3',
+    [email,done,canceled]
     );
   return result.rows;
 };
@@ -107,7 +109,7 @@ exports.assignLead = async (leadId, email) => {
 
 exports.updateLeadToInProgress = async (number) => {
   const newStatus = 'in progress';
-  const oldStatus = 'new'
+  const oldStatus = 'new';
   const result = await pool.query(
     'UPDATE leads_table SET status = $1 WHERE status = $2 AND rep_mail IS NOT NULL',
     [newStatus,oldStatus]
