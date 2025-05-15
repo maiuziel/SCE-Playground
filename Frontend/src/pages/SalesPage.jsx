@@ -74,7 +74,7 @@ export default function SalesPage() {
 
   return(
     <div className='sales-container'>
-      <h1>Welcome to Salse.</h1>
+      <h1>Welcome to Sales.</h1>
 
       <button className="addSalesConverstaionBtn"
       onClick={() => navigate('/salesConverstaion')}>Add converstaion</button>

@@ -90,7 +90,7 @@ exports.getAllLeads = async () => {
 
 exports.getSalesByCostumerId = async(customerId) => {
   const result = await pool.query(
-    'SELECT * FROM sales WHERE customer_id = $1',
+    'SELECT * FROM sales WHERE customer_id = $1 ORDER BY date DESC',
     [customerId]
   );
   return result.rows;

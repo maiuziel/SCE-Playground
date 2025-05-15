@@ -20,34 +20,42 @@ export default function SalesSearchHistoryPage() {
     };
 
   return (
-    <div>
+    <div >
       <h1>Sales</h1>
-      <input
-        type="text"
-        style={{
-
-        }}
-        placeholder="Customer ID"
-        value={customerId}
-        onChange={(e) => setCustomerId(e.target.value)}
-        required
-      />
-      <button
-          onClick={fetchSales}
-          style={{
-            padding: '8px 16px',
-            fontSize: 14,
-            background: '#4caf50',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 6,
-            cursor: 'pointer',
-            marginBottom: 10
-          }}
-        >
-          Load Sales for Customer #{customerId || '...'}
-        </button>
-      <table>
+      <div>
+        <input
+          type="text"
+          placeholder="Customer ID"
+          value={customerId}
+          onChange={(e) => setCustomerId(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <button
+            onClick={fetchSales}
+            style={{
+              padding: '8px 16px',
+              fontSize: 14,
+              background: '#4caf50',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 6,
+              cursor: 'pointer',
+              marginBottom: 10
+            }}
+          >
+            Load Sales for Customer #{customerId || '...'}
+          </button>
+      </div>
+      <div>
+      <table
+       style={{
+        width: '100%',
+        borderCollapse: 'collapse',
+        border: '1px solid #ccc',
+        marginTop: 10
+      }}>
         <thead>
           <tr>
             <th>ID</th>
@@ -66,6 +74,7 @@ export default function SalesSearchHistoryPage() {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
