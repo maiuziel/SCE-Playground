@@ -1,23 +1,37 @@
 // components/FilterOffcanvas.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Offcanvas, Form } from 'react-bootstrap';
 import PriceSlider from './PriceSlider';
 import './buttons.css';
 
-const FilterOffcanvas = ({
-  onApplyFilters,
-  categories,
-  minPrice,
-  maxPrice,
-  filterByCategory,
-  filterByPrice,
-}) => {
+const FilterOffcanvas = ({ allProducts, setDisplayedProducts }) => {
+  const categories = [
+    ...new Set(
+      allProducts
+        .map((product) => product.category)
+        .filter((category) => category)
+    ),
+  ];
+
   const [show, setShow] = useState(false);
   const [filters, setFilters] = useState({
     category: '',
-    minPrice: '',
-    maxPrice: '',
+    minPrice: 0,
+    maxPrice: 0,
   });
+
+  useEffect(() => {
+    if (allProducts.length > 0) {
+      const prices = allProducts.map((product) => product.price);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      setFilters((prev) => ({
+        ...prev,
+        minPrice: min,
+        maxPrice: max,
+      }));
+    }
+  }, [allProducts]);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -29,14 +43,18 @@ const FilterOffcanvas = ({
   const handleApply = () => {
     const { category, minPrice, maxPrice } = filters;
 
-    if (category) {
-      filterByCategory(category);
+    let filtered = [...allProducts];
+
+    if (category && category !== 'Choose Category') {
+      filtered = filtered.filter((product) => product.category === category);
     }
 
-    if (minPrice && maxPrice) {
-      filterByPrice(Number(minPrice), Number(maxPrice));
-    }
+    filtered = filtered.filter(
+      (product) =>
+        product.price >= Number(minPrice) && product.price <= Number(maxPrice)
+    );
 
+    setDisplayedProducts(filtered);
     handleClose();
   };
 
@@ -55,19 +73,23 @@ const FilterOffcanvas = ({
         variant="outline-primary"
         onClick={handleShow}
       >
-        Filter by <i class="bi bi-funnel"></i>
+        Filter by <i className="bi bi-funnel"></i>
       </Button>
 
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title> Filters </Offcanvas.Title>
+          <Offcanvas.Title>Filters</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Category</Form.Label>
-              <Form.Select name="category" onChange={handleChange}>
-                <option value=""> Choose Category</option>
+              <Form.Select
+                name="category"
+                value={filters.category}
+                onChange={handleChange}
+              >
+                <option value="">Choose Category</option>
                 {categories.map((category) => (
                   <option key={category} value={category}>
                     {category}
@@ -75,13 +97,16 @@ const FilterOffcanvas = ({
                 ))}
               </Form.Select>
             </Form.Group>
+
             <Form.Group className="mb-4">
               <PriceSlider
-                minPrice={minPrice}
-                maxPrice={maxPrice}
+                minPrice={Math.min(...allProducts.map((p) => p.price))}
+                maxPrice={Math.max(...allProducts.map((p) => p.price))}
                 onPriceChange={handlePriceChange}
+                value={[filters.minPrice, filters.maxPrice]}
               />
             </Form.Group>
+
             <Form.Group className="d-flex justify-content-center mt-3">
               <Button variant="success" onClick={handleApply} className="me-2">
                 Apply

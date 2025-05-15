@@ -11,8 +11,18 @@ function Search(props) {
     setSearchTerm(value);
   };
 
+  function search(searchTerm) {
+    searchTerm = String(searchTerm).toLowerCase();
+    const searched = [...props.allProducts].filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm)
+    );
+    props.setDisplayedProducts(searched);
+  }
+
   const handleSearchClick = (e) => {
-    props.search(searchTerm);
+    search(searchTerm);
   };
 
   return (
@@ -20,9 +30,11 @@ function Search(props) {
       <Form.Control
         type="search"
         placeholder="Search..."
-        className="me-2"
+        className="me-2 filter-sort-search"
         aria-label="Search"
-        style={{ width: '200px' }}
+        style={{
+          width: '200px',
+        }}
         value={searchTerm}
         onChange={handleSearchChange}
       />

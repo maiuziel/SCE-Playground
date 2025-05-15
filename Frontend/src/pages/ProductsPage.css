@@ -9,6 +9,11 @@
 
 .products-page-title {
   margin: 0;
+  background: linear-gradient(to right, #b2fefa, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2.5rem;
+  font-weight: bold;
 }
 
 .display-buttons {

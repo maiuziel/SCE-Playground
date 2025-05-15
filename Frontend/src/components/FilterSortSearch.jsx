@@ -5,17 +5,17 @@ import Search from './Search';
 function FilterSortSearch(props) {
   return (
     <>
-      <Search search={props.search} />
+      <Search
+        allProducts={props.allProducts}
+        setDisplayedProducts={props.setDisplayedProducts}
+      />
       <FilterOffcanvas
-        categories={props.categories}
-        minPrice={props.minPrice}
-        maxPrice={props.maxPrice}
-        filterByCategory={props.filterByCategory}
-        filterByPrice={props.filterByPrice}
+        allProducts={props.allProducts}
+        setDisplayedProducts={props.setDisplayedProducts}
       />
       <SortDropdown
-        sortHighToLow={props.sortHighToLow}
-        sortLowToHigh={props.sortLowToHigh}
+        displayedProducts={props.displayedProducts}
+        setDisplayedProducts={props.setDisplayedProducts}
       />
     </>
   );
