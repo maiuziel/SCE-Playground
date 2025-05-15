@@ -183,16 +183,19 @@ exports.unassignLead = async(req, res) => {
   }
 }
 
-exports.doneRevenueLead = async(req, res) => {
-  try{
-    const leadId = req.params.leadId;
+exports.doneRevenueLead = async (req, res) => {
+  try {
+    const leadId = req.params.id;
+    console.log("Controller: Processing request for leadId:", leadId);
     const revenue = await salesService.doneRevenue(leadId);
+    console.log("Controller: Got revenue result:", revenue);
     res.json(revenue);
-  }catch (err) {
-    console.error('Error calculate lead revenue:', err);
+  } catch (err) {
+    console.error('Error calculating lead revenue:', err);
     res.status(500).json({ error: 'Failed to fetch data' });
   }
 };
+
 
 exports.unDoneRevenueLead = async(req, res) => {
   try{

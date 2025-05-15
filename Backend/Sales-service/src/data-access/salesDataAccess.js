@@ -134,6 +134,7 @@ exports.unassignLead = async (leadId) => {
 };
 
 exports.doneRevenue = async(leadId) => {
+  console.log("been here3")
   const newStr = 'new';
   const result = await pool.query(
   'SELECT AVG(sales.amount)  FROM leads_table JOIN sales ON leads_table.lead_id = sales.customer_id WHERE leads_table.lead_id = $1 AND leads_table.status = $2 GROUP BY leads_table.lead_id ',

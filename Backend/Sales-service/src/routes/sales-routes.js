@@ -23,7 +23,7 @@ router.put('/updateLeadToInProgress/:contact_number', controller.updateLeadToInP
 router.post('/updateLeadStatus', controller.updateLeadStatus);
 router.post('/unassignLead', controller.unassignLead);
 
-router.get('/doneRevenue/:leadId', controller.doneRevenueLead);
+router.get('/doneRevenue/:id', controller.doneRevenueLead);
 router.get('/unDoneRevenue', controller.unDoneRevenueLead);
 
 

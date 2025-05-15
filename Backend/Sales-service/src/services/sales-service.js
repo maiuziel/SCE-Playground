@@ -72,6 +72,7 @@ exports.unassignLead = async (leadId) => {
 };
 
 exports.doneRevenue = async(leadId) => {
+  console.log("been here 2")
   return await salesDataAccess.doneRevenue(leadId);
 };
 
