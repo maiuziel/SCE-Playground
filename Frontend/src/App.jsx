@@ -69,7 +69,7 @@ function App() {
             <Route path='/salesConverstaion' element={<SalesConverstaionPage />} />
             <Route path='/salesSearchHistory' element={<SalesSearchHistoryPage />}/>
             <Route path='/SalesLeadsPage' element={<SalesLeadsPage />}/>
-            <Route path='/SalesForecast' element={<SalesForecastPage/>}/>
+            <Route path='/SalesForecastPage' element={<SalesForecastPage/>}/>
 
             <Route
               path='/products'

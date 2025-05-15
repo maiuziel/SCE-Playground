@@ -89,7 +89,7 @@ export default function SalesPage() {
   <button className="searchSaleHistorybtn" onClick={() => navigate('/salesSearchHistory')}>
   Search Sale History
 </button>
-  <button className="SalesForecastbtn" onClick={()=> navigate('/SalesForecast')}>
+  <button className="SalesForecastbtn" onClick={()=> navigate('/SalesForecastPage')}>
     Sales Forcast
   </button>
 
