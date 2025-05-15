@@ -77,7 +77,7 @@ exports.getMyLeads = async (email) => {
   const done = 'done';
   const canceled = 'canceled';
   const result = await pool.query(
-    'SELECT * FROM Leads_table WHERE rep_mail = $1 AND status != $2 AND status != $3',
+    'SELECT * FROM Leads_table WHERE rep_mail = $1 AND status != $2 AND status != $3 ORDER BY application_date DESC',
     [email,done,canceled]
     );
   return result.rows;
@@ -85,7 +85,7 @@ exports.getMyLeads = async (email) => {
 
 exports.getAllLeads = async () => {
   const result = await pool.query(
-    'SELECT * FROM Leads_table'
+    'SELECT * FROM Leads_table ORDER BY application_date DESC'
     );
   return result.rows;
 };
