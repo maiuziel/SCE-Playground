@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState } from 'react';
 import api from '../services/api';
 
-
 export default function SalesForecastPage() {
-    const [ donerevenue, setDoneRevenue] = useState([]);
-    const [undonerevenue, setUnDoneRevenue] = useState([]);
-    const [leadId, setLeadId] = useState('');
+  const [doneRevenue, setDoneRevenue] = useState(null);
+  const [undoneRevenue, setUnDoneRevenue] = useState(null);
+  const [leadId, setLeadId] = useState('');
 
     const doneRevenue = async () => {
         try{
-            const res = await api.get('sales/doneRevenue', {leadId});
+            const res = await api.get('sales/doneRevenueLead', {leadId});
             setDoneRevenue(res.data);
             if(!donerevenue){
-                {unDoneRevenue};
+                unDoneRevenue;
             }
         }catch (err) {
             alert('An error occurred while getting the data');
@@ -21,7 +20,7 @@ export default function SalesForecastPage() {
 
     const unDoneRevenue = async () => {
         try{
-            const res = await api.get('sales/unDoneRevenue');
+            const res = await api.get('sales/unDoneRevenueLead');
             setUnDoneRevenue(res.data);
         }catch (err) {
             alert('An error occurred while getting the data');
@@ -29,7 +28,7 @@ export default function SalesForecastPage() {
     };
 
     return(
-    <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }}>
       <h1 style={{ color: '#fff' }}>Forecast Reveneu</h1>
 
       <div style={{ marginBottom: '10px' }}>
@@ -40,8 +39,9 @@ export default function SalesForecastPage() {
           onChange={(e) => setLeadId(e.target.value)}
         />
       </div>
+
       <button
-        onClick={doneRevenue}
+        onClick={fetchRevenues}
         style={{
           padding: '8px 16px',
           fontSize: 14,
@@ -62,42 +62,31 @@ export default function SalesForecastPage() {
           borderCollapse: 'collapse',
           border: '1px solid #ccc',
           marginTop: 10,
-          backgroundColor: 'transparent', 
+          backgroundColor: 'transparent',
         }}
       >
         <thead>
           <tr>
-            <th style={th}>Lead ID</th>
-            <th style={th}>Revenue</th>
+            <th style={thStyle}>Lead ID</th>
+            <th style={thStyle}>Revenue</th>
           </tr>
         </thead>
         <tbody>
-          {doneRevenue.length === 0 ? (
+          {(doneRevenue !== null || undoneRevenue !== null) ? (
             <tr>
-              <td style={td}>{leadId}</td>
-              <td style={td}>{undonerevenue}</td>
+              <td style={tdStyle}>{leadId}</td>
+              <td style={tdStyle}>{undonerevenue}</td>
             </tr>
           ) : (
            
               <tr>
-                <td style={td}>{leadId}</td>
-                <td style={td}>{donerevenue}</td>
+                <td style={tdStyle}>{leadId}</td>
+                <td style={tdStyle}>{donerevenue}</td>
               </tr>
             )
          }
         </tbody>
       </table>
     </div>
-    );
+  );
 }
-
-const th = {
-    border: '1px solid #ccc',
-    padding: 8,
-    textAlign: 'left'
-  };
-  
-  const td = {
-    border: '1px solid #ccc',
-    padding: 8
-  };
