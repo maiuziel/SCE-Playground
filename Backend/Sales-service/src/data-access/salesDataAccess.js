@@ -134,16 +134,20 @@ exports.unassignLead = async (leadId) => {
 };
 
 exports.doneRevenue = async(leadId) => {
+  const newStr = 'new';
   const result = await pool.query(
-  'SELECT AVG(sales.amount)  FROM leads_table JOIN sales ON leads_table.lead_id = sales.customer_id WHERE leads_table.lead_id = $1 AND leads_table.status="done" GROUP BY leads_table.lead_id '
-  [leadId]
+  'SELECT AVG(sales.amount)  FROM leads_table JOIN sales ON leads_table.lead_id = sales.customer_id WHERE leads_table.lead_id = $1 AND leads_table.status = $2 GROUP BY leads_table.lead_id ',
+  [leadId, newStr]
   );
   return result.rows[0];
 };
 
 exports.unDoneRevenue = async() => {
+  const month = 'month';
+  const oneMonth = '1 month'
   const result = await pool.query(
-  'SELECT AVG(COALESCE(total.total_amount, 0)) FROM ( SELECT leads_table.lead_id, SUM(s.amount) AS total_amount FROM leads LEFT JOIN sales s ON leads_table.lead_id = s.customer_id AND date_trunc("month", s.date) = date_trunc("month", CURRENT_DATE - INTERVAL "1 month") GROUP BY leads_table.lead_id) AS total'
+  'SELECT AVG(COALESCE(total.total_amount, 0)) FROM ( SELECT leads_table.lead_id, SUM(s.amount) AS total_amount FROM leads LEFT JOIN sales s ON leads_table.lead_id = s.customer_id AND date_trunc($1, s.date) = date_trunc($1, CURRENT_DATE - INTERVAL $2) GROUP BY leads_table.lead_id) AS total',
+  [month,oneMonth]
   );
   return result.rows[0];
 };

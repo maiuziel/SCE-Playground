@@ -10,6 +10,9 @@ export default function SalesForecastPage() {
     try {
       const doneRes = await api.get(`/sales/doneRevenue/${leadId}`);
       setDoneRevenue(doneRes.data);
+      if(!doneRevenue){
+        undoneRevenue;
+      }
 
       const undoneRes = await api.get('/sales/unDoneRevenue');
       setUnDoneRevenue(undoneRes.data);
