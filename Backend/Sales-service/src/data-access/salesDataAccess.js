@@ -133,15 +133,53 @@ exports.unassignLead = async (leadId) => {
   return result.rows[0];
 };
 
-exports.doneRevenue = async(leadId) => {
-  console.log("been here3")
-  const newStr = 'new';
-  const result = await pool.query(
-  'SELECT AVG(sales.amount)  FROM leads_table JOIN sales ON leads_table.lead_id = sales.customer_id WHERE leads_table.lead_id = $1 AND leads_table.status = $2 GROUP BY leads_table.lead_id ',
-  [leadId, newStr]
-  );
-  return result.rows[0];
+
+exports.doneRevenue = async (leadId) => {
+  console.log("Checking done revenue for lead:", leadId);
+
+  try {
+    const newStr = 'new';
+    const doneResult = await pool.query(
+      `SELECT AVG(sales.amount)  
+       FROM leads_table 
+       JOIN sales ON leads_table.lead_id = sales.customer_id 
+       WHERE leads_table.lead_id = $1 AND leads_table.status = $2 
+       GROUP BY leads_table.lead_id`,
+      [leadId, newStr]
+    );
+
+    if (doneResult.rows.length > 0 && doneResult.rows[0].avg !== null) {
+      return doneResult.rows[0];  // הצליח, מחזירים
+    }
+  } catch (err) {
+    console.error("Error querying done revenue:", err);
+  }
+
+  // אם לא מצאנו תוצאה מתאימה, מנסים את השאילתה השנייה
+  console.log("Falling back to undone revenue...");
+
+  try {
+    const month = 'month';
+    const oneMonth = '1 month';
+    const undoneResult = await pool.query(
+      `SELECT AVG(COALESCE(total.total_amount, 0)) AS avg 
+       FROM (
+         SELECT leads_table.lead_id, SUM(s.amount) AS total_amount 
+         FROM leads_table 
+         LEFT JOIN sales s ON leads_table.lead_id = s.customer_id 
+         AND date_trunc($1, s.date) = date_trunc($1, CURRENT_DATE - INTERVAL $2) 
+         GROUP BY leads_table.lead_id
+       ) AS total`,
+      [month, oneMonth]
+    );
+
+    return undoneResult.rows[0];
+  } catch (err) {
+    console.error("Error querying undone revenue:", err);
+    return null;
+  }
 };
+
 
 exports.unDoneRevenue = async() => {
   const month = 'month';
