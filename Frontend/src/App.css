@@ -138,9 +138,8 @@ body {
   transition: background 0.2s;
 }
 
-.searchSaleHistorybtn, .SalesForecastbtn{
+.SalesForecastbtn{
   margin-top: 24px;
-  margin-left: 30px;
   padding: 12px 32px;
   background: #00897b;
   color: #fff;
