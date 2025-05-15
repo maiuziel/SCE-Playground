@@ -4,6 +4,8 @@ export default function SupportHistoryPage() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeRequestId, setActiveRequestId] = useState(null);
+  const [commentText, setCommentText] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:4001/api/support-requests', {
@@ -36,6 +38,29 @@ export default function SupportHistoryPage() {
         setLoading(false);
       });
   }, []);
+
+  const submitComment = async () => {
+    if (!commentText.trim()) return;
+
+    try {
+      const res = await fetch(`http://localhost:4002/support-requests/${activeRequestId}/comment`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment: commentText })
+      });
+
+      if (res.ok) {
+        alert('Comment sent successfully!');
+        setCommentText('');
+        setActiveRequestId(null);
+      } else {
+        alert('Failed to send comment');
+      }
+    } catch (err) {
+      alert('Error sending comment');
+      console.error(err);
+    }
+  };
 
   return (
     <div className="page-container">
@@ -76,6 +101,23 @@ export default function SupportHistoryPage() {
             ))}
           </tbody>
         </table>
+      )}
+
+      {activeRequestId && (
+        <div style={{ marginTop: '1rem', background: '#f0f0f0', padding: '1rem', borderRadius: '8px' }}>
+          <h3>Write comment for Request #{activeRequestId}</h3>
+          <textarea
+            rows={4}
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            placeholder="Type your comment here..."
+            style={{ width: '100%', marginBottom: '0.5rem' }}
+          />
+          <div>
+            <button onClick={submitComment} style={{ marginRight: '1rem' }}>Send</button>
+            <button onClick={() => setActiveRequestId(null)}>Cancel</button>
+          </div>
+        </div>
       )}
     </div>
   );

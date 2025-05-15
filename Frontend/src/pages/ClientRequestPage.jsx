@@ -8,12 +8,19 @@ export default function ClientRequestPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:4001/support-request', {
+    fetch('http://localhost:4002/support-requests', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ subject, description })
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to submit');
+        }
+        return res.json();
+      })
       .then((data) => {
         alert('Request submitted successfully! ✅');
         setSubject('');
