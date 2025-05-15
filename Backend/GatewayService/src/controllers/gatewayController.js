@@ -42,6 +42,7 @@ const forwardSalesRequests = async (req, res, next) => {
     const url = `${salesServiceUrl}/sales${path}`;
 
     console.log('Forwarding request to sales service:', url);
+    console.log('Forwarding data to sales service:', req.data);
 
     const response = await axios({
       method: req.method,

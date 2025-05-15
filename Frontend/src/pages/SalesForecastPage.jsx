@@ -16,7 +16,7 @@ export default function RevenueChecker() {
     setAverageRevenue(null);
     try {
       // Make sure the URL matches your backend route
-      const doneRes = await api.get(`/sales/doneRevenue/${leadId}`);
+      const doneRes = await api.get('/sales/doneRevenue/${leadId}');
       
       const avgFromDone = doneRes.data?.avg ?? null;
       if (avgFromDone != null) {
