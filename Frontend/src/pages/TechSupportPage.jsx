@@ -466,7 +466,7 @@ export default function TechSupportPage() {
                 {selectedRequest.category || "Request Category"}
               </h3>
               <p className="tech-view-request-subtitle">
-                Date: {selectedRequest.date || "Unknown"} | Urgency:{" "}
+                Date: {selectedRequest.date.replace("T", " At ").replace("Z", "").replace(/\.\d+$/, '') || "Unknown"} | Urgency:{" "}
                 {getUrgencyText(selectedRequest.urgency)}
               </p>
 
@@ -701,7 +701,7 @@ export default function TechSupportPage() {
                 {selectedRequest.category || "Request Category"}
               </h3>
               <p className="tech-view-request-subtitle">
-                Date 31.3.25 | Time 14:00
+              Date: {selectedRequest.date.replace("T", " At ").replace("Z", "").replace(/\.\d+$/, '') || "Unknown"}
               </p>
               <div className="tech-view-request-history">
                 {isLoadingMessages ? (
