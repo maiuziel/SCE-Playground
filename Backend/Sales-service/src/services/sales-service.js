@@ -62,3 +62,11 @@ exports.assignLead = async (leadId, email) => {
 exports.updateLeadToInProgress = async (number) => {
   return await salesDataAccess.updateLeadToInProgress(number);
 };
+
+exports.updateLeadStatus = async (leadId, status) => {
+  return await salesDataAccess.updateLeadStatus(leadId, status);
+};
+
+exports.unassignLead = async (leadId) => {
+  return await salesDataAccess.unassignLead(leadId);
+};

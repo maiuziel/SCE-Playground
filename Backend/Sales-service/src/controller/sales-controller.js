@@ -161,3 +161,25 @@ exports.updateLeadToInProgress = async(req, res) => {
   }
 }
 
+exports.updateLeadStatus = async(req, res) => {
+  try {
+    const { leadId, status } = req.body;
+    const data = await salesService.updateLeadStatus(leadId, status);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error updating lead status:', err);
+    res.status(500).json({ success: false, error: 'Failed to update lead status' });
+  }
+}
+
+exports.unassignLead = async(req, res) => {
+  try {
+    const { leadId } = req.body;
+    const data = await salesService.unassignLead(leadId);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error unassigning lead:', err);
+    res.status(500).json({ success: false, error: 'Failed to unassign lead' });
+  }
+}
+

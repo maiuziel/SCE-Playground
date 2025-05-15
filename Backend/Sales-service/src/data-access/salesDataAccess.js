@@ -114,3 +114,20 @@ exports.updateLeadToInProgress = async (number) => {
   );
   return result.rows[0];
 };
+
+exports.updateLeadStatus = async (leadId, status) => {
+  const result = await pool.query(
+    'UPDATE Leads_table SET status = $1 WHERE lead_id = $2 RETURNING *',
+    [status, leadId]
+  );
+  return result.rows[0];
+};
+
+exports.unassignLead = async (leadId) => {
+  const result = await pool.query(
+    'UPDATE Leads_table SET rep_mail = NULL, status = $1 WHERE lead_id = $2 RETURNING *',
+    ['new', leadId]
+  );
+  return result.rows[0];
+};
+

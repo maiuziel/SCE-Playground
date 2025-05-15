@@ -58,17 +58,14 @@ export default function SalesLeadsPage() {
 
     setLoading(true);
     try {
-      // Assign the lead to the user
       const res = await api.post('sales/assignLead', {
         leadId,
         email: user.email
       });
 
       if (res.data.success) {
-        // Update the lead's status to InProgress
         await api.put(`sales/updateLeadToInProgress/${contactNumber}`);
 
-        // Update UI state
         setLeads(leads.map(lead =>
           lead.lead_id === leadId
             ? { ...lead, rep_mail: user.email, status: 'in progress' }
@@ -82,6 +79,78 @@ export default function SalesLeadsPage() {
     } catch (error) {
       console.error('Error assigning lead:', error);
       alert('Error assigning lead. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const markLeadAsDone = async (leadId) => {
+    if (!user?.email) {
+      alert('You must be logged in to update leads');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await api.post('/sales/updateLeadStatus', {
+        leadId,
+        status: 'done'
+      });
+
+      if (res.status === 200) {
+        const updatedLeads = leads.map(lead =>
+          lead.lead_id === leadId ? { ...lead, status: 'done' } : lead
+        );
+        setLeads(updatedLeads);
+        alert('Lead marked as done!');
+      }
+    } catch (error) {
+      console.error('Error updating lead status: ', error);
+      alert('Error updating lead status. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const unassignLead = async (leadId) => {
+    setLoading(true);
+    try {
+      const res = await api.post('/sales/unassignLead', {
+        leadId
+      });
+
+      if (res.status === 200) {
+        const updatedLeads = leads.map(lead =>
+          lead.lead_id === leadId ? { ...lead, rep_mail: null, status: 'new' } : lead
+        );
+        setLeads(updatedLeads);
+        alert('Lead unassigned!');
+      }
+    } catch (error) {
+      console.error('Error unassigning lead: ', error);
+      alert('Error unassigning lead. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelLead = async (leadId) => {
+    setLoading(true);
+    try {
+      const res = await api.post('/sales/updateLeadStatus', {
+        leadId,
+        status: 'canceled'
+      });
+
+      if (res.status === 200) {
+        const updatedLeads = leads.map(lead =>
+          lead.lead_id === leadId ? { ...lead, status: 'canceled' } : lead
+        );
+        setLeads(updatedLeads);
+        alert('Lead canceled!');
+      }
+    } catch (error) {
+      console.error('Error canceling lead: ', error);
+      alert('Error canceling lead. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -110,24 +179,13 @@ export default function SalesLeadsPage() {
   return (
     <div style={{ padding: '20px' }}>
       <div style={{ marginBottom: '15px' }}>
-        <button
-          onClick={fetchAllLeads}
-          style={buttonStyle('#007bff', 'white')}
-        >
+        <button onClick={fetchAllLeads} style={buttonStyle('#007bff', 'white')}>
           all the leads
         </button>
-
-        <button
-          onClick={fetchMyLeads}
-          style={buttonStyle('#28a745', 'white')}
-        >
+        <button onClick={fetchMyLeads} style={buttonStyle('#28a745', 'white')}>
           my leads
         </button>
-
-        <button
-          onClick={showActiveLeads}
-          style={buttonStyle('#ffc107', 'black')}
-        >
+        <button onClick={showActiveLeads} style={buttonStyle('#ffc107', 'black')}>
           active leads
         </button>
       </div>
@@ -137,7 +195,7 @@ export default function SalesLeadsPage() {
           You have no leads assigned to you.
         </p>
       ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '16px' }}>
           <thead>
             <tr>
               <th>Lead ID</th>
@@ -154,34 +212,62 @@ export default function SalesLeadsPage() {
               <tr
                 key={lead.lead_id}
                 style={{
-                  backgroundColor: isNewAndOld(lead) ? 'red' : 'transparent'
+                  backgroundColor: isNewAndOld(lead) ? 'red' : 'transparent',
+                  color: isNewAndOld(lead) ? 'black' : 'inherit',
+                  fontWeight: isNewAndOld(lead) ? 'bold' : 'normal',
+                  height: '60px'
                 }}
               >
-                <td>{lead.lead_id}</td>
-                <td>{lead.contact_number}</td>
-                <td>{lead.status}</td>
-                <td>{lead.rep_mail}</td>
-                <td>{lead.application_date}</td>
-                <td>{lead.closing_date ?? '-'}</td>
-                <td>
-                  {!lead.rep_mail && (
-                    <button
-                      onClick={() =>
-                        assignLeadToMe(lead.lead_id, lead.contact_number)
-                      }
-                      disabled={loading}
-                      style={{
-                        backgroundColor: '#4CAF50',
-                        color: 'white',
-                        border: 'none',
-                        padding: '5px 10px',
-                        borderRadius: '3px',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        opacity: loading ? 0.7 : 1
-                      }}
-                    >
-                      {loading ? 'Assigning...' : 'Assign to me'}
-                    </button>
+                <td style={cellStyle}>{lead.lead_id}</td>
+                <td style={cellStyle}>{lead.contact_number}</td>
+                <td style={cellStyle}>{lead.status}</td>
+                <td style={cellStyle}>{lead.rep_mail}</td>
+                <td style={cellStyle}>{lead.application_date}</td>
+                <td style={cellStyle}>{lead.closing_date ?? '-'}</td>
+                <td style={{ ...cellStyle, display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  {lead.status?.toLowerCase() === 'new' && (
+                    <>
+                      <button
+                        onClick={() => assignLeadToMe(lead.lead_id, lead.contact_number)}
+                        disabled={loading}
+                        style={actionButtonStyle('#4CAF50')}
+                      >
+                        Assign
+                      </button>
+                      <button
+                        onClick={() => cancelLead(lead.lead_id)}
+                        disabled={loading}
+                        style={actionButtonStyle('#dc3545')}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  )}
+
+                  {lead.status?.toLowerCase() === 'in progress' && (
+                    <>
+                      <button
+                        onClick={() => markLeadAsDone(lead.lead_id)}
+                        disabled={loading}
+                        style={actionButtonStyle('#17a2b8')}
+                      >
+                        Done
+                      </button>
+                      <button
+                        onClick={() => unassignLead(lead.lead_id)}
+                        disabled={loading}
+                        style={actionButtonStyle('#ffc107')}
+                      >
+                        Unassign
+                      </button>
+                      <button
+                        onClick={() => cancelLead(lead.lead_id)}
+                        disabled={loading}
+                        style={actionButtonStyle('#dc3545')}
+                      >
+                        Cancel
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>
@@ -205,3 +291,19 @@ function buttonStyle(bgColor, color) {
     cursor: 'pointer'
   };
 }
+
+const actionButtonStyle = (bgColor) => ({
+  backgroundColor: bgColor,
+  color: 'white',
+  border: 'none',
+  padding: '6px 12px',
+  borderRadius: '4px',
+  fontSize: '14px',
+  cursor: 'pointer'
+});
+
+const cellStyle = {
+  textAlign: 'center',
+  padding: '12px',
+  fontSize: '16px'
+};
