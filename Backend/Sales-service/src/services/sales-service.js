@@ -76,5 +76,5 @@ exports.doneRevenue = async(leadId) => {
 };
 
 exports.unDoneRevenue = async() => {
-  return await salesDataAccess.doneRevenue(leadId);
+  return await salesDataAccess.unDoneRevenue(leadId);
 };
