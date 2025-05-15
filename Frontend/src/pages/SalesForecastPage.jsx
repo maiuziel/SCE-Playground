@@ -11,7 +11,7 @@ export default function SalesForecastPage() {
       const doneRes = await api.get(`/sales/doneRevenue/${leadId}`);
       setDoneRevenue(doneRes.data);
 
-      const undoneRes = await api.get(`/sales/unDoneRevenue`);
+      const undoneRes = await api.get('/sales/unDoneRevenue');
       setUnDoneRevenue(undoneRes.data);
     } catch (err) {
       alert('An error occurred while getting the data');
