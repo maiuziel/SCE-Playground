@@ -8,11 +8,13 @@ import ProductsPage from './pages/ProductsPage.jsx';
 import SalesPage from './pages/SalesPage.jsx';
 import SalesConverstaionPage from './pages/SalesConverstaionPage.jsx';
 import SalesSearchHistoryPage from './pages/SalesSearchHistoryPage.jsx';
+import SalesForecastPage from './pages/SalesForecastPage.jsx';
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
 import SalesLeadsPage from  './pages/SalesLeadsPage.jsx';
+
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
@@ -67,6 +69,7 @@ function App() {
             <Route path='/salesConverstaion' element={<SalesConverstaionPage />} />
             <Route path='/salesSearchHistory' element={<SalesSearchHistoryPage />}/>
             <Route path='/SalesLeadsPage' element={<SalesLeadsPage />}/>
+            <Route path='/SalesForecast' element={<SalesForecastPage/>}/>
 
             <Route
               path='/products'

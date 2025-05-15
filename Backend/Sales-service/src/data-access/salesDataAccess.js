@@ -133,3 +133,17 @@ exports.unassignLead = async (leadId) => {
   return result.rows[0];
 };
 
+exports.doneRevenue = async(leadId) => {
+  const result = await pool.query(
+  'SELECT AVG(sales.amount)  FROM leads_table JOIN sales ON leads_table.lead_id = sales.customer_id WHERE leads_table.lead_id = $1 AND leads_table.status="done" GROUP BY leads_table.lead_id '
+  [leadId]
+  );
+  return result.rows[0];
+};
+
+exports.undoneRevenue = async() => {
+  const result = await pool.query(
+  'SELECT AVG(COALESCE(total.total_amount, 0)) FROM ( SELECT leads_table.lead_id, SUM(s.amount) AS total_amount FROM leads LEFT JOIN sales s ON leads_table.lead_id = s.customer_id AND date_trunc("month", s.date) = date_trunc("month", CURRENT_DATE - INTERVAL "1 month") GROUP BY leads_table.lead_id) AS total'
+  );
+  return result.rows[0];
+};

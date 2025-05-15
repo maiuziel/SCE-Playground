@@ -53,7 +53,7 @@ export default function SalesSearchHistoryPage() {
           borderCollapse: 'collapse',
           border: '1px solid #ccc',
           marginTop: 10,
-          backgroundColor: 'transparent', // כדי לא להסתיר את הרקע של הדף
+          backgroundColor: 'transparent', 
         }}
       >
         <thead>

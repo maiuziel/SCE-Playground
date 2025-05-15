@@ -70,3 +70,11 @@ exports.updateLeadStatus = async (leadId, status) => {
 exports.unassignLead = async (leadId) => {
   return await salesDataAccess.unassignLead(leadId);
 };
+
+exports.doneRevenue = async(leadId) => {
+  return await salesDataAccess.doneRevenue(leadId);
+};
+
+exports.unDoneRevenue = async() => {
+  return await salesDataAccess.doneRevenue(leadId);
+};

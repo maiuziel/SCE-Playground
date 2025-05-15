@@ -183,3 +183,24 @@ exports.unassignLead = async(req, res) => {
   }
 }
 
+exports.doneRevenueLead = async(req, res) => {
+  try{
+    const leadId = req.param.leadId;
+    const revenue = await salesService.doneRevenue(leadId);
+    res.json(revenue);
+  }catch (err) {
+    console.error('Error calculate lead revenue:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+};
+
+exports.unDoneRevenueLead = async(req, res) => {
+  try{
+    const leadId = req.param.leadId;
+    const revenue = await salesService.unDoneRevenue();
+    res.json(revenue);
+  }catch (err) {
+    console.error('Error calculate lead revenue:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+};
