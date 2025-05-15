@@ -196,7 +196,6 @@ exports.doneRevenueLead = async(req, res) => {
 
 exports.unDoneRevenueLead = async(req, res) => {
   try{
-    const leadId = req.param.leadId;
     const revenue = await salesService.unDoneRevenue();
     res.json(revenue);
   }catch (err) {

@@ -9,10 +9,10 @@ export default function SalesForecastPage() {
 
     const doneRevenue = async () => {
         try{
-            const res = await api.get('sales/doneRevenueLead', {leadId});
+            const res = await api.get('sales/doneRevenue', {leadId});
             setDoneRevenue(res.data);
             if(!donerevenue){
-                unDoneRevenue;
+                {unDoneRevenue};
             }
         }catch (err) {
             alert('An error occurred while getting the data');
@@ -21,7 +21,7 @@ export default function SalesForecastPage() {
 
     const unDoneRevenue = async () => {
         try{
-            const res = await api.get('sales/unDoneRevenueLead');
+            const res = await api.get('sales/unDoneRevenue');
             setUnDoneRevenue(res.data);
         }catch (err) {
             alert('An error occurred while getting the data');
@@ -29,7 +29,7 @@ export default function SalesForecastPage() {
     };
 
     return(
-        <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px' }}>
       <h1 style={{ color: '#fff' }}>Forecast Reveneu</h1>
 
       <div style={{ marginBottom: '10px' }}>
@@ -67,21 +67,21 @@ export default function SalesForecastPage() {
       >
         <thead>
           <tr>
-            <th style={thStyle}>Lead ID</th>
-            <th style={thStyle}>Revenue</th>
+            <th style={th}>Lead ID</th>
+            <th style={th}>Revenue</th>
           </tr>
         </thead>
         <tbody>
           {doneRevenue.length === 0 ? (
             <tr>
-              <td style={tdStyle}>{leadId}</td>
-              <td style={tdStyle}>{undonerevenue}</td>
+              <td style={td}>{leadId}</td>
+              <td style={td}>{undonerevenue}</td>
             </tr>
           ) : (
            
               <tr>
-                <td style={tdStyle}>{leadId}</td>
-                <td style={tdStyle}>{donerevenue}</td>
+                <td style={td}>{leadId}</td>
+                <td style={td}>{donerevenue}</td>
               </tr>
             )
          }
@@ -90,3 +90,14 @@ export default function SalesForecastPage() {
     </div>
     );
 }
+
+const th = {
+    border: '1px solid #ccc',
+    padding: 8,
+    textAlign: 'left'
+  };
+  
+  const td = {
+    border: '1px solid #ccc',
+    padding: 8
+  };
