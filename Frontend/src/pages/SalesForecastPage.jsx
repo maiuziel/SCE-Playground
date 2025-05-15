@@ -1,87 +1,89 @@
 import React, { useState } from 'react';
-import api from '../services/api';
+import api from '../services/api'; // ודא שהנתיב נכון לשירות API שלך
 
-export default function SalesForecastPage() {
-  const [doneRevenue, setDoneRevenue] = useState(null);
-  const [undoneRevenue, setUnDoneRevenue] = useState(null);
+export default function RevenueChecker() {
   const [leadId, setLeadId] = useState('');
+  const [averageRevenue, setAverageRevenue] = useState(null);
+  const [error, setError] = useState(null);
 
-  const fetchRevenues = async () => {
+  const handleSubmit = async () => {
+    if (!leadId) {
+      setError('Please enter a valid ID');
+      return;
+    }
+
+    setError(null);
+    setAverageRevenue(null);
+
     try {
-      const doneRes = await api.get(`/sales/doneRevenue/${leadId}`);
-      setDoneRevenue(doneRes.data);
-      if(!doneRevenue){
-        undoneRevenue;
-      }
+      const doneRes = await api.get(`/doneRevenue/${leadId}`);
+      const avgFromDone = doneRes.data?.avg ?? doneRes.data ?? null;
 
-      const undoneRes = await api.get('/sales/unDoneRevenue');
-      setUnDoneRevenue(undoneRes.data);
+      if (avgFromDone !== null) {
+        setAverageRevenue(avgFromDone);
+      } else {
+        // אם אין ממוצע מהשאילתה הראשונה – נשלחת הבקשה השנייה
+        const undoneRes = await api.get('/unDoneRevenue');
+        const avgFromUndone = undoneRes.data?.avg ?? undoneRes.data ?? 0;
+        setAverageRevenue(avgFromUndone);
+      }
     } catch (err) {
-      alert('An error occurred while getting the data');
+      console.error(err);
+      setError('Error fetching revenue');
     }
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1 style={{ color: '#fff' }}>Forecast Revenue</h1>
+    <div style={{ padding: 20, color: '#fff' }}>
+      <h2>Revenue Checker</h2>
 
-      <div style={{ marginBottom: '10px' }}>
-        <input
-          type="text"
-          placeholder="Lead ID"
-          value={leadId}
-          onChange={(e) => setLeadId(e.target.value)}
-        />
-      </div>
-
+      <input
+        type="text"
+        placeholder="Enter ID"
+        value={leadId}
+        onChange={(e) => setLeadId(e.target.value)}
+        style={{ padding: 8, marginRight: 10 }}
+      />
       <button
-        onClick={fetchRevenues}
+        onClick={handleSubmit}
         style={{
           padding: '8px 16px',
-          fontSize: 14,
-          background: '#4caf50',
+          backgroundColor: '#4caf50',
           color: '#fff',
           border: 'none',
           borderRadius: 6,
           cursor: 'pointer',
-          marginBottom: 10,
         }}
       >
-        Calculate Revenue
+        Submit
       </button>
 
-      <table
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          border: '1px solid #ccc',
-          marginTop: 10,
-          backgroundColor: 'transparent',
-        }}
-      >
-        <thead>
-          <tr>
-            <th style={thStyle}>Lead ID</th>
-            <th style={thStyle}>Done Revenue</th>
-            <th style={thStyle}>Undone Revenue</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(doneRevenue !== null || undoneRevenue !== null) ? (
+      {error && <p style={{ color: 'red', marginTop: 10 }}>{error}</p>}
+
+      {averageRevenue !== null && (
+        <table
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            border: '1px solid #ccc',
+            marginTop: 20,
+            backgroundColor: 'transparent',
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={thStyle}>ID</th>
+              <th style={thStyle}>Average Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td style={tdStyle}>{leadId}</td>
-              <td style={tdStyle}>{doneRevenue ?? 'N/A'}</td>
-              <td style={tdStyle}>{undoneRevenue ?? 'N/A'}</td>
+              <td style={tdStyle}>{averageRevenue}</td>
             </tr>
-          ) : (
-            <tr>
-              <td colSpan="3" style={{ textAlign: 'center', color: '#fff', padding: 10 }}>
-                No data loaded yet.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

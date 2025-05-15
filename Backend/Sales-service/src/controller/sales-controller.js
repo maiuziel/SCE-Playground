@@ -185,7 +185,7 @@ exports.unassignLead = async(req, res) => {
 
 exports.doneRevenueLead = async(req, res) => {
   try{
-    const leadId = req.param.leadId;
+    const leadId = req.params.leadId;
     const revenue = await salesService.doneRevenue(leadId);
     res.json(revenue);
   }catch (err) {
