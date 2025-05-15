@@ -163,14 +163,14 @@ exports.doneRevenue = async (leadId) => {
     const oneMonth = '1 month';
     const undoneResult = await pool.query(
       `SELECT AVG(COALESCE(total.total_amount, 0)) AS avg 
-       FROM (
-         SELECT leads_table.lead_id, SUM(s.amount) AS total_amount 
-         FROM leads_table 
-         LEFT JOIN sales s ON leads_table.lead_id = s.customer_id 
-         AND date_trunc($1, s.date) = date_trunc($1, CURRENT_DATE - INTERVAL $2) 
-         GROUP BY leads_table.lead_id
-       ) AS total`,
-      [month, oneMonth]
+   FROM (
+     SELECT leads_table.lead_id, SUM(s.amount) AS total_amount 
+     FROM leads_table 
+     LEFT JOIN sales s ON leads_table.lead_id = s.customer_id 
+     AND date_trunc($1, s.date) = date_trunc($1, CURRENT_DATE - INTERVAL '1 month') 
+     GROUP BY leads_table.lead_id
+   ) AS total`,
+  [month]
     );
 
     return undoneResult.rows[0];
