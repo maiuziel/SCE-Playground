@@ -168,6 +168,7 @@ body {
    Tech-Sup Pages START
 ===================== */
 
+
 .btn-blue-tech {
   background-color: #1e90ff; /* DodgerBlue */
   color: white;
@@ -314,6 +315,8 @@ body {
   color: #555;
 }
 
+
+
 .tech-request-id {
   color: #007bff;
   font-weight: bold;
@@ -360,19 +363,25 @@ body {
 }
 
 .tech-form-container {
-  background: white;
-  padding: 10px 20px; 
-  border-radius: 8px;
+  background: #fff;
+  padding: 30px 20px; 
+  border-radius: 10px;
   max-width: 600px;
   margin: 17px auto 0;
   color: black; 
-  font-family: "Segoe UI", sans-serif;
-  min-height: 180px; 
+  font-family: "Trebuchet MS", sans-serif;
+  min-height: 180px;
+  border: 2px solid black;
+  min-height: 300px; 
 }
 
-.tech-form-container h1 {
+.tech-form-container-title {
+  color: #333;
   text-align: center;
-  color: black;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 2%;
+  margin-top: 2%;
 }
 
 .tech-form-container form {
@@ -404,6 +413,7 @@ body {
   margin-top: 15px;
   display: flex;
   gap: 10px;
+  justify-content: space-between;
 }
 
 #tech-filePreview img {
@@ -437,7 +447,7 @@ body {
   color: black;
   padding: 2%;
   border-radius: 30px;
-  width: 420px;
+  width: 500px;
   z-index: 1000;
   box-shadow: 0 0 5px 3px #007bff;
 }
@@ -489,8 +499,31 @@ body {
   justify-content: space-between;
 }
 
+
 .tech-bold-label {
   font-weight: bold;
+}
+
+.tech-view-request-closed-msg {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.tech-loading-messages {
+   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  height: 150px; 
+  text-align: center;
+}
+
+.tech-loading-text {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
 }
 
 /* =====================
