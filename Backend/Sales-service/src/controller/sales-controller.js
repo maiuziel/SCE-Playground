@@ -138,3 +138,48 @@ exports.getAllLeads = async(req, res) => {
   }
 }
 
+exports.assignLead = async(req, res) => {
+  try {
+    const { leadId, email } = req.body;
+    const data = await salesService.assignLead(leadId, email);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error assigning lead:', err);
+    res.status(500).json({ success: false, error: 'Failed to assign lead' });
+  }
+}
+
+
+exports.updateLeadToInProgress = async(req, res) => {
+  try {
+    const number = req.params.number;
+    const data = await salesService.updateLeadToInProgress(number);
+    res.json(data);
+  } catch (err) {
+    console.error('Error retrieving leads:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+}
+
+exports.updateLeadStatus = async(req, res) => {
+  try {
+    const { leadId, status } = req.body;
+    const data = await salesService.updateLeadStatus(leadId, status);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error updating lead status:', err);
+    res.status(500).json({ success: false, error: 'Failed to update lead status' });
+  }
+}
+
+exports.unassignLead = async(req, res) => {
+  try {
+    const { leadId } = req.body;
+    const data = await salesService.unassignLead(leadId);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error unassigning lead:', err);
+    res.status(500).json({ success: false, error: 'Failed to unassign lead' });
+  }
+}
+

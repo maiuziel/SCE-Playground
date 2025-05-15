@@ -73,14 +73,28 @@ export default function SalesPage() {
   }
 
   return(
+    
     <div className='sales-container'>
       <h1>Welcome to Sales.</h1>
 
-      <button className="addSalesConverstaionBtn"
-      onClick={() => navigate('/salesConverstaion')}>Add converstaion</button>
-      <button className= "searchSaleHistorybtn"
-      onClick={()=> navigate('/salesSearchHistory')}>Search Sale History</button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+  <button className="addSalesConverstaionBtn"
+    onClick={() => navigate('/salesConverstaion')}>
+    Add conversation
+  </button>
+  <button className="addSalesConverstaionBtn"
+    onClick={() => navigate('/SalesLeadsPage')}>
+    Leads
+  </button>
+  <button className="searchSaleHistorybtn" onClick={() => navigate('/salesSearchHistory')}>
+  Search Sale History
+</button>
+
+</div>
+
+
     </div>
+    
   );
 
 

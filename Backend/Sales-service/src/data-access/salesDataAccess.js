@@ -74,9 +74,11 @@ exports.getAllConversations = async () => {
 
 
 exports.getMyLeads = async (email) => {
+  const done = 'done';
+  const canceled = 'canceled';
   const result = await pool.query(
-    'SELECT * FROM Leads_table WHERE rep_mail = $1',
-    [email]
+    'SELECT * FROM Leads_table WHERE rep_mail = $1 AND status != $2 AND status != $3',
+    [email,done,canceled]
     );
   return result.rows;
 };
@@ -95,3 +97,39 @@ exports.getSalesByCostumerId = async(customerId) => {
   );
   return result.rows;
 }
+
+exports.assignLead = async (leadId, email) => {
+  const result = await pool.query(
+    'UPDATE Leads_table SET rep_mail = $1 WHERE lead_id = $2 RETURNING *',
+    [email, leadId]
+  );
+  return result.rows[0];
+};
+
+
+exports.updateLeadToInProgress = async (number) => {
+  const newStatus = 'in progress';
+  const oldStatus = 'new';
+  const result = await pool.query(
+    'UPDATE leads_table SET status = $1 WHERE status = $2 AND rep_mail IS NOT NULL',
+    [newStatus,oldStatus]
+  );
+  return result.rows[0];
+};
+
+exports.updateLeadStatus = async (leadId, status) => {
+  const result = await pool.query(
+    'UPDATE Leads_table SET status = $1 WHERE lead_id = $2 RETURNING *',
+    [status, leadId]
+  );
+  return result.rows[0];
+};
+
+exports.unassignLead = async (leadId) => {
+  const result = await pool.query(
+    'UPDATE Leads_table SET rep_mail = NULL, status = $1 WHERE lead_id = $2 RETURNING *',
+    ['new', leadId]
+  );
+  return result.rows[0];
+};
+
