@@ -1,4 +1,3 @@
-// frontend/src/pages/SupportHistoryPage.jsx
 import React, { useEffect, useState } from 'react';
 
 export default function SupportHistoryPage() {
@@ -7,7 +6,7 @@ export default function SupportHistoryPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:4001/support-requests', {
+    fetch('http://localhost:4001/api/support-requests', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -19,10 +18,21 @@ export default function SupportHistoryPage() {
       .then(data => {
         setRequests(data);
         setLoading(false);
+
+        // סימון תגובות כנקראו אם יש שדה response ולא נקרא עדיין
+        data.forEach(req => {
+          if (req.response && !req.responseMessageRead) {
+            fetch(`http://localhost:4001/api/support-requests/${req.id}/mark-read`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+            });
+          }
+        });
       })
       .catch(err => {
         console.error('Error fetching requests:', err);
-        setError('לא ניתן להציג פניות כרגע');
+        setError('Unable to load support requests at the moment.');
         setLoading(false);
       });
   }, []);
@@ -34,7 +44,7 @@ export default function SupportHistoryPage() {
         Here you can view all the support requests you've submitted.
       </p>
 
-      {loading && <p>טוען פניות…</p>}
+      {loading && <p>Loading requests…</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       {!loading && !error && (
@@ -46,6 +56,7 @@ export default function SupportHistoryPage() {
               <th>Description</th>
               <th>Date</th>
               <th>Status</th>
+              <th>Response</th>
             </tr>
           </thead>
           <tbody>
@@ -56,6 +67,11 @@ export default function SupportHistoryPage() {
                 <td>{r.description}</td>
                 <td>{new Date(r.createdAt).toLocaleString()}</td>
                 <td>{r.status}</td>
+                <td>
+                  {r.response && r.response.trim()
+                    ? <span style={{ color: 'green' }}>{r.response}</span>
+                    : <span style={{ color: 'gray' }}>No response yet</span>}
+                </td>
               </tr>
             ))}
           </tbody>

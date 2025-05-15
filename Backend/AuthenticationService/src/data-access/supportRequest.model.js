@@ -1,4 +1,3 @@
-// Backend/AuthenticationService/src/data-access/supportRequest.model.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from './db.js'; 
 
@@ -16,11 +15,14 @@ export const SupportRequest = sequelize.define('SupportRequest', {
     allowNull: false,
     defaultValue: 'open',
   },
+  responseMessage: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   responseMessageRead: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   }
-  
 }, {
   tableName: 'support_requests',
   timestamps: true,

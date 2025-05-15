@@ -5,7 +5,7 @@ const port = process.env.PORT || 4002;
 
 const customerController = require('./Controller/Customer-ServiceController');
 
-// תוספי אמצע (middlewares)
+
 app.use(express.json());
 
 app.use('/customers', customerController);

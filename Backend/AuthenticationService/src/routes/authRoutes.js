@@ -7,27 +7,28 @@ import {
   deleteUser
 } from '../controllers/authController.js';
 
-// ייבוא הקונטרולר החדש לטיפול בפניות
 import {
   createSupportRequest,
   getSupportRequests,
-  updateSupportRequestStatus
+  updateSupportRequestStatus,
+  respondToSupportRequest,
+  getUnreadResponses,
+  markResponseAsRead
 } from '../controllers/supportController.js';
-
 
 const router = Router();
 
-// רוטות אוטנטיקציה
 router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/validate-token', validateToken);
 router.delete('/user', deleteUser);
 
-// רוטות פניות שירות
-router.post(  '/support-request',               createSupportRequest);
-router.get(   '/support-requests',              getSupportRequests);
-router.patch( '/support-requests/:id/status',   updateSupportRequestStatus);
+router.post(  '/support-request',                createSupportRequest);
+router.get(   '/support-requests',               getSupportRequests);
+router.patch( '/support-requests/:id/status',    updateSupportRequestStatus);
 
-
+router.patch( '/support-requests/:id/respond',   respondToSupportRequest);   // תגובת נציג
+router.get(   '/support-requests/unread',        getUnreadResponses);        // פניות לא נקראו
+router.patch( '/support-requests/:id/mark-read', markResponseAsRead);        // סימון כהנקראה
 
 export default router;

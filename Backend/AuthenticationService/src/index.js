@@ -4,13 +4,15 @@ import express from 'express';
 import cors from 'cors';
 import { Op } from 'sequelize';
 // authentication-service/src/index.js
-import './data-access/supportRequest.model.js'; // ייבוא המודלים
+import './data-access/supportRequest.model.js'; 
+
 import authRoutes from './routes/authRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { initDb } from './data-access/db.js';
 import { SupportRequest } from './data-access/supportRequest.model.js';
 import { updateSupportRequestStatus } from './controllers/supportController.js';
 import { getSupportRequests } from './controllers/supportController.js';
+import { sequelize } from './data-access/db.js';
 
 
 
@@ -18,24 +20,27 @@ import { getSupportRequests } from './controllers/supportController.js';
 const app = express();
 const PORT = process.env.PORT || 4001;
 
-// 1) קודם CORS
+
 app.use(cors({
-  origin: 'http://localhost:5173',  // כתובת ה-frontend שלך
+  origin: 'http://localhost:5173',  
   credentials: true
 }));
 
-// 2) אחריה JSON parsing
 app.use(express.json());
 
-// 3) אתחול DB
 initDb()
-  .then(() => console.log('Database connected successfully'))
-  .catch(err => console.error('DB connection failed:', err));
+.then(() => {
+  console.log('Database connected successfully');
 
-// 4) רוטות האוטנטיקציה (signup, signin וכו')
-app.use('/', authRoutes);
+  // ✅ הוספת שדות חדשים לטבלה אם הם לא קיימים
+  sequelize.sync({ alter: true });
+})
+.catch(err => console.error('DB connection failed:', err));
 
-// 5) רוטה לשמירת פנייה
+app.use('/api', authRoutes);
+
+
+
 app.post('/support-request', async (req, res) => {
   const { subject, description } = req.body;
   try {
@@ -49,7 +54,6 @@ app.post('/support-request', async (req, res) => {
 app.patch('/support-requests/:id/status', updateSupportRequestStatus);
 
 app.get('/support-requests', getSupportRequests);
-// 5.1) רוטה להביא את כל הפניות
 app.get('/support-requests', async (req, res) => {
   try {
     const allRequests = await SupportRequest.findAll({
@@ -63,10 +67,8 @@ app.get('/support-requests', async (req, res) => {
 });
 
 
-// 5.5) רוטה חדשה להבאת כל הפניות
 app.get('/support-requests', async (req, res) => {
   try {
-    // תשלוף את כל הרשומות, ממוינות לפי תאריך יורד
     const all = await SupportRequest.findAll({
       order: [['createdAt', 'DESC']]
     });
@@ -101,7 +103,7 @@ app.post('/support-requests/:id/response', async (req, res) => {
       return res.status(404).json({ message: 'Support request not found' });
     }
 
-    // עדכון ההודעה בתגובה
+
     request.responseMessage = message;
     await request.save();
 
