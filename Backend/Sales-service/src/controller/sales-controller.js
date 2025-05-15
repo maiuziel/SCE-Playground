@@ -59,7 +59,7 @@ exports.deleteSale = async (req, res) => {
   }
 };
 
-exports.getSalesByCostumerId = async (req, res) => {
+exports.getSalesByCustomerId = async (req, res) => {
   try {
     const customerId = parseInt(req.params.customerId);
     const data = await salesService.getSalesByCustomerId(customerId);
