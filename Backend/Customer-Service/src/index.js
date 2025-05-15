@@ -11,9 +11,10 @@ const app = express();  // ① מוודאים שמייד אחרי היבוא מ�
 
 // ② מגדירים CORS ו־JSON middleware
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5174', // ← עדכון הפורט כאן
     credentials: true
 }));
+
 app.use(express.json());
 
 // ③ מתחברים לבסיס הנתונים (אסינכרוני, אבל לא לפני שה־app הוגדר)

@@ -6,18 +6,26 @@ export default function ManageRequestsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:4001/support-requests')
-      .then(res => res.json())
+    fetch('http://localhost:4002/support-requests', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch support requests');
+        return res.json();
+      })
       .then(setRequests)
-      .catch(console.error);
+      .catch(err => console.error('Error loading requests:', err));
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:4001/support-requests/${id}/status`, {
+      const res = await fetch(`http://localhost:4002/support-requests/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        credentials: 'include',
+        body: JSON.stringify({ status: newStatus }),
       });
 
       if (res.ok) {

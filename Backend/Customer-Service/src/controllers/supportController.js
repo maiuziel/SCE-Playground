@@ -43,35 +43,61 @@ export async function updateSupportRequestStatus(req, res) {
     }
 }
 
-// POST /support-requests/:id/respond
+// PATCH /support-requests/:id/respond
 export async function respondToSupportRequest(req, res) {
     const { id } = req.params;
     const { response } = req.body;
+  
     try {
-        const reqItem = await SupportRequest.findByPk(id);
-        if (!reqItem) return res.status(404).json({ message: 'Not found' });
-        reqItem.response = response;
-        await reqItem.save();
-        res.json({ message: 'Response saved' });
+      const reqItem = await SupportRequest.findByPk(id);
+      if (!reqItem) return res.status(404).json({ message: 'Not found' });
+  
+      reqItem.response = response;
+      reqItem.responseMessageRead = false; // ✅ מסומן כלא נקרא
+      await reqItem.save();
+  
+      res.json({ message: 'Response saved successfully', request: reqItem });
     } catch (err) {
-        console.error('Error saving response:', err);
-        res.status(500).json({ message: 'Failed to save response' });
+      console.error('Error saving response:', err);
+      res.status(500).json({ message: 'Failed to save response' });
     }
-}
+  }
+  
 
 // GET /support-requests/unread
 export async function getUnreadSupportRequests(req, res) {
     try {
-        const unread = await SupportRequest.findAll({
-            where: {
-                responseMessage: { [Op.ne]: null },
-                responseMessageRead: false,
-            },
-            order: [['createdAt', 'DESC']],
-        });
-        res.json(unread);
+      const unread = await SupportRequest.findAll({
+        where: {
+          response: { [Op.ne]: null },
+          responseMessageRead: false,
+        },
+        order: [['createdAt', 'DESC']],
+      });
+      res.json(unread);
     } catch (err) {
-        console.error('Error fetching unread messages:', err);
-        res.status(500).json({ message: 'Failed to fetch notifications' });
+      console.error('Error fetching unread messages:', err);
+      res.status(500).json({ message: 'Failed to fetch notifications' });
     }
-}
+  }
+  
+// PATCH /support-requests/:id/mark-read
+export async function markResponseAsRead(req, res) {
+    const { id } = req.params;
+  
+    try {
+      const request = await SupportRequest.findByPk(id);
+      if (!request) {
+        return res.status(404).json({ message: 'Support request not found' });
+      }
+  
+      request.responseMessageRead = true; 
+      await request.save();
+  
+      res.status(200).json({ message: 'Marked as read' });
+    } catch (err) {
+      console.error('Error marking response as read:', err);
+      res.status(500).json({ message: 'Failed to mark response as read' });
+    }
+  }
+  

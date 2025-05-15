@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import ClientNotificationBanner from '../components/ClientNotificationBanner'; // ✅
 
 export default function ClientPage() {
   const navigate = useNavigate();
 
   return (
     <div className="page-container">
+      {/* ✅ הצגת ההתראה אם קיימת */}
+      <ClientNotificationBanner />
+
       <h1 className="page-title">Client Portal</h1>
 
       <button
