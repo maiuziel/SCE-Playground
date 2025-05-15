@@ -141,7 +141,7 @@ exports.doneRevenue = async(leadId) => {
   return result.rows[0];
 };
 
-exports.undoneRevenue = async() => {
+exports.unDoneRevenue = async() => {
   const result = await pool.query(
   'SELECT AVG(COALESCE(total.total_amount, 0)) FROM ( SELECT leads_table.lead_id, SUM(s.amount) AS total_amount FROM leads LEFT JOIN sales s ON leads_table.lead_id = s.customer_id AND date_trunc("month", s.date) = date_trunc("month", CURRENT_DATE - INTERVAL "1 month") GROUP BY leads_table.lead_id) AS total'
   );
