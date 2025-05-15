@@ -6,30 +6,21 @@ export default function SalesForecastPage() {
   const [undoneRevenue, setUnDoneRevenue] = useState(null);
   const [leadId, setLeadId] = useState('');
 
-    const doneRevenue = async () => {
-        try{
-            const res = await api.get('sales/doneRevenueLead', {leadId});
-            setDoneRevenue(res.data);
-            if(!donerevenue){
-                unDoneRevenue;
-            }
-        }catch (err) {
-            alert('An error occurred while getting the data');
-        }
-    };
+  const fetchRevenues = async () => {
+    try {
+      const doneRes = await api.get(`/sales/doneRevenueLead/${leadId}`);
+      setDoneRevenue(doneRes.data);
 
-    const unDoneRevenue = async () => {
-        try{
-            const res = await api.get('sales/unDoneRevenueLead');
-            setUnDoneRevenue(res.data);
-        }catch (err) {
-            alert('An error occurred while getting the data');
-        }
-    };
+      const undoneRes = await api.get(`/sales/unDoneRevenueLead/${leadId}`);
+      setUnDoneRevenue(undoneRes.data);
+    } catch (err) {
+      alert('An error occurred while getting the data');
+    }
+  };
 
-    return(
-        <div style={{ padding: '20px' }}>
-      <h1 style={{ color: '#fff' }}>Forecast Reveneu</h1>
+  return (
+    <div style={{ padding: '20px' }}>
+      <h1 style={{ color: '#fff' }}>Forecast Revenue</h1>
 
       <div style={{ marginBottom: '10px' }}>
         <input
@@ -68,25 +59,38 @@ export default function SalesForecastPage() {
         <thead>
           <tr>
             <th style={thStyle}>Lead ID</th>
-            <th style={thStyle}>Revenue</th>
+            <th style={thStyle}>Done Revenue</th>
+            <th style={thStyle}>Undone Revenue</th>
           </tr>
         </thead>
         <tbody>
           {(doneRevenue !== null || undoneRevenue !== null) ? (
             <tr>
               <td style={tdStyle}>{leadId}</td>
-              <td style={tdStyle}>{undonerevenue}</td>
+              <td style={tdStyle}>{doneRevenue ?? 'N/A'}</td>
+              <td style={tdStyle}>{undoneRevenue ?? 'N/A'}</td>
             </tr>
           ) : (
-           
-              <tr>
-                <td style={tdStyle}>{leadId}</td>
-                <td style={tdStyle}>{donerevenue}</td>
-              </tr>
-            )
-         }
+            <tr>
+              <td colSpan="3" style={{ textAlign: 'center', color: '#fff', padding: 10 }}>
+                No data loaded yet.
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
   );
 }
+
+const thStyle = {
+  border: '1px solid #ccc',
+  padding: 8,
+  color: '#fff',
+};
+
+const tdStyle = {
+  border: '1px solid #ccc',
+  padding: 8,
+  color: '#fff',
+};
