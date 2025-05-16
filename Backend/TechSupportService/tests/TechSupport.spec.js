@@ -5,7 +5,7 @@ import chaiImport from 'chai';
 import chaiHttp from 'chai-http';
 import { app, startTestServer } from './testServer.js';
 
-const chai = chaiImport.default || chaiImport; // תמיכה גם אם chai יובא כ־default
+const chai = chaiImport.default || chaiImport; 
 const { expect } = chai;
 chai.use(chaiHttp);
 
@@ -18,7 +18,7 @@ const testTicket = {
   email: 'test@example.com',
   category: 'Other',
   description: 'This is a test ticket',
-  images: '',
+  images: [null, null, null, null],
 };
 
 const testForumMessage = {
@@ -41,9 +41,9 @@ describe('🧪 TechSupport Backend Full API Test Suite', () => {
     chai
       .request(app)
       .post('/techsupportadd')
-      .query(testTicket) // ← זה במקום query
+      .send(testTicket) 
       .end((err, res) => {
-        expect(res).to.have.status(200); // ← כי הקונטרולר מחזיר 200
+        expect(res).to.have.status(200); 
         expect(res.body).to.have.property('ticketId');
         createdTicketId = res.body.ticketId;
         done();
