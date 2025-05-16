@@ -101,13 +101,13 @@ export async function addOneDbTicket(
 
   const imagesJSON = Array.isArray(images)
   ? images.map((img) => {
-      if (!img || typeof img !== "string" || !img.startsWith("data:image/")) {
+      if (!img || typeof img !== 'string' || !img.startsWith('data:image/')) {
         return null;
       }
 
       try {
-        const base64 = img.split(",")[1]; // remove the "data:image/...;base64," part
-        return Buffer.from(base64, "base64");
+        const base64 = img.split(',')[1]; // remove the "data:image/...;base64," part
+        return Buffer.from(base64, 'base64');
       } catch (err) {
         return null;
       }
