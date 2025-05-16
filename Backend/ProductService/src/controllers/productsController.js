@@ -3,6 +3,8 @@ import { productsService } from '../services/productsService.js';
 export const createProduct = async (req, res) => {
   try {
     const productData = req.body;
+    console.log(productData);
+
     const newProduct = await productsService.createProduct(productData);
     res.status(201).json(newProduct);
   } catch (error) {
@@ -17,7 +19,10 @@ export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    const updatedProduct = await productsService.updateProductById(id, updateData);
+    const updatedProduct = await productsService.updateProductById(
+      id,
+      updateData
+    );
     res.status(200).json(updatedProduct);
   } catch (error) {
     res
@@ -44,7 +49,9 @@ export const readProduct = async (req, res) => {
     const product = await productsService.fetchProductById(id);
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching product.', details: error.message });
+    res
+      .status(500)
+      .json({ error: 'Error fetching product.', details: error.message });
   }
 };
 
@@ -58,5 +65,3 @@ export const readAllProducts = async (req, res) => {
       .json({ error: 'Error fetching all products', details: error.message });
   }
 };
-
-

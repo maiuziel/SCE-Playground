@@ -60,12 +60,7 @@ function Navbar() {
           )}
           <Link to="/signup">Sign Up</Link>
           <Link to="/products">Products</Link>
-
-          {user?.email === 'admin@gmail.com' && (
-            <Link to="/admin/products">Manage-Products</Link>
-          )}
         </div>
-        {/* If logged in, show user circle */}
         {user && <div className="user-circle">{userInitial}</div>}
       </div>
     </div>
@@ -96,10 +91,9 @@ function App() {
             <Route
               path="/products/update-product/:id"
               element={<EditProductPage />}
-              />
-            
+            />
+
             <Route path="/products/:id/leads" element={<LeadsPage />}></Route>
-            
           </Routes>
         </div>
       </BrowserRouter>
