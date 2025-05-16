@@ -1,8 +1,8 @@
-import { useContext } from "react";
-import { StoreContext } from "../store/StoreContext";
-import React, { useState, useEffect } from "react";
-import api from "../services/api.js";
-import "../App.css";
+import { useContext } from 'react';
+import { StoreContext } from '../store/StoreContext';
+import React, { useState, useEffect } from 'react';
+import api from '../services/api.js';
+import '../App.css';
 
 export default function TechSupportPage() {
   const { user } = useContext(StoreContext); // Gets the logged in user from the context
@@ -14,13 +14,13 @@ export default function TechSupportPage() {
   const loadingScreen = 5;
 
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [name, setName] = useState("");
-  const [content, setContent] = useState("");
+  const [name, setName] = useState('');
+  const [content, setContent] = useState('');
   const [error, setError] = useState(null);
   const [addedId, setAddedId] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null); // null means no popup yet
   const [forumMessages, setForumMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
 
   const [requests, setRequests] = useState([]);
 
@@ -32,7 +32,7 @@ export default function TechSupportPage() {
   // page state modifier.
   const [pageState, setPageState] = useState(loadingScreen);
 
-  let tempUrl = "/ts/techsupportadd/?name=";
+  let tempUrl = '/ts/techsupportadd/?name=';
 
   // Loading messages from the server when a request is selected
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function TechSupportPage() {
         );
         setForumMessages(res.data.messages);
       } catch (err) {
-        console.error("Failed to fetch messages", err);
+        console.error('Failed to fetch messages', err);
       } finally {
         setIsLoadingMessages(false); // Stop loading
       }
