@@ -48,7 +48,7 @@ jest.mock('../src/services/api.js', () => {
 
 import React from 'react';
 import api from '../src/services/api.js';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
