@@ -63,7 +63,7 @@ describe('TechSupportPage - User', () => {
   // Test: Verify user page renders with requests
   test('renders My Requests and a request entry', async () => {
     await act(async () => {
-      render(
+      await renderWithContext(
         <StoreContext.Provider value={mockContext}>
           <BrowserRouter>
             <TechSupportPage />
@@ -78,7 +78,7 @@ describe('TechSupportPage - User', () => {
 
   // Test: Clicking on a request should open the popup and show chat history
   test('opens request popup and shows message history', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
         <BrowserRouter>
           <TechSupportPage />
@@ -92,7 +92,7 @@ describe('TechSupportPage - User', () => {
 
    // Test: Typing and sending a message should trigger api.post
   test('can type and send a message in the popup', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
         <BrowserRouter>
           <TechSupportPage />
@@ -116,7 +116,7 @@ describe('TechSupportPage - Agent', () => {
 
   // Test: Verify agent dashboard renders with both customer and lead requests
   test('renders agent view with customers and leads', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
         <BrowserRouter>
           <TechSupportPage />
@@ -130,7 +130,7 @@ describe('TechSupportPage - Agent', () => {
 
   // Test: Agent opens ticket and sends message
   test('agent can open request and send message', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
         <BrowserRouter>
           <TechSupportPage />
@@ -150,7 +150,7 @@ describe('TechSupportPage - Agent', () => {
   // Test: If unsent message exists, clicking "Close" should trigger a warning
   test('agent sees warning on close if message is unsent', async () => {
     window.alert = jest.fn();
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
         <BrowserRouter>
           <TechSupportPage />
