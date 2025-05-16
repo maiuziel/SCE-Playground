@@ -20,10 +20,12 @@ app.post('/techsupportaddagent', addAgent);
 app.get('/techsupportfetchuserrequests', getRequestsFromOneUser);
 app.get('/gettechsupportforum', getForumMessages);
 app.post('/posttechsupportforum', postForumMessage);
-app.patch("/techsupportcloserequest", closeSupportRequest);
+app.patch('/techsupportcloserequest', closeSupportRequest);
 
 
 
 app.listen(port, ()=> {
     console.log(`[ ✅ ] Tech-Support Service is running at port: ${  port}`);
 });
+
+export { app }; // for testing purposes

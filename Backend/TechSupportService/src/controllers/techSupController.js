@@ -33,7 +33,7 @@ export async function addTicket(req, res) {
     const description = req.query.description;
     const images = req.query.images;
 
-    console.log("", name, email, category, description, images);
+    console.log('', name, email, category, description, images);
 
     if (!type || !name || !email || !category || !description) {
         return res.status(400).json({ error: 'all fields must be filled' });

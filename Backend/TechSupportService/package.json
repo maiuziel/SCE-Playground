@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npx mocha tests/*.spec.js --color",
+    "test": "mocha tests/*.spec.js",
     "start": "node src/index.js",
     "lint": "eslint ."
   },
@@ -20,9 +20,10 @@
   "devDependencies": {
     "@types/chai": "^5.2.1",
     "@types/mocha": "^10.0.10",
-    "chai": "^5.2.0",
     "eslint": "^9.25.0",
-    "moch": "^0.0.1"
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0"
   },
   "mocha": {
   "timeout": 5000

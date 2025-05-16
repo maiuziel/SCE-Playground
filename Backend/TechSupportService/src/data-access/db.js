@@ -1,6 +1,6 @@
-import pkg from "pg";
+import pkg from 'pg';
 const { Pool } = pkg;
-import "dotenv/config";
+import 'dotenv/config';
 
 // Your external PostgreSQL URL
 const connectionString = process.env.DB_CON_STR;
@@ -62,8 +62,8 @@ initDB().catch(console.error);
 
 // Fetch all tech reports
 export async function getAllTechReports() {
-  const res = await pool.query("SELECT * FROM tickets");
-  console.log("[ 📨 ] Recived GET Req"); // for dbg, delete later!
+  const res = await pool.query('SELECT * FROM tickets');
+  console.log('[ 📨 ] Recived GET Req'); // for dbg, delete later!
   return res.rows;
 }
 
@@ -92,22 +92,22 @@ export async function addOneDbTicket(
 
   // img format
   const imagesJSON = [
-    images.img1 ? Buffer.from(images.img1, "hex") : null,
-    images.img2 ? Buffer.from(images.img2, "hex") : null,
-    images.img3 ? Buffer.from(images.img3, "hex") : null,
-    images.img4 ? Buffer.from(images.img4, "hex") : null,
+    images.img1 ? Buffer.from(images.img1, 'hex') : null,
+    images.img2 ? Buffer.from(images.img2, 'hex') : null,
+    images.img3 ? Buffer.from(images.img3, 'hex') : null,
+    images.img4 ? Buffer.from(images.img4, 'hex') : null,
   ];
 
   if (
-    category === "Security concern" ||
-    category === "Crash or freezing issue" ||
-    category === "Installation issue"
+    category === 'Security concern' ||
+    category === 'Crash or freezing issue' ||
+    category === 'Installation issue'
   ) {
     urgency = high;
   } else if (
-    category === "Update or version issue" ||
-    category === "Integration issue with third-party software" ||
-    category === "Bug report"
+    category === 'Update or version issue' ||
+    category === 'Integration issue with third-party software' ||
+    category === 'Bug report'
   ) {
     urgency = medium;
   } else {
@@ -119,7 +119,7 @@ export async function addOneDbTicket(
 
   try {
     const res = await pool.query(
-      "INSERT INTO tickets (type, name, email, category, description, date, status, urgency, imgs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+      'INSERT INTO tickets (type, name, email, category, description, date, status, urgency, imgs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
       [
         uType,
         name,
@@ -135,17 +135,17 @@ export async function addOneDbTicket(
 
     // Insert the original user message into forum
     await pool.query(
-      "INSERT INTO forum (pid, name, content) VALUES ($1, $2, $3)",
+      'INSERT INTO forum (pid, name, content) VALUES ($1, $2, $3)',
       [res.rows[0].id, name, description]
     );
 
-    console.log("[ 🎫 ] New ticket added:", res.rows[0]);
+    console.log('[ 🎫 ] New ticket added:', res.rows[0]);
     return {
       success: true,
       ticket: res.rows[0],
     };
   } catch (err) {
-    console.error("[ ⚡ ] Error adding ticket:", err.message);
+    console.error('[ ⚡ ] Error adding ticket:', err.message);
     return {
       success: false,
       error: err.message,
@@ -157,7 +157,7 @@ export async function addOneDbTicket(
 export async function editOneDbTicket(id, content) {
   try {
     const res = await pool.query(
-      "UPDATE tickets SET content = $1 WHERE id = $2 RETURNING *",
+      'UPDATE tickets SET content = $1 WHERE id = $2 RETURNING *',
       [content, id]
     );
 
@@ -165,14 +165,14 @@ export async function editOneDbTicket(id, content) {
       throw new Error(`Ticket with id ${id} does not exist.`);
     }
 
-    console.log("[ 🩹 ] Patching ticket:", res.rows[0]);
+    console.log('[ 🩹 ] Patching ticket:', res.rows[0]);
     return {
       success: true,
       message: `Ticket ${id} content was updated.`,
       updatedTicket: res.rows[0],
     };
   } catch (err) {
-    console.error("[ ⚠ ] Error patching ticket:", err.message);
+    console.error('[ ⚠ ] Error patching ticket:', err.message);
     return {
       success: false,
       error: err.message,
@@ -184,7 +184,7 @@ export async function editOneDbTicket(id, content) {
 export async function deleteOneDbTicket(id) {
   try {
     const res = await pool.query(
-      "DELETE FROM tickets WHERE id = $1 RETURNING *",
+      'DELETE FROM tickets WHERE id = $1 RETURNING *',
       [id]
     );
 
@@ -192,14 +192,14 @@ export async function deleteOneDbTicket(id) {
       throw new Error(`Ticket with id ${id} does not exist.`);
     }
 
-    console.log("[ 🗑️  ] Recived DEL req");
+    console.log('[ 🗑️  ] Recived DEL req');
     return {
       success: true,
       message: `Ticket with id ${id} was deleted.`,
       deletedTicket: res.rows[0],
     };
   } catch (err) {
-    console.error("[ ⚡ ] Error deleting ticket:", err.message);
+    console.error('[ ⚡ ] Error deleting ticket:', err.message);
     return {
       success: false,
       error: err.message,
@@ -209,11 +209,11 @@ export async function deleteOneDbTicket(id) {
 
 export async function isDbAgent(email) {
   try {
-    const res = await pool.query("SELECT FROM agents WHERE email = $1", [
+    const res = await pool.query('SELECT FROM agents WHERE email = $1', [
       email,
     ]);
 
-    console.log("[ 🔎 ] Recived look for agent req");
+    console.log('[ 🔎 ] Recived look for agent req');
 
     if (res.rowCount === 0) {
       return {
@@ -227,7 +227,7 @@ export async function isDbAgent(email) {
       };
     }
   } catch (err) {
-    console.error("[ ⚡ ] Error finding agent:", err.message);
+    console.error('[ ⚡ ] Error finding agent:', err.message);
     return {
       success: false,
       error: err.message,
@@ -238,11 +238,11 @@ export async function isDbAgent(email) {
 export async function addDbAgent(email) {
   try {
     const res = await pool.query(
-      "INSERT INTO agents (email) VALUES ($1) RETURNING *",
+      'INSERT INTO agents (email) VALUES ($1) RETURNING *',
       [email]
     );
 
-    console.log("[ 🗽 ] Recived add new agent req");
+    console.log('[ 🗽 ] Recived add new agent req');
 
     if (res.rowCount > 0) {
       return {
@@ -256,7 +256,7 @@ export async function addDbAgent(email) {
       };
     }
   } catch (err) {
-    console.error("[ ⚡ ] Error adding agent:", err.message);
+    console.error('[ ⚡ ] Error adding agent:', err.message);
     return {
       success: false,
       error: err.message,
@@ -266,7 +266,7 @@ export async function addDbAgent(email) {
 
 export async function getDbRequests(email) {
   try {
-    const res = await pool.query("SELECT * FROM tickets WHERE email = $1", [
+    const res = await pool.query('SELECT * FROM tickets WHERE email = $1', [
       email,
     ]);
 
@@ -275,7 +275,7 @@ export async function getDbRequests(email) {
       userRequest: res.rows, // will be [] if no rows found
     };
   } catch (err) {
-    console.error("[ ⚡ ] Error getting requests:", err.message);
+    console.error('[ ⚡ ] Error getting requests:', err.message);
     return {
       success: false,
       error: err.message,
@@ -286,7 +286,7 @@ export async function getDbRequests(email) {
 export async function getForumMessagesFromDb(pid) {
   try {
     const result = await pool.query(
-      "SELECT * FROM forum WHERE pid = $1 ORDER BY id ASC",
+      'SELECT * FROM forum WHERE pid = $1 ORDER BY id ASC',
       [pid]
     );
     return {
@@ -294,7 +294,7 @@ export async function getForumMessagesFromDb(pid) {
       messages: result.rows,
     };
   } catch (err) {
-    console.error("[ ⚡ ] Error fetching forum messages:", err.message);
+    console.error('[ ⚡ ] Error fetching forum messages:', err.message);
     return {
       success: false,
       error: err.message,
@@ -306,22 +306,22 @@ export async function postForumMessageToDb(pid, name, content, isAgent) {
   try {
     // If it is a agent and the status is still open, we will update it to "in progress."
     const ticketRes = await pool.query(
-      "SELECT status FROM tickets WHERE id = $1",
+      'SELECT status FROM tickets WHERE id = $1',
       [pid]
     );
     const ticket = ticketRes.rows[0];
     if (isAgent && ticket?.status === 1) {
-      await pool.query("UPDATE tickets SET status = 2 WHERE id = $1", [pid]);
+      await pool.query('UPDATE tickets SET status = 2 WHERE id = $1', [pid]);
     }
 
     await pool.query(
-      "INSERT INTO forum (pid, name, content) VALUES ($1, $2, $3)",
+      'INSERT INTO forum (pid, name, content) VALUES ($1, $2, $3)',
       [pid, name, content]
     );
 
     return { success: true };
   } catch (err) {
-    console.error("[ ⚡ ] Error posting forum message:", err.message);
+    console.error('[ ⚡ ] Error posting forum message:', err.message);
     return {
       success: false,
       error: err.message,
@@ -333,7 +333,7 @@ export async function postForumMessageToDb(pid, name, content, isAgent) {
 export async function closeSupportRequestInDb(id) {
   try {
     const res = await pool.query(
-      "UPDATE tickets SET status = 3 WHERE id = $1 RETURNING *",
+      'UPDATE tickets SET status = 3 WHERE id = $1 RETURNING *',
       [id]
     );
 
@@ -350,10 +350,12 @@ export async function closeSupportRequestInDb(id) {
       closedTicket: res.rows[0],
     };
   } catch (err) {
-    console.error("[ ⚡ ] Error closing ticket:", err.message);
+    console.error('[ ⚡ ] Error closing ticket:', err.message);
     return {
       success: false,
       error: err.message,
     };
   }
 }
+
+export { initDB }; // for testing purposes

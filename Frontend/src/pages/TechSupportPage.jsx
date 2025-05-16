@@ -63,7 +63,7 @@ export default function TechSupportPage() {
       const res = await api.get("/ts/techsupportisagent/?email=" + user?.email);
 
       if (res?.data.agent === true)
-        setPageState(userPage); 
+        setPageState(agentPage); 
       else setPageState(userPage);
     }
 
