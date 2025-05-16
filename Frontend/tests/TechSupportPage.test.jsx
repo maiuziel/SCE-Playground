@@ -62,13 +62,16 @@ describe('TechSupportPage - User', () => {
 
   // Test: Verify user page renders with requests
   test('renders My Requests and a request entry', async () => {
-    render(
-      <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
-          <TechSupportPage />
-        </BrowserRouter>
-      </StoreContext.Provider>
-    );
+    await act(async () => {
+      render(
+        <StoreContext.Provider value={mockContext}>
+          <BrowserRouter>
+            <TechSupportPage />
+          </BrowserRouter>
+        </StoreContext.Provider>
+      );
+    });
+  
     expect(await screen.findByText(/My Requests/i)).toBeInTheDocument();
     expect(await screen.findByText(/Request #1/i)).toBeInTheDocument();
   });
