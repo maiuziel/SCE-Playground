@@ -56,6 +56,18 @@ import TechSupportPage from '../src/pages/TechSupportPage.jsx';
 import { StoreContext } from '../src/store/StoreContext.jsx';
 jest.mock('../src/App.css', () => ({}));
 
+
+const renderWithContext = async (ui, user) => {
+  await act(async () => {
+    render(
+      <StoreContext.Provider value={{ user }}>
+        <BrowserRouter>{ui}</BrowserRouter>
+      </StoreContext.Provider>
+    );
+  });
+};
+
+
 describe('TechSupportPage - User', () => {
   const mockUser = { firstName: 'Alice', email: 'alice@test.com' };
   const mockContext = { user: mockUser };
