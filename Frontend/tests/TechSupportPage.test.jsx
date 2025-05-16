@@ -93,9 +93,7 @@ describe('TechSupportPage - User', () => {
     await act(async () => {
       await renderWithContext(
         <StoreContext.Provider value={mockContext}>
-          <BrowserRouter>
             <TechSupportPage />
-          </BrowserRouter>
         </StoreContext.Provider>
       );
     });
@@ -108,9 +106,7 @@ describe('TechSupportPage - User', () => {
   test('opens request popup and shows message history', async () => {
     await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i));
@@ -122,9 +118,7 @@ describe('TechSupportPage - User', () => {
   test('can type and send a message in the popup', async () => {
     await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i));
@@ -146,9 +140,7 @@ describe('TechSupportPage - Agent', () => {
   test('renders agent view with customers and leads', async () => {
     await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     expect(await screen.findByText((content) => content.includes('Welcome agent'))).toBeInTheDocument();
@@ -160,9 +152,7 @@ describe('TechSupportPage - Agent', () => {
   test('agent can open request and send message', async () => {
     await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i));
@@ -180,9 +170,7 @@ describe('TechSupportPage - Agent', () => {
     window.alert = jest.fn();
     render(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i)); // Click request
@@ -197,9 +185,7 @@ describe('TechSupportPage - Agent', () => {
 test('shows loading screen when user is null', () => {
   render(
     <StoreContext.Provider value={{ user: null }}>
-      <BrowserRouter>
         <TechSupportPage />
-      </BrowserRouter>
     </StoreContext.Provider>
   );
   expect(screen.getByText(/Loading/i)).toBeInTheDocument();
@@ -219,9 +205,7 @@ test('shows message when user has no requests', async () => {
 
   render(
     <StoreContext.Provider value={mockContext}>
-      <BrowserRouter>
         <TechSupportPage />
-      </BrowserRouter>
     </StoreContext.Provider>
   );
   expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
