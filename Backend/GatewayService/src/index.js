@@ -9,7 +9,7 @@ import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(json());
+app.use(json({ limit: '12mb' }));
 app.use(cors());
 
 // Gateway routes

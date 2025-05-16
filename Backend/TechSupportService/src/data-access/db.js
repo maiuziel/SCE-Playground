@@ -16,6 +16,7 @@ const pool = new Pool({
 // Initialize DB: create table if it doesn't exist
 async function initDB() {
   //const del = `DROP TABLE IF EXISTS tickets;`;
+  //const del2 = `DROP TABLE IF EXISTS forum;`;
 
   const posts = `
   CREATE TABLE IF NOT EXISTS tickets (
@@ -25,7 +26,7 @@ async function initDB() {
     email TEXT NOT NULL,
     category TEXT NOT NULL,
     description TEXT NOT NULL,
-    date DATE NOT NULL,
+    date TIMESTAMP NOT NULL,
     status INT NOT NULL,
     urgency INT NOT NULL,
     imgs BYTEA[4]
@@ -79,7 +80,7 @@ export async function addOneDbTicket(
   let uType = 0;
   const status = 1;
   let urgency = 0;
-  const date = new Date();
+  const date = new Date(Date.now() + 3 * 60 * 60 * 1000);
 
   // status codes
   const high = 1;
@@ -91,12 +92,27 @@ export async function addOneDbTicket(
   const lead = 2;
 
   // img format
-  const imagesJSON = [
-    images.img1 ? Buffer.from(images.img1, 'hex') : null,
-    images.img2 ? Buffer.from(images.img2, 'hex') : null,
-    images.img3 ? Buffer.from(images.img3, 'hex') : null,
-    images.img4 ? Buffer.from(images.img4, 'hex') : null,
-  ];
+  // const imagesJSON = [
+  //   images.img1 ? Buffer.from(images.img1, "hex") : null,
+  //   images.img2 ? Buffer.from(images.img2, "hex") : null,
+  //   images.img3 ? Buffer.from(images.img3, "hex") : null,
+  //   images.img4 ? Buffer.from(images.img4, "hex") : null,
+  // ];
+
+  const imagesJSON = Array.isArray(images)
+  ? images.map((img) => {
+      if (!img || typeof img !== "string" || !img.startsWith("data:image/")) {
+        return null;
+      }
+
+      try {
+        const base64 = img.split(",")[1]; // remove the "data:image/...;base64," part
+        return Buffer.from(base64, "base64");
+      } catch (err) {
+        return null;
+      }
+    })
+  : [null, null, null, null];
 
   if (
     category === 'Security concern' ||
