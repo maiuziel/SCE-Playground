@@ -820,7 +820,7 @@ export default function TechSupportPage() {
                 {selectedRequest.category || 'Request Category'}
               </h3>
               <p className='tech-view-request-subtitle'>
-              Date: {selectedRequest.date.replace('T', ' At ').replace('Z', '').replace(/\.\d+$/, '') || 'Unknown'}
+              Date: {selectedRequest?.date?.replace('T', ' At ').replace('Z', '').replace(/\.\d+$/, '') || 'Unknown'}
               </p>
               <div className='tech-view-request-history'>
                 {isLoadingMessages ? (
