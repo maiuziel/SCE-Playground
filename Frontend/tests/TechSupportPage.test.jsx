@@ -23,10 +23,26 @@ jest.mock('../src/services/api.js', () => {
 
         // Return all support tickets for agent
         if (url.includes('/techsupport')) {
-          return Promise.resolve({ data: [
-            { id: 1, category: 'Bug report', status: 1, urgency: 2, type: 1 },
-            { id: 2, category: 'Other', status: 2, urgency: 3, type: 2 }
-          ] });
+          return Promise.resolve({
+            data: [
+              {
+                id: 1,
+                category: 'Bug report',
+                status: 1,
+                urgency: 2,
+                type: 1,
+                date: '2024-05-15T14:00:00.000Z'
+              },
+              {
+                id: 2,
+                category: 'Other',
+                status: 2,
+                urgency: 3,
+                type: 2,
+                date: '2024-05-14T10:00:00.000Z'
+              }
+            ]
+          });
         }
 
         // Return message history for forum popup
