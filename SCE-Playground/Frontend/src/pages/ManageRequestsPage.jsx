@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ManageRequestsPage() {
   const [requests, setRequests] = useState([]);
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [searchId, setSearchId] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,12 +42,47 @@ export default function ManageRequestsPage() {
     }
   };
 
+  const maxId = Math.max(...requests.map(r => r.id), 0);
+
   return (
     <div className="page-container">
       <h1 className="page-title">Manage Customer Requests</h1>
       <p className="page-description">
         Here you can update status request and send messages to customer
       </p>
+
+      {/* ✅ שדות סינון */}
+      <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <input
+          type="number"
+          placeholder="Search by ID"
+          value={searchId}
+          min="0"
+          max={maxId}
+          onChange={(e) => setSearchId(e.target.value)}
+          style={{
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            width: '160px' // ✅ שורה זו מחזירה את שדה החיפוש לגודל ברור
+          }}
+        />
+
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          style={{
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #ccc'
+          }}
+        >
+          <option value="all">All statuses</option>
+          <option value="open">Open</option>
+          <option value="in_progress">In Progress</option>
+          <option value="closed">Done</option>
+        </select>
+      </div>
 
       <table className="requests-table">
         <thead>
@@ -59,32 +96,38 @@ export default function ManageRequestsPage() {
           </tr>
         </thead>
         <tbody>
-          {requests.map((r) => (
-            <tr key={r.id}>
-              <td>{r.id}</td>
-              <td>{r.subject}</td>
-              <td>{r.description}</td>
-              <td>{r.clientComment || <i style={{ color: '#777' }}>No comment</i>}</td>
-              <td>
-                <select
-                  value={r.status}
-                  onChange={(e) => handleStatusChange(r.id, e.target.value)}
-                >
-                  <option value="open">Open</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="closed">Done</option>
-                </select>
-              </td>
-              <td>
-                <button
-                  className="action-button"
-                  onClick={() => navigate(`/respond/${r.id}`)}
-                >
-                  Respond
-                </button>
-              </td>
-            </tr>
-          ))}
+          {requests
+            .filter((r) => {
+              const matchStatus = filterStatus === 'all' || r.status === filterStatus;
+              const matchId = !searchId || r.id.toString() === searchId;
+              return matchStatus && matchId;
+            })
+            .map((r) => (
+              <tr key={r.id}>
+                <td>{r.id}</td>
+                <td>{r.subject}</td>
+                <td>{r.description}</td>
+                <td>{r.clientComment || <i style={{ color: '#777' }}>No comment</i>}</td>
+                <td>
+                  <select
+                    value={r.status}
+                    onChange={(e) => handleStatusChange(r.id, e.target.value)}
+                  >
+                    <option value="open">Open</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="closed">Done</option>
+                  </select>
+                </td>
+                <td>
+                  <button
+                    className="action-button"
+                    onClick={() => navigate(`/respond/${r.id}`)}
+                  >
+                    Respond
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
 
