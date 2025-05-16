@@ -73,11 +73,13 @@ import { StoreContext } from '../src/store/StoreContext.jsx';
 jest.mock('../src/App.css', () => ({}));
 
 
-const renderWithContext = async (ui, user) => {
+const renderWithContext = async (ui, contextValue) => {
   await act(async () => {
     render(
-      <StoreContext.Provider value={{ user }}>
-        <BrowserRouter>{ui}</BrowserRouter>
+      <StoreContext.Provider value={contextValue}>
+        <BrowserRouter>
+        {ui}
+        </BrowserRouter>
       </StoreContext.Provider>
     );
   });
