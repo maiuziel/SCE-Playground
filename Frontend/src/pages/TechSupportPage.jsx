@@ -65,7 +65,7 @@ export default function TechSupportPage() {
       const res = await api.get("/ts/techsupportisagent/?email=" + user?.email);
 
       if (res?.data.agent === true)
-        setPageState(userPage); 
+        setPageState(agentPage); 
       else setPageState(userPage);
     }
 
@@ -228,11 +228,11 @@ export default function TechSupportPage() {
   
     for (let file of newFiles) {
       // Stop if we already have 4 images total
-      if (files.length + validFiles.length >= 4) {
-        setMessageText("You can upload up to 4 images only.");
-        setMessageColor("red");
-        break;
-      }
+      // if (files.length + validFiles.length >= 4) {
+      //   setMessageText("You can upload up to 4 images only.");
+      //   setMessageColor("red");
+      //   break;
+      // }
   
       // Validate size
       if (file.size > 3 * 1024 * 1024) {
@@ -292,6 +292,13 @@ export default function TechSupportPage() {
 
     if (!userType || !issueCategory || description.length < 10) {
       setMessageText("Please fill out all required fields correctly.");
+      setMessageColor("red");
+      return;
+    }
+
+    if (description.length > 2000)
+    {
+      setMessageText("Please enter a maximum of 2000 characters");
       setMessageColor("red");
       return;
     }
@@ -692,9 +699,12 @@ export default function TechSupportPage() {
               value={description}
               onChange={(e) => {
                 if (e.target.value.length <= 2000) setDescription(e.target.value);
+                else{
+                  setDescription(e.target.value);
+                }
               }}
               minLength={10}
-              maxLength={2000}
+              maxLength={10000}
               required
             />
             <p style={{ fontSize: "12px", color: description.length >= 2000 ? "red" : "#555" }}>
