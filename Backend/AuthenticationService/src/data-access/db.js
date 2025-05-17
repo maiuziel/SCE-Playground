@@ -1,3 +1,4 @@
+
 // authentication-service/src/data-access/db.js
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';

@@ -1,3 +1,4 @@
+
 // authentication-service/src/index.js
 import 'dotenv/config';
 import express, { json } from 'express';
@@ -12,12 +13,12 @@ app.use(json());
 
 // Initialize the database connection
 initDb()
-  .then(() => {
-    console.log('Database connected successfully');
-  })
-  .catch((err) => {
-    console.error('Database connection failed:', err.message);
-  });
+    .then(() => {
+      console.log('Database connected successfully');
+    })
+    .catch((err) => {
+      console.error('Database connection failed:', err.message);
+    });
 
 // Authentication routes
 app.use('/', authRoutes);

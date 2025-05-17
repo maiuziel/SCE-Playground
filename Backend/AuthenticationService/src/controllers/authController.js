@@ -11,13 +11,13 @@ export async function signup(req, res, next) {
     } = req.body;
 
     console.log('Got signup request: ', email, ' and password: ', password);
-    
+
 
     const newUser = await authService.signup(
-      email,
-      password,
-      firstName,
-      lastName
+        email,
+        password,
+        firstName,
+        lastName
     );
     // newUser will not include password
     return res.status(201).json(newUser);
