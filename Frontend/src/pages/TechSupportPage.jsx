@@ -26,6 +26,10 @@ export default function TechSupportPage() {
 
   const [enlargedImage, setEnlargedImage] = useState(null);
 
+  const [isLoadingRequests, setIsLoadingRequests] = useState(true);
+  const [isLoadingAgentRequests, setIsLoadingAgentRequests] = useState(true);
+
+
   // agent page requests.
   const [costumerReq, setCostumerReq] = useState([]);
 
@@ -76,35 +80,33 @@ export default function TechSupportPage() {
   useEffect(() => {
     async function fetchRequests() {
       if (pageState === agentPage) {
+        setIsLoadingAgentRequests(true);
         try {
           const res = await api.get('/ts/techsupport');
-
-          res.data.sort((a, b) => {
-            if (a.urgency !== b.urgency) {
-              return a.urgency - b.urgency;
-            }
-            return a.id - b.id;
-          });
-
+          res.data.sort((a, b) => a.urgency - b.urgency || a.id - b.id);
           setCostumerReq(res.data);
         } catch (err) {
           console.error(err);
           setError('Failed to load support requests');
+        } finally {
+          setIsLoadingAgentRequests(false);
         }
-      } else {
-        // if is user.
+      }
+  
+      if (pageState === userPage) {
+        setIsLoadingUserRequests(true);
         try {
-          const res = await api.get(
-            '/ts/techsupportfetchuserrequests/?email=' + user?.email
-          );
+          const res = await api.get('/ts/techsupportfetchuserrequests/?email=' + user?.email);
           setRequests(res.data.userRequest);
         } catch (err) {
           console.error(err);
           setError('Failed to load support requests');
+        } finally {
+          setIsLoadingUserRequests(false);
         }
       }
     }
-
+  
     fetchRequests();
   }, [pageState]);
 
@@ -428,7 +430,15 @@ export default function TechSupportPage() {
                 <span className='tech-request-cell'>ID</span>
               </div>
   
-              {costumerReq
+              {isLoadingAgentRequests ? (
+              <div className='tech-loading-messages'>
+                <div className='spinner'></div>
+                <p className='tech-loading-text'>Loading requests...</p>
+              </div>
+            ) : costumerReq.filter((req) => req.type === 1).length === 0 ? (
+              <p className='tech-no-requests'>No customer requests yet.</p>
+            ) : (
+              costumerReq
                 .filter((req) => req.type === 1)
                 .map((req) => (
                   <div
@@ -438,22 +448,16 @@ export default function TechSupportPage() {
                   >
                     <span className='tech-request-cell'>
                       <span
-                        className={`tech-status-circle ${getStatusColor(
-                          req.status
-                        )}`}
+                        className={`tech-status-circle ${getStatusColor(req.status)}`}
                         style={{ marginRight: '8px' }}
                       ></span>
                     </span>
-  
                     <span className='tech-request-cell'>{req.category}</span>
-                    <span className='tech-request-cell'>
-                      {getUrgencyText(req.urgency)}
-                    </span>
-                    <span className='tech-request-cell tech-request-id'>
-                      Request #{req.id}
-                    </span>
+                    <span className='tech-request-cell'>{getUrgencyText(req.urgency)}</span>
+                    <span className='tech-request-cell tech-request-id'>Request #{req.id}</span>
                   </div>
-                ))}
+                ))
+            )}
             </div>
   
             {/* RIGHT PANEL: type === 2 */}
@@ -467,7 +471,15 @@ export default function TechSupportPage() {
                 <span className='tech-request-cell'>ID</span>
               </div>
   
-              {costumerReq
+              {isLoadingAgentRequests ? (
+              <div className='tech-loading-messages'>
+                <div className='spinner'></div>
+                <p className='tech-loading-text'>Loading requests...</p>
+              </div>
+            ) : costumerReq.filter((req) => req.type === 2).length === 0 ? (
+              <p className='tech-no-requests'>No lead requests yet.</p>
+            ) : (
+              costumerReq
                 .filter((req) => req.type === 2)
                 .map((req) => (
                   <div
@@ -477,22 +489,16 @@ export default function TechSupportPage() {
                   >
                     <span className='tech-request-cell'>
                       <span
-                        className={`tech-status-circle ${getStatusColor(
-                          req.status
-                        )}`}
+                        className={`tech-status-circle ${getStatusColor(req.status)}`}
                         style={{ marginRight: '8px' }}
                       ></span>
                     </span>
-  
                     <span className='tech-request-cell'>{req.category}</span>
-                    <span className='tech-request-cell'>
-                      {getUrgencyText(req.urgency)}
-                    </span>
-                    <span className='tech-request-cell tech-request-id'>
-                      Request #{req.id}
-                    </span>
+                    <span className='tech-request-cell'>{getUrgencyText(req.urgency)}</span>
+                    <span className='tech-request-cell tech-request-id'>Request #{req.id}</span>
                   </div>
-                ))}
+                ))
+            )}
             </div>
           </div>
         </div>
@@ -775,7 +781,12 @@ export default function TechSupportPage() {
 
           {error && <p className='tech-error'>{error}</p>}
 
-          {requests?.length === 0 ? (
+          {isLoadingRequests ? (
+            <div className='tech-loading-messages'>
+              <div className='spinner'></div>
+              <p className='tech-loading-text'>Loading requests...</p>
+            </div>
+          ) : requests.length === 0 ? (
             <p className='tech-no-requests'>No requests yet.</p>
           ) : (
             <div className='tech-requests-list'>
@@ -786,9 +797,7 @@ export default function TechSupportPage() {
                   onClick={() => setSelectedRequest(req)}
                 >
                   <span
-                    className={`tech-status-circle ${getStatusColor(
-                      req.status
-                    )}`}
+                    className={`tech-status-circle ${getStatusColor(req.status)}`}
                   ></span>
                   <span className='tech-request-category'>{req.category}</span>
                   <span className='tech-request-id'> Request #{req.id}</span>
