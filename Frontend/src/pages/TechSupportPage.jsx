@@ -786,7 +786,7 @@ export default function TechSupportPage() {
               <div className='spinner'></div>
               <p className='tech-loading-text'>Loading requests...</p>
             </div>
-          ) : requests.length === 0 ? (
+          ) : requests.length === 0 ? ( 
             <p className='tech-no-requests'>No requests yet.</p>
           ) : (
             <div className='tech-requests-list'>
