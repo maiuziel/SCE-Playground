@@ -9,10 +9,14 @@ export default [
       semi: "error",
       quotes: ["error", "double"]
     },
-    "env": {
-    "browser": true,
-    "es2021": true
-  },
+    languageOptions: {
+  ecmaVersion: "latest",
+  sourceType: "module",
+  globals: {
+    browser: true,
+  }
+},
+
   "extends": "eslint:recommended",
   "parserOptions": {
     "ecmaVersion": 12,
