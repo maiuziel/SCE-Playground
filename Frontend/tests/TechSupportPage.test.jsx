@@ -211,10 +211,10 @@ test('shows message when user has no requests', async () => {
     </StoreContext.Provider>
   );
   await waitFor(() => {
-    expect(screen.queryByText(/Loading requests/i)).not.toBeInTheDocument();
-  });
-  
-  expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
+  expect(screen.queryByText(/Loading requests/i)).not.toBeInTheDocument();
+});
+
+expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
 });
 
 
