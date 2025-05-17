@@ -4,10 +4,10 @@ name: Customer Service CI
 
 on:
   push:
-    branches: [main]
+    branches: [main,yeudaba]
   
   pull_request:
-    branches: [main]  
+    branches: [main,yeudaba]  
 
 jobs:
   build:
