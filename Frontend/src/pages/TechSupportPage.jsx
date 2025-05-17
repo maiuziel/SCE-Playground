@@ -26,7 +26,7 @@ export default function TechSupportPage() {
 
   const [enlargedImage, setEnlargedImage] = useState(null);
 
-  const [isLoadingUserRequests, setIsLoadingUserRequests] = useState(true);
+  //const [isLoadingRequests, setIsLoadingRequests] = useState(true);
   const [isLoadingRequests, setIsLoadingRequests] = useState(true);
   const [isLoadingAgentRequests, setIsLoadingAgentRequests] = useState(true);
 
@@ -95,7 +95,7 @@ export default function TechSupportPage() {
       }
   
       if (pageState === userPage) {
-        setIsLoadingUserRequests(true);
+        setIsLoadingRequests(true);
         try {
           const res = await api.get('/ts/techsupportfetchuserrequests/?email=' + user?.email);
           setRequests(res.data.userRequest);
@@ -103,7 +103,7 @@ export default function TechSupportPage() {
           console.error(err);
           setError('Failed to load support requests');
         } finally {
-          setIsLoadingUserRequests(false);
+          setIsLoadingRequests(false);
         }
       }
     }
