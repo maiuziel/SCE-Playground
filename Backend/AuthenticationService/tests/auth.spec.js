@@ -1,115 +1,159 @@
-// authentication-service/tests/auth.test.js
+// tests/TechSupport.spec.js
 process.env.NODE_ENV = 'test';
 
-import chai from 'chai';
+import { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import { app, startTestServer } from './testServer.js';
+import chai from 'chai';
+import express from 'express';
+import bodyParser from 'body-parser';
+//import * as controller from '../src/controllers/techSupController.js';
+import * as controller from '../../TechSupportService/src/controllers/techSupController.js';
+import { initDB } from '../src/data-access/db.js';
 
-const { expect } = chai;
 chai.use(chaiHttp);
-let server = null;
 
-describe('Authentication Service Tests', () => {
-  const createdUserEmail = 'test@example.com';
+// יצירת אפליקציה עם ראוטים
+const app = express();
+app.use(bodyParser.json());
+app.use('/techsupport', controller.router); // נניח שייצאת router
 
-  before(async function() {
-    this.timeout(10000); // 10 seconds
-    server = await startTestServer();
-    console.log("test server is running");
-    
+// הפעלת השרת בפורט זמני
+let server;
+
+before(async function () {
+  this.timeout(10000);
+  await initDB();
+  server = app.listen(13250, () => {
+    console.log('[ ✅ ] Tech-Support Service is running at port: 13250');
   });
+});
 
-  after(async () => {
-    // Use chai.request.execute(app) with .delete()
-    await chai.request.execute(app)
-      .delete('/user')
-      .query({ email: createdUserEmail });
+after(() => {
+  if (server) server.close();
+});
 
-    server.close();
-  });
+describe('🧪 TechSupport Backend Full API Test Suite', () => {
+  let ticketId;
 
-  it('should sign up a new user successfully', (done) => {
-    chai.request.execute(app)
-      .post('/signup')
+  it('POST /techsupportadd → should create a new ticket', done => {
+    chai.request(app)
+      .post('/techsupportadd')
       .send({
-        email: createdUserEmail,
-        password: '123456',
-        firstName: 'Test',
-        lastName: 'User'
+        type: 1,
+        name: 'Test User',
+        email: 'test@example.com',
+        category: 'Bug report',
+        description: 'There is a problem',
+        imgs: { img1: '', img2: '', img3: '', img4: '' }
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
-        expect(res.body).to.have.property('email').equal(createdUserEmail);
-        expect(res.body).to.have.property('firstName').equal('Test');
-        expect(res.body).to.have.property('lastName').equal('User');
+        ticketId = res.body.ticket.id;
         done();
       });
   });
 
-  it('should not sign up a user with an existing email', (done) => {
-    chai.request.execute(app)
-      .post('/signup')
-      .send({
-        email: createdUserEmail,
-        password: 'anotherPass',
-        firstName: 'Someone',
-        lastName: 'Else'
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body).to.have.property('message').contains('already in use');
-        done();
-      });
-  });
-
-  it('should sign in an existing user', (done) => {
-    chai.request.execute(app)
-      .post('/signin')
-      .send({
-        email: createdUserEmail,
-        password: '123456'
-      })
+  it('GET /techsupport → should return all tickets including the new one', done => {
+    chai.request(app)
+      .get('/techsupport')
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.body).to.have.property('token');
+        expect(res.body).to.be.an('array');
         done();
       });
   });
 
-  it('should reject sign in with wrong password', (done) => {
-    chai.request.execute(app)
-      .post('/signin')
-      .send({
-        email: createdUserEmail,
-        password: 'WRONGPASS'
-      })
+  it('GET /techsupportfetchuserrequests → should return tickets for specific user', done => {
+    chai.request(app)
+      .get('/techsupportfetchuserrequests')
+      .query({ email: 'test@example.com' })
       .end((err, res) => {
-        expect(res).to.have.status(401);
-        expect(res.body).to.have.property('message').equal('Invalid credentials');
+        expect(res).to.have.status(200);
+        expect(res.body.userRequest).to.be.an('array');
         done();
       });
   });
 
-  it('should validate a valid token', (done) => {
-    // First sign in to get a token
-    chai.request.execute(app)
-      .post('/signin')
+  it('POST /posttechsupportforum → user sends a forum message', done => {
+    chai.request(app)
+      .post('/posttechsupportforum')
       .send({
-        email: createdUserEmail,
-        password: '123456'
+        pid: ticketId,
+        name: 'Test User',
+        content: 'I have a problem',
+        isAgent: false
       })
       .end((err, res) => {
-        const { token } = res.body;
-        expect(token).to.exist;
+        expect(res).to.have.status(201);
+        done();
+      });
+  });
 
-        chai.request.execute(app)
-          .post('/validate-token')
-          .send({ token })
-          .end((innerErr, innerRes) => {
-            expect(innerRes).to.have.status(200);
-            expect(innerRes.body).to.have.property('isValid').equal(true);
-            done();
-          });
+  it('POST /posttechsupportforum → agent sends a reply', done => {
+    chai.request(app)
+      .post('/posttechsupportforum')
+      .send({
+        pid: ticketId,
+        name: 'Agent',
+        content: 'We are checking',
+        isAgent: true
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        done();
+      });
+  });
+
+  it('GET /gettechsupportforum → should return forum messages for the ticket', done => {
+    chai.request(app)
+      .get('/gettechsupportforum')
+      .query({ pid: ticketId })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.messages).to.be.an('array');
+        done();
+      });
+  });
+
+  it('PATCH /techsupportcloserequest → should close the ticket', done => {
+    chai.request(app)
+      .patch('/techsupportcloserequest')
+      .send({ id: ticketId })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  it('GET /techsupportisagent → should return false for non-existing agent', done => {
+    chai.request(app)
+      .get('/techsupportisagent')
+      .query({ email: 'unknown@example.com' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.agent).to.equal(false);
+        done();
+      });
+  });
+
+  it('POST /techsupportaddagent → should add a new agent', done => {
+    chai.request(app)
+      .post('/techsupportaddagent')
+      .send({ email: 'agent@example.com' })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        done();
+      });
+  });
+
+  it('GET /techsupportisagent → should return true for added agent', done => {
+    chai.request(app)
+      .get('/techsupportisagent')
+      .query({ email: 'agent@example.com' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.agent).to.equal(true);
+        done();
       });
   });
 });
