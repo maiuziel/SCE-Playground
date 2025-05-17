@@ -26,6 +26,7 @@ export default function TechSupportPage() {
 
   const [enlargedImage, setEnlargedImage] = useState(null);
 
+  const [isLoadingUserRequests, setIsLoadingUserRequests] = useState(true);
   const [isLoadingRequests, setIsLoadingRequests] = useState(true);
   const [isLoadingAgentRequests, setIsLoadingAgentRequests] = useState(true);
 
