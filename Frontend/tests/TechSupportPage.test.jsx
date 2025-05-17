@@ -184,12 +184,18 @@ describe('TechSupportPage - Agent', () => {
 });
 
 // Test: User sees loading state when no user is set yet
+test('shows loading screen when user is null', () => {
+  render(
+    <StoreContext.Provider value={{ user: null }}>
+        <TechSupportPage />
+    </StoreContext.Provider>
+  );
+  expect(screen.getByText(/Loading/i)).toBeInTheDocument();
+});
+
+// Test: User sees 'No requests yet' when there are no tickets
 test('shows message when user has no requests', async () => {
-  // Override the get mock to return empty user requests
   api.get.mockImplementation((url) => {
-    if (url.includes('/techsupportisagent')) {
-      return Promise.resolve({ data: { agent: false } });
-    }
     if (url.includes('/techsupportfetchuserrequests')) {
       return Promise.resolve({ data: { userRequest: [] } });
     }
@@ -199,15 +205,16 @@ test('shows message when user has no requests', async () => {
   const mockUser = { firstName: 'Alice', email: 'alice@test.com' };
   const mockContext = { user: mockUser };
 
-  await renderWithContext(<TechSupportPage />, mockContext);
-
-  // Wait for the loading spinner to disappear
-  await waitFor(() =>
-    expect(screen.queryByText(/Loading requests/i)).not.toBeInTheDocument()
+  render(
+    <StoreContext.Provider value={mockContext}>
+        <TechSupportPage />
+    </StoreContext.Provider>
   );
+  await waitFor(() => {
+  expect(screen.queryByText(/Loading requests/i)).not.toBeInTheDocument();
+});
 
-  // Now check for the "No requests yet" message
-  expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
+expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
 });
 
 
