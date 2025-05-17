@@ -210,6 +210,10 @@ test('shows message when user has no requests', async () => {
         <TechSupportPage />
     </StoreContext.Provider>
   );
+  await waitFor(() => {
+    expect(screen.queryByText(/Loading requests/i)).not.toBeInTheDocument();
+  });
+  
   expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
 });
 
