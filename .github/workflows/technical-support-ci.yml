@@ -20,16 +20,16 @@ jobs:
         with:
           node-version: 18.x
       - name: Install dependencies
-        working-directory: Backend/TechSupportService
         run: npm install
+        working-directory: Backend/TechSupportService
 
       - name: Run linter
+        run: npm run lint
         working-directory: Backend/TechSupportService
-        run: npm install
 
       - name: Run tests
+        run: npm run test
         working-directory: Backend/TechSupportService
-        run: npm install
 
   deploy-server:
     needs: [build-and-test]
