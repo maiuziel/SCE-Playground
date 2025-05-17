@@ -22,10 +22,26 @@ jest.mock('../src/services/api.js', () => ({
 
         // Return all support tickets for agent
         if (url.includes('/techsupport')) {
-          return Promise.resolve({ data: [
-            { id: 1, category: 'Bug report', status: 1, urgency: 2, type: 1 },
-            { id: 2, category: 'Other', status: 2, urgency: 3, type: 2 }
-          ] });
+          return Promise.resolve({
+            data: [
+              {
+                id: 1,
+                category: 'Bug report',
+                status: 1,
+                urgency: 2,
+                type: 1,
+                date: '2024-05-15T14:00:00.000Z'
+              },
+              {
+                id: 2,
+                category: 'Other',
+                status: 2,
+                urgency: 3,
+                type: 2,
+                date: '2024-05-14T10:00:00.000Z'
+              }
+            ]
+          });
         }
 
         // Return message history for forum popup
@@ -46,7 +62,7 @@ jest.mock('../src/services/api.js', () => ({
 
 import React from 'react';
 import api from '../src/services/api.js';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -54,30 +70,43 @@ import TechSupportPage from '../src/pages/TechSupportPage.jsx';
 import { StoreContext } from '../src/store/StoreContext.jsx';
 jest.mock('../src/App.css', () => ({}));
 
+
+const renderWithContext = async (ui, contextValue) => {
+  await act(async () => {
+    render(
+      <StoreContext.Provider value={contextValue}>
+        <BrowserRouter>
+        {ui}
+        </BrowserRouter>
+      </StoreContext.Provider>
+    );
+  });
+};
+
+
 describe('TechSupportPage - User', () => {
   const mockUser = { firstName: 'Alice', email: 'alice@test.com' };
   const mockContext = { user: mockUser };
 
   // Test: Verify user page renders with requests
   test('renders My Requests and a request entry', async () => {
-    render(
-      <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
-          <TechSupportPage />
-        </BrowserRouter>
-      </StoreContext.Provider>
-    );
+    await act(async () => {
+      await renderWithContext(
+        <StoreContext.Provider value={mockContext}>
+            <TechSupportPage />
+        </StoreContext.Provider>
+      );
+    });
+  
     expect(await screen.findByText(/My Requests/i)).toBeInTheDocument();
     expect(await screen.findByText(/Request #1/i)).toBeInTheDocument();
   });
 
   // Test: Clicking on a request should open the popup and show chat history
   test('opens request popup and shows message history', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i));
@@ -87,11 +116,9 @@ describe('TechSupportPage - User', () => {
 
    // Test: Typing and sending a message should trigger api.post
   test('can type and send a message in the popup', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i));
@@ -111,11 +138,9 @@ describe('TechSupportPage - Agent', () => {
 
   // Test: Verify agent dashboard renders with both customer and lead requests
   test('renders agent view with customers and leads', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     expect(await screen.findByText((content) => content.includes('Welcome agent'))).toBeInTheDocument();
@@ -125,11 +150,9 @@ describe('TechSupportPage - Agent', () => {
 
   // Test: Agent opens ticket and sends message
   test('agent can open request and send message', async () => {
-    render(
+    await renderWithContext(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i));
@@ -142,14 +165,12 @@ describe('TechSupportPage - Agent', () => {
     });
   });
 
-  // Test: If unsent message exists, clicking "Close" should trigger a warning
+  // Test: If unsent message exists, clicking 'Close' should trigger a warning
   test('agent sees warning on close if message is unsent', async () => {
     window.alert = jest.fn();
     render(
       <StoreContext.Provider value={mockContext}>
-        <BrowserRouter>
           <TechSupportPage />
-        </BrowserRouter>
       </StoreContext.Provider>
     );
     fireEvent.click(await screen.findByText(/Request #1/i)); // Click request
@@ -164,17 +185,15 @@ describe('TechSupportPage - Agent', () => {
 test('shows loading screen when user is null', () => {
   render(
     <StoreContext.Provider value={{ user: null }}>
-      <BrowserRouter>
         <TechSupportPage />
-      </BrowserRouter>
     </StoreContext.Provider>
   );
   expect(screen.getByText(/Loading/i)).toBeInTheDocument();
 });
 
-// Test: User sees "No requests yet" when there are no tickets
+// Test: User sees 'No requests yet' when there are no tickets
 test('shows message when user has no requests', async () => {
-  jest.mocked(api.get).mockImplementation((url) => {
+  api.get.mockImplementation((url) => {
     if (url.includes('/techsupportfetchuserrequests')) {
       return Promise.resolve({ data: { userRequest: [] } });
     }
@@ -186,12 +205,14 @@ test('shows message when user has no requests', async () => {
 
   render(
     <StoreContext.Provider value={mockContext}>
-      <BrowserRouter>
         <TechSupportPage />
-      </BrowserRouter>
     </StoreContext.Provider>
   );
-  expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
+  await waitFor(() => {
+  expect(screen.queryByText(/Loading requests/i)).not.toBeInTheDocument();
+});
+
+expect(await screen.findByText(/No requests yet/i)).toBeInTheDocument();
 });
 
 
