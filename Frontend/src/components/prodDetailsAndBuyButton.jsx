@@ -18,6 +18,10 @@ export default function ProductPageUI({
 }) {
   const [selectedImage, setSelectedImage] = useState(product.image_url);
   const [showModal, setShowModal] = useState(false);
+  const allImages = [
+    product.image_url,
+    ...(product.additional_images?.map((img) => img.image_url) || []),
+  ];
 
   const handleDownloadProduct = () => {
     window.open(product.datasheet_url, '_blank');
@@ -27,9 +31,8 @@ export default function ProductPageUI({
     <Container
       className="my-5"
       style={{
-        borderColor: '#b2fefa',
         borderRadius: '20px',
-        border: 'solid 10px',
+        border: 'solid 10px #b2fefa',
       }}
     >
       <Row className="align-items-center mb-3">
@@ -77,31 +80,29 @@ export default function ProductPageUI({
                 width: '100%',
                 overflowX: 'auto',
                 border: '1px solid #b2fefa',
-                borderRadius: '8px',
+                borderRadius: '10px',
                 padding: '8px',
                 backgroundColor: 'transparent',
               }}
             >
-              {[product.image_url, ...(product.additional_images || [])].map(
-                (img, i) => (
-                  <Image
-                    key={i}
-                    src={img}
-                    onClick={() => setSelectedImage(img)}
-                    rounded
-                    style={{
-                      width: '80px',
-                      height: '80px',
-                      objectFit: 'cover',
-                      cursor: 'pointer',
-                      border:
-                        img === selectedImage
-                          ? '3px solid #0d6efd'
-                          : '1px solid #ccc',
-                    }}
-                  />
-                )
-              )}
+              {allImages.map((img, i) => (
+                <Image
+                  key={i}
+                  src={img}
+                  onClick={() => setSelectedImage(img)}
+                  rounded
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    objectFit: 'cover',
+                    cursor: 'pointer',
+                    border:
+                      img === selectedImage
+                        ? '3px solid #0d6efd'
+                        : '1px solid #ccc',
+                  }}
+                />
+              ))}
             </Stack>
           </div>
         </Col>

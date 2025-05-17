@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 let server = null;
 
 describe('Product Service Tests', () => {
-  const productId = 23;
+  const productId = 42;
 
   before(async function () {
     this.timeout(10000);
@@ -30,7 +30,7 @@ describe('Product Service Tests', () => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id').equal(productId);
-        expect(res.body).to.have.property('name').equal('Product 3');
+        expect(res.body).to.have.property('name').equal('Product 1');
         done();
       });
   });

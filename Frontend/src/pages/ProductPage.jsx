@@ -57,24 +57,6 @@ export default function ProductPage() {
 
   return (
     <div className="product-page">
-      {user?.email === 'admin@gmail.com' && (
-        <div className="admin-buttons">
-          <button className="btn btn-sm btn-primary" /*onClick={EditProduct}*/>
-            <i class="bi bi-pencil"></i>
-          </button>
-          <button
-            className="btn btn-sm btn-danger"
-            /*onClick={() => deleteProductById()}*/
-          >
-            <i class="bi bi-trash"></i>
-          </button>
-          <button
-            className="btn btn-sm btn-secondary" /*onClick={ProductLeads}*/
-          >
-            Leads
-          </button>
-        </div>
-      )}
       <div className="product-container">
         <ProductPageUI product={product} />
       </div>
