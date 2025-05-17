@@ -195,7 +195,7 @@ test('shows loading screen when user is null', () => {
 
 // Test: User sees 'No requests yet' when there are no tickets
 test('shows message when user has no requests', async () => {
-  jest.mocked(api.get).mockImplementation((url) => {
+  api.get.mockImplementation((url) => {
     if (url.includes('/techsupportfetchuserrequests')) {
       return Promise.resolve({ data: { userRequest: [] } });
     }
