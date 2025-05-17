@@ -26,6 +26,11 @@
 }
 
 .card-body {
+  text-decoration: underline;
+  color: black;
+}
+
+.title_and_price {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -40,4 +45,18 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 10px rgba(200, 255, 255, 0.8);
+}
+
+.product-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lead-count-text {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: white;
+  text-align: center;
 }

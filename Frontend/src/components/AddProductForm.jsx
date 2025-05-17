@@ -4,7 +4,12 @@ import api from '../services/api';
 import { handleMainImageChange, handlePdfUpload } from '../utils/fileHandlers';
 import { uploadFiles } from '../utils/uploadFiles';
 
-function AddProductForm({ onProductAdded, initialData = null, onSubmit }) {
+function AddProductForm({
+  onProductAdded,
+  handleClose,
+  initialData = null,
+  onSubmit,
+}) {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -76,7 +81,7 @@ function AddProductForm({ onProductAdded, initialData = null, onSubmit }) {
       setTimeout(() => setSuccess(''), 4000);
       console.log('Server response:', response.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create product');
+      console.log(err);
     } finally {
       setUploading(false);
     }
@@ -277,21 +282,36 @@ function AddProductForm({ onProductAdded, initialData = null, onSubmit }) {
             </div>
           )}
         </Form.Group>
-
-        <Button variant="primary" type="submit" disabled={uploading}>
-          {uploading ? (
-            <>
-              Uploading...
-              <Spinner
-                animation="border"
-                size="sm"
-                style={{ marginLeft: '8px' }}
-              />
-            </>
-          ) : (
-            <span>{onSubmit ? 'Update Product' : 'Add Product'}</span>
-          )}
-        </Button>
+        <div
+          className="mt-3"
+          style={{
+            display: 'flex',
+            gap: '10px',
+          }}
+        >
+          <Button variant="primary" type="submit" disabled={uploading}>
+            {uploading ? (
+              <>
+                Uploading...
+                <Spinner
+                  animation="border"
+                  size="sm"
+                  style={{ marginLeft: '8px' }}
+                />
+              </>
+            ) : (
+              <span>{onSubmit ? 'Update Product' : 'Add Product'}</span>
+            )}
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleClose}
+            disabled={uploading}
+            className="me-2"
+          >
+            Cancel
+          </Button>
+        </div>
       </Form>
     </Container>
   );

@@ -17,7 +17,6 @@ export default function ProductPage() {
     async function fetchProductById() {
       try {
         const response = await api.get(`/products/read-product/${id}`);
-        console.log('Product data from DB:', response.data);
         setProduct(response.data);
       } catch (err) {
         console.error('Error loading product', err);
@@ -25,33 +24,34 @@ export default function ProductPage() {
     }
     fetchProductById();
   }, [id]);
+  console.log('Product data from DB:', product);
 
-  async function deleteProductById() {
-    const confirmDelete = window.confirm(
-      'האם אתה בטוח שברצונך למחוק את המוצר?'
-    );
-    if (!confirmDelete) return;
+  // async function deleteProductById() {
+  //   const confirmDelete = window.confirm(
+  //     'האם אתה בטוח שברצונך למחוק את המוצר?'
+  //   );
+  //   if (!confirmDelete) return;
 
-    try {
-      const response = await api.delete(`/products/delete-product/${id}`);
-      alert('המוצר נמחק בהצלחה');
-      navigate('/products');
-    } catch (err) {
-      console.error('Error loading product', err);
-      alert('אירעה שגיאה במחיקת המוצר');
-    }
-  }
+  //   try {
+  //     const response = await api.delete(`/products/delete-product/${id}`);
+  //     alert('המוצר נמחק בהצלחה');
+  //     navigate('/products');
+  //   } catch (err) {
+  //     console.error('Error loading product', err);
+  //     alert('אירעה שגיאה במחיקת המוצר');
+  //   }
+  // }
 
-  function EditProduct() {
-    const confirmEdit = window.confirm('האם אתה בטוח שברצונך לערוך את המוצר?');
-    if (!confirmEdit) return;
+  // function EditProduct() {
+  //   const confirmEdit = window.confirm('האם אתה בטוח שברצונך לערוך את המוצר?');
+  //   if (!confirmEdit) return;
 
-    navigate(`/products/update-product/${id}`);
-  }
+  //   navigate(`/products/update-product/${id}`);
+  // }
 
-  function ProductLeads() {
-    navigate(`/products/${id}/leads`);
-  }
+  // function ProductLeads() {
+  //   navigate(`/products/${id}/leads`);
+  // }
 
   if (!product) return <div>Loading...</div>;
 
@@ -59,16 +59,18 @@ export default function ProductPage() {
     <div className="product-page">
       {user?.email === 'admin@gmail.com' && (
         <div className="admin-buttons">
-          <button className="btn btn-sm btn-primary" onClick={EditProduct}>
-            עריכת מוצר
+          <button className="btn btn-sm btn-primary" /*onClick={EditProduct}*/>
+            <i class="bi bi-pencil"></i>
           </button>
           <button
             className="btn btn-sm btn-danger"
-            onClick={() => deleteProductById()}
+            /*onClick={() => deleteProductById()}*/
           >
-            מחיקת מוצר
+            <i class="bi bi-trash"></i>
           </button>
-          <button className="btn btn-sm btn-secondary" onClick={ProductLeads}>
+          <button
+            className="btn btn-sm btn-secondary" /*onClick={ProductLeads}*/
+          >
             Leads
           </button>
         </div>

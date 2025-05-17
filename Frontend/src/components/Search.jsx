@@ -23,10 +23,20 @@ function Search(props) {
 
   const handleSearchClick = (e) => {
     search(searchTerm);
+    props.setLastSearchTerm(searchTerm);
+    setSearchTerm('');
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim() !== '') {
+      search(searchTerm);
+      setSearchTerm('');
+    }
   };
 
   return (
-    <Form className="d-flex">
+    <Form className="d-flex" onSubmit={handleSearch}>
       <Form.Control
         type="search"
         placeholder="Search..."
@@ -41,10 +51,31 @@ function Search(props) {
       <Button
         className="filter-sort-search"
         variant="outline-primary"
-        style={{ width: '60px' }}
+        style={{
+          width: '60px',
+          position: 'relative',
+        }}
         onClick={handleSearchClick}
+        type="submit"
+        disabled={searchTerm.trim() === ''}
       >
         <i className="bi bi-search me-1"></i>
+
+        {searchTerm.trim() === '' && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'white',
+              opacity: 0.2,
+              cursor: 'not-allowed',
+              borderRadius: '16px',
+            }}
+          />
+        )}
       </Button>
     </Form>
   );

@@ -10,11 +10,12 @@ import { jwtDecode } from 'jwt-decode';
 import ProductCard from '../components/ProductCard.jsx';
 import AddProductForm from '../components/AddProductForm';
 import FilterSortSearch from '../components/FilterSortSearch.jsx';
-import products from './products.js';
+import leads from './leads.js';
 
 export default function ProductsPage() {
   const [allProducts, setAllProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [lastSearchTerm, setLastSearchTerm] = useState('');
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -26,15 +27,25 @@ export default function ProductsPage() {
   }, []);
 
   const fetchProducts = async () => {
-    setAllProducts(products);
-    setDisplayedProducts(products);
-    // try {
-    //   const response = await api.get('/products/read-all-products');
-    //   setAllProducts(response.data);
-    //   setDisplayedProducts(response.data);
-    // } catch (err) {
-    //   setError(err.response?.data?.message || 'Failed to fetch products');
-    // }
+    try {
+      const response = await api.get('/products/read-all-products');
+      console.log('products from API:', response.data);
+      console.log('leads:', leads);
+
+      const productsWithLeadCount = response.data.map((product) => {
+        const count = leads.filter(
+          (lead) => Number(lead.product_id) === Number(product.id)
+        ).length;
+        return {
+          ...product,
+          lead_count: count,
+        };
+      });
+      setAllProducts(productsWithLeadCount);
+      setDisplayedProducts(productsWithLeadCount);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch products');
+    }
   };
 
   if (error) {
@@ -61,7 +72,10 @@ export default function ProductsPage() {
               <Modal.Title>Add New Product</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <AddProductForm onProductAdded={fetchProducts} />
+              <AddProductForm
+                onProductAdded={fetchProducts}
+                handleClose={handleClose}
+              />
             </Modal.Body>
           </Modal>
         </div>
@@ -73,7 +87,9 @@ export default function ProductsPage() {
             allProducts={allProducts}
             displayedProducts={displayedProducts}
             setDisplayedProducts={setDisplayedProducts}
-            setLastSearchTerm={setLastSearchTerm} // מעביר את הפונקציה ל-Search
+            setFilteredProducts={setFilteredProducts}
+            setLastSearchTerm={setLastSearchTerm}
+            isAdmin={user?.email === 'admin@gmail.com'}
           />
         </div>
       </div>
@@ -94,13 +110,19 @@ export default function ProductsPage() {
 
           <div className="product-list">
             <div className="products-catalog">
-              {displayedProducts.map((product) => (
+              {(filteredProducts.length > 0
+                ? filteredProducts
+                : displayedProducts
+              ).map((product) => (
                 <div key={product.id}>
                   <ProductCard
                     id={product.id}
                     name={product.name}
+                    category={product.category}
                     img={product.image_url}
                     price={product.price}
+                    lead_count={product.lead_count}
+                    isAdmin={user?.email === 'admin@gmail.com'}
                   />
                 </div>
               ))}
@@ -108,9 +130,7 @@ export default function ProductsPage() {
           </div>
         </>
       ) : (
-        <div className="no-results-message">
-          No results found for: '{lastSearchTerm}'{' '}
-        </div>
+        <div className="no-results-message">No results found</div>
       )}
     </div>
   );

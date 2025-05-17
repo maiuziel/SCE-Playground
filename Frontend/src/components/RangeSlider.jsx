@@ -3,22 +3,22 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { Form } from 'react-bootstrap';
 
-function PriceSlider(props) {
+function RangeSlider(props) {
   const handleChange = (newValue) => {
-    props.onPriceChange(newValue);
+    props.onChange(newValue);
   };
 
   return (
     <>
-      <Form.Label>Price Range</Form.Label>
+      <Form.Label>{props.title}</Form.Label>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>{props.value[0]}</span>
         <span>{props.value[1]}</span>
       </div>
       <Slider
         range
-        min={props.minPrice}
-        max={props.maxPrice}
+        min={props.min}
+        max={props.max}
         value={props.value}
         onChange={handleChange}
       />
@@ -26,4 +26,4 @@ function PriceSlider(props) {
   );
 }
 
-export default PriceSlider;
+export default RangeSlider;

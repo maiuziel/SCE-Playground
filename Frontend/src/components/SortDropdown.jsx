@@ -16,7 +16,7 @@ function SortDropdown(props) {
       (a, b) => b.price - a.price
     );
     props.setDisplayedProducts(sorted);
-    setSelectedSort('High to Low');
+    setSelectedSort('Price: High to Low');
   }
 
   function sortLowToHigh() {
@@ -24,7 +24,24 @@ function SortDropdown(props) {
       (a, b) => a.price - b.price
     );
     props.setDisplayedProducts(sorted);
-    setSelectedSort('Low to High');
+    setSelectedSort('Price: Low to High');
+  }
+
+  function sortLeadsHighToLow() {
+    console.log(props.displayedProducts);
+    const sorted = [...props.displayedProducts].sort(
+      (a, b) => b.lead_count - a.lead_count
+    );
+    props.setDisplayedProducts(sorted);
+    setSelectedSort('Leads: High to Low');
+  }
+
+  function sortLeadsLowToHigh() {
+    const sorted = [...props.displayedProducts].sort(
+      (a, b) => a.lead_count - b.lead_count
+    );
+    props.setDisplayedProducts(sorted);
+    setSelectedSort('Leads: Low to High');
   }
 
   return (
@@ -32,15 +49,25 @@ function SortDropdown(props) {
       <Dropdown.Toggle className="filter-sort-search" variant="outline-primary">
         {selectedSort}
       </Dropdown.Toggle>
-
       <Dropdown.Menu>
         <Dropdown.Item onClick={displayNormal}>Sort by</Dropdown.Item>
+        <Dropdown.Divider />
         <Dropdown.Item onClick={sortHighToLow}>
           Price: High to Low
         </Dropdown.Item>
         <Dropdown.Item onClick={sortLowToHigh}>
           Price: Low to High
         </Dropdown.Item>
+        {props.isAdmin && (
+          <>
+            <Dropdown.Item onClick={sortLeadsHighToLow}>
+              Leads: High to Low
+            </Dropdown.Item>
+            <Dropdown.Item onClick={sortLeadsLowToHigh}>
+              Leads: Low to High
+            </Dropdown.Item>
+          </>
+        )}
       </Dropdown.Menu>
     </Dropdown>
   );

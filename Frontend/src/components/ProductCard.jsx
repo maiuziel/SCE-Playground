@@ -1,18 +1,26 @@
 import Card from 'react-bootstrap/Card';
-import { Link, Routes, BrowserRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './ProductCard.css';
 
 function ProductCard(props) {
   return (
-    <Link to={`/products/${props.id}`}>
-      <Card className="product-card">
-        <Card.Img className="card-img" variant="top" src={props.img} />
-        <Card.Body>
-          <Card.Title>{props.name}</Card.Title>
-          <Card.Title>{props.price} ₪</Card.Title>
-        </Card.Body>
-      </Card>
-    </Link>
+    <div className="product-card-wrapper">
+      <Link to={`/products/${props.id}`}>
+        <Card className="product-card">
+          <Card.Img className="card-img" variant="top" src={props.img} />
+          <Card.Body>
+            <div className="title_and_price">
+              <Card.Title>{props.name}</Card.Title>
+              <Card.Title>{props.price} $</Card.Title>
+            </div>
+            <Card.Subtitle className="mb-2">{props.category}</Card.Subtitle>
+          </Card.Body>
+        </Card>
+      </Link>
+      {props.isAdmin && (
+        <div className="lead-count-text">Leads: {props.lead_count}</div>
+      )}
+    </div>
   );
 }
 

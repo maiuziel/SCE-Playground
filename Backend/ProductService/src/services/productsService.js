@@ -74,10 +74,18 @@ export const productsService = {
   async fetchProductById(productId) {
     try {
       const product = await Products.findByPk(productId);
+      const additional_images = await ProductsImages.findAll({
+        where: {
+          product_id: productId,
+        },
+      });
+      const productPlain = product.get({ plain: true });
+
+      const mergedProduct = { ...productPlain, additional_images };
       if (!product) {
         throw new Error('Product not found');
       }
-      return product;
+      return mergedProduct;
     } catch (err) {
       console.error('Error fetching product by ID:', err);
       throw new Error('Failed to fetch product');

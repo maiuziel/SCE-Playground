@@ -1,37 +1,49 @@
 // components/FilterOffcanvas.jsx
 import React, { useState, useEffect } from 'react';
-import { Button, Offcanvas, Form } from 'react-bootstrap';
-import PriceSlider from './PriceSlider';
+import { Accordion, Card, Button, Offcanvas, Form } from 'react-bootstrap';
+import RangeSlider from './RangeSlider';
 import './buttons.css';
 
-const FilterOffcanvas = ({ allProducts, setDisplayedProducts }) => {
+const FilterOffcanvas = ({
+  displayedProducts,
+  setDisplayedProducts,
+  setFilteredProducts,
+  isAdmin,
+}) => {
+  const [show, setShow] = useState(false);
+  const [filters, setFilters] = useState({
+    category: [],
+    minPrice: 0,
+    maxPrice: 0,
+    minLeadCount: 0,
+    maxLeadCount: 0,
+  });
   const categories = [
     ...new Set(
-      allProducts
+      displayedProducts
         .map((product) => product.category)
         .filter((category) => category)
     ),
   ];
-
-  const [show, setShow] = useState(false);
-  const [filters, setFilters] = useState({
-    category: '',
-    minPrice: 0,
-    maxPrice: 0,
-  });
-
   useEffect(() => {
-    if (allProducts.length > 0) {
-      const prices = allProducts.map((product) => product.price);
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
+    if (displayedProducts.length > 0) {
+      const prices = displayedProducts.map((product) => product.price);
+      const lead_counts = displayedProducts.map(
+        (product) => product.lead_count
+      );
+      const minP = Math.min(...prices);
+      const maxP = Math.max(...prices);
+      const minL = Math.min(...lead_counts);
+      const maxL = Math.max(...lead_counts);
       setFilters((prev) => ({
         ...prev,
-        minPrice: min,
-        maxPrice: max,
+        minPrice: minP,
+        maxPrice: maxP,
+        minLeadCount: minL,
+        maxLeadCount: maxL,
       }));
     }
-  }, [allProducts]);
+  }, [displayedProducts]);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -41,12 +53,15 @@ const FilterOffcanvas = ({ allProducts, setDisplayedProducts }) => {
   };
 
   const handleApply = () => {
-    const { category, minPrice, maxPrice } = filters;
+    const { category, minPrice, maxPrice, minLeadCount, maxLeadCount } =
+      filters;
 
-    let filtered = [...allProducts];
+    let filtered = [...displayedProducts];
 
     if (category && category !== 'Choose Category') {
-      filtered = filtered.filter((product) => product.category === category);
+      filtered = filtered.filter((product) =>
+        filters.category.includes(product.category)
+      );
     }
 
     filtered = filtered.filter(
@@ -54,7 +69,13 @@ const FilterOffcanvas = ({ allProducts, setDisplayedProducts }) => {
         product.price >= Number(minPrice) && product.price <= Number(maxPrice)
     );
 
-    setDisplayedProducts(filtered);
+    filtered = filtered.filter(
+      (product) =>
+        product.lead_count >= Number(minLeadCount) &&
+        product.lead_count <= Number(maxLeadCount)
+    );
+
+    setFilteredProducts(filtered);
     handleClose();
   };
 
@@ -64,6 +85,34 @@ const FilterOffcanvas = ({ allProducts, setDisplayedProducts }) => {
       minPrice: newPriceRange[0],
       maxPrice: newPriceRange[1],
     });
+  };
+
+  const handleLeadCountChange = (newLeadCountRange) => {
+    setFilters({
+      ...filters,
+      minLeadCount: newLeadCountRange[0],
+      maxLeadCount: newLeadCountRange[1],
+    });
+  };
+
+  const handleClear = () => {
+    const prices = displayedProducts.map((product) => product.price);
+    const lead_counts = displayedProducts.map((product) => product.lead_count);
+    const minP = Math.min(...prices);
+    const maxP = Math.max(...prices);
+    const minL = Math.min(...lead_counts);
+    const maxL = Math.max(...lead_counts);
+
+    setFilters({
+      category: '',
+      minPrice: minP,
+      maxPrice: maxP,
+      minLeadCount: minL,
+      maxLeadCount: maxL,
+    });
+
+    setDisplayedProducts(displayedProducts);
+    setFilteredProducts([]);
   };
 
   return (
@@ -82,37 +131,80 @@ const FilterOffcanvas = ({ allProducts, setDisplayedProducts }) => {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Category</Form.Label>
-              <Form.Select
-                name="category"
-                value={filters.category}
-                onChange={handleChange}
-              >
-                <option value="">Choose Category</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+            <Accordion defaultActiveKey="">
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Category</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Group className="mb-3">
+                    {categories.map((category) => (
+                      <Form.Check
+                        key={category}
+                        type="checkbox"
+                        label={category}
+                        name="category"
+                        value={category}
+                        checked={filters.category.includes(category)}
+                        className="checkbox-right"
+                        style={{ display: 'flex', gap: '0.5rem' }}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const checked = e.target.checked;
+                          setFilters((prev) => {
+                            const updatedCategories = checked
+                              ? [...prev.category, value]
+                              : prev.category.filter((c) => c !== value);
+                            return { ...prev, category: updatedCategories };
+                          });
+                        }}
+                      />
+                    ))}
+                  </Form.Group>
+                </Accordion.Body>
+              </Accordion.Item>
 
-            <Form.Group className="mb-4">
-              <PriceSlider
-                minPrice={Math.min(...allProducts.map((p) => p.price))}
-                maxPrice={Math.max(...allProducts.map((p) => p.price))}
-                onPriceChange={handlePriceChange}
-                value={[filters.minPrice, filters.maxPrice]}
-              />
-            </Form.Group>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>Price Range</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Group className="mb-3">
+                    <RangeSlider
+                      title=""
+                      min={Math.min(...displayedProducts.map((p) => p.price))}
+                      max={Math.max(...displayedProducts.map((p) => p.price))}
+                      onChange={handlePriceChange}
+                      value={[filters.minPrice, filters.maxPrice]}
+                    />
+                  </Form.Group>
+                </Accordion.Body>
+              </Accordion.Item>
 
-            <Form.Group className="d-flex justify-content-center mt-3">
+              {isAdmin && (
+                <Accordion.Item eventKey="2">
+                  <Accordion.Header>Lead Count Range</Accordion.Header>
+                  <Accordion.Body>
+                    <Form.Group className="mb-3">
+                      <RangeSlider
+                        title=""
+                        min={Math.min(
+                          ...displayedProducts.map((p) => p.lead_count)
+                        )}
+                        max={Math.max(
+                          ...displayedProducts.map((p) => p.lead_count)
+                        )}
+                        onChange={handleLeadCountChange}
+                        value={[filters.minLeadCount, filters.maxLeadCount]}
+                      />
+                    </Form.Group>
+                  </Accordion.Body>
+                </Accordion.Item>
+              )}
+            </Accordion>
+
+            <Form.Group className="d-flex justify-content-center mt-4">
               <Button variant="success" onClick={handleApply} className="me-2">
                 Apply
               </Button>
-              <Button variant="secondary" onClick={handleClose}>
-                Cancel
+              <Button variant="secondary" onClick={handleClear}>
+                Clear
               </Button>
             </Form.Group>
           </Form>
