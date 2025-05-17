@@ -1,4 +1,4 @@
-const customerData = require('../Data-Access/Customer-ServiceDataAccess');
+const customerData = require("../Data-Access/Customer-ServiceDataAccess");
 
 const createCustomer = async (data) => {
   return await customerData.insertCustomer(data);
