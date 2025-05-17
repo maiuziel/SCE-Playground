@@ -26,15 +26,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: Backend/CustomerService
+        working-directory: Backend/Customer-Service
 
 
       - name: Run linter
         run: npm run lint
-        working-directory: Backend/CustomerService
+        working-directory: Backend/Customer-Service
 
 
       - name: Run basic check
         run: npm test
-        working-directory: Backend/CustomerService
+        working-directory: Backend/Customer-Service
 
