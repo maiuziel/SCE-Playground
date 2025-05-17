@@ -7,7 +7,7 @@ import {
   getCustomerById,
   updateCustomer,
   deleteCustomer
-} from '../Service/Customer-Service.js';
+} from '../services/customerService.js';
 
 const router = Router();
 

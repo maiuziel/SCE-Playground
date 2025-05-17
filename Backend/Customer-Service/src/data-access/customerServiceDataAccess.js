@@ -1,4 +1,4 @@
-// src/Data-Access/Customer-ServiceDataAccess.js
+// src/data-access/customerServiceDataAccess.js
 
 import pkg from 'pg';
 const { Pool } = pkg;
