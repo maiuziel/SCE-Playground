@@ -167,7 +167,7 @@ describe('TechSupportPage - Agent', () => {
     });
   });
 
-  // Test: If unsent message exists, clicking "Close" should trigger a warning
+  // Test: If unsent message exists, clicking 'Close' should trigger a warning
   test('agent sees warning on close if message is unsent', async () => {
     window.alert = jest.fn();
     render(
@@ -193,7 +193,7 @@ test('shows loading screen when user is null', () => {
   expect(screen.getByText(/Loading/i)).toBeInTheDocument();
 });
 
-// Test: User sees "No requests yet" when there are no tickets
+// Test: User sees 'No requests yet' when there are no tickets
 test('shows message when user has no requests', async () => {
   jest.mocked(api.get).mockImplementation((url) => {
     if (url.includes('/techsupportfetchuserrequests')) {
