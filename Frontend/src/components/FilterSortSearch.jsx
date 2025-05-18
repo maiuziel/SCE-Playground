@@ -11,14 +11,18 @@ function FilterSortSearch(props) {
         setLastSearchTerm={props.setLastSearchTerm}
       />
       <FilterOffcanvas
+        allProducts={props.allProducts}
         displayedProducts={props.displayedProducts}
+        filteredProducts={props.filteredProducts}
         setDisplayedProducts={props.setDisplayedProducts}
         setFilteredProducts={props.setFilteredProducts}
         isAdmin={props.isAdmin}
       />
       <SortDropdown
         displayedProducts={props.displayedProducts}
+        filteredProducts={props.filteredProducts}
         setDisplayedProducts={props.setDisplayedProducts}
+        setFilteredProducts={props.setFilteredProducts}
         isAdmin={props.isAdmin}
       />
     </>

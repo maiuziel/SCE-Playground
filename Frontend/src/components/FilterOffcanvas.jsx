@@ -5,7 +5,9 @@ import RangeSlider from './RangeSlider';
 import './buttons.css';
 
 const FilterOffcanvas = ({
+  allProducts,
   displayedProducts,
+  filteredProducts,
   setDisplayedProducts,
   setFilteredProducts,
   isAdmin,
@@ -56,7 +58,9 @@ const FilterOffcanvas = ({
     const { category, minPrice, maxPrice, minLeadCount, maxLeadCount } =
       filters;
 
-    let filtered = [...displayedProducts];
+    let filtered = [
+      ...(filteredProducts.length > 0 ? filteredProducts : displayedProducts),
+    ];
 
     if (category && category !== 'Choose Category') {
       filtered = filtered.filter((product) =>
@@ -111,8 +115,8 @@ const FilterOffcanvas = ({
       maxLeadCount: maxL,
     });
 
-    setDisplayedProducts(displayedProducts);
     setFilteredProducts([]);
+    setDisplayedProducts(allProducts);
   };
 
   return (
@@ -133,7 +137,7 @@ const FilterOffcanvas = ({
           <Form>
             <Accordion defaultActiveKey="">
               <Accordion.Item eventKey="0">
-                <Accordion.Header>Category</Accordion.Header>
+                <Accordion.Header>Filter by category</Accordion.Header>
                 <Accordion.Body>
                   <Form.Group className="mb-3">
                     {categories.map((category) => (
@@ -163,7 +167,7 @@ const FilterOffcanvas = ({
               </Accordion.Item>
 
               <Accordion.Item eventKey="1">
-                <Accordion.Header>Price Range</Accordion.Header>
+                <Accordion.Header>Filter by price Range</Accordion.Header>
                 <Accordion.Body>
                   <Form.Group className="mb-3">
                     <RangeSlider
@@ -179,7 +183,9 @@ const FilterOffcanvas = ({
 
               {isAdmin && (
                 <Accordion.Item eventKey="2">
-                  <Accordion.Header>Lead Count Range</Accordion.Header>
+                  <Accordion.Header>
+                    Filter by lead Count Range
+                  </Accordion.Header>
                   <Accordion.Body>
                     <Form.Group className="mb-3">
                       <RangeSlider

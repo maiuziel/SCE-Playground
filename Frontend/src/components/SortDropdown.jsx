@@ -7,40 +7,57 @@ function SortDropdown(props) {
   const [selectedSort, setSelectedSort] = useState('Sort by');
 
   function displayNormal() {
-    const sorted = [...props.displayedProducts].sort((a, b) => a.id - b.id);
+    const sorted = [
+      ...(props.filteredProducts.length > 0
+        ? props.filteredProducts
+        : props.displayedProducts),
+    ].sort((a, b) => a.id - b.id);
     props.setDisplayedProducts(sorted);
+    props.setFilteredProducts(sorted);
     setSelectedSort('Sort by');
   }
   function sortHighToLow() {
-    const sorted = [...props.displayedProducts].sort(
-      (a, b) => b.price - a.price
-    );
+    const sorted = [
+      ...(props.filteredProducts.length > 0
+        ? props.filteredProducts
+        : props.displayedProducts),
+    ].sort((a, b) => b.price - a.price);
     props.setDisplayedProducts(sorted);
+    props.setFilteredProducts(sorted);
     setSelectedSort('Price: High to Low');
   }
 
   function sortLowToHigh() {
-    const sorted = [...props.displayedProducts].sort(
-      (a, b) => a.price - b.price
-    );
+    const sorted = [
+      ...(props.filteredProducts.length > 0
+        ? props.filteredProducts
+        : props.displayedProducts),
+    ].sort((a, b) => a.price - b.price);
     props.setDisplayedProducts(sorted);
+    props.setFilteredProducts(sorted);
     setSelectedSort('Price: Low to High');
   }
 
   function sortLeadsHighToLow() {
     console.log(props.displayedProducts);
-    const sorted = [...props.displayedProducts].sort(
-      (a, b) => b.lead_count - a.lead_count
-    );
+    const sorted = [
+      ...(props.filteredProducts.length > 0
+        ? props.filteredProducts
+        : props.displayedProducts),
+    ].sort((a, b) => b.lead_count - a.lead_count);
     props.setDisplayedProducts(sorted);
+    props.setFilteredProducts(sorted);
     setSelectedSort('Leads: High to Low');
   }
 
   function sortLeadsLowToHigh() {
-    const sorted = [...props.displayedProducts].sort(
-      (a, b) => a.lead_count - b.lead_count
-    );
+    const sorted = [
+      ...(props.filteredProducts.length > 0
+        ? props.filteredProducts
+        : props.displayedProducts),
+    ].sort((a, b) => a.lead_count - b.lead_count);
     props.setDisplayedProducts(sorted);
+    props.setFilteredProducts(sorted);
     setSelectedSort('Leads: Low to High');
   }
 

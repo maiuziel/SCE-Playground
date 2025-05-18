@@ -86,6 +86,7 @@ export default function ProductsPage() {
           <FilterSortSearch
             allProducts={allProducts}
             displayedProducts={displayedProducts}
+            filteredProducts={filteredProducts}
             setDisplayedProducts={setDisplayedProducts}
             setFilteredProducts={setFilteredProducts}
             setLastSearchTerm={setLastSearchTerm}
@@ -129,8 +130,10 @@ export default function ProductsPage() {
             </div>
           </div>
         </>
-      ) : (
+      ) : allProducts.length > 0 ? (
         <div className="no-results-message">No results found</div>
+      ) : (
+        <div className="loading-message">Loading...</div>
       )}
     </div>
   );
