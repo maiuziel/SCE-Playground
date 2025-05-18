@@ -15,6 +15,7 @@ export default function ProductPageUI({
   onEdit,
   onDelete,
   onViewLeads,
+  user,
 }) {
   const [selectedImage, setSelectedImage] = useState(product.image_url);
   const [showModal, setShowModal] = useState(false);
@@ -38,18 +39,19 @@ export default function ProductPageUI({
       <Row className="align-items-center mb-3">
         <Col className="d-flex justify-content-between align-items-center">
           <h2 className="mb-0">{product.name}</h2>
-
-          <Stack direction="horizontal" gap={2}>
-            <Button variant="info" onClick={onViewLeads}>
-              Leads
-            </Button>
-            <Button variant="warning" onClick={onEdit}>
-              <i className="bi bi-pencil"></i>
-            </Button>
-            <Button variant="danger" onClick={onDelete}>
-              <i className="bi bi-trash"></i>
-            </Button>
-          </Stack>
+          {user?.email === 'admin@gmail.com' && (
+            <Stack direction="horizontal" gap={2}>
+              <Button variant="info" onClick={onViewLeads}>
+                Leads
+              </Button>
+              <Button variant="warning" onClick={onEdit}>
+                <i className="bi bi-pencil"></i>
+              </Button>
+              <Button variant="danger" onClick={onDelete}>
+                <i className="bi bi-trash"></i>
+              </Button>
+            </Stack>
+          )}
         </Col>
       </Row>
 

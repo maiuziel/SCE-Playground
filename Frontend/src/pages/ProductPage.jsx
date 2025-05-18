@@ -58,7 +58,7 @@ export default function ProductPage() {
   return (
     <div className="product-page">
       <div className="product-container">
-        <ProductPageUI product={product} />
+        <ProductPageUI product={product} user={user} />
       </div>
     </div>
   );
