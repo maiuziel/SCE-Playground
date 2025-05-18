@@ -131,7 +131,7 @@ export async function addClientComment(req, res) {
 
     res.status(200).json({
       message: 'Comment added successfully',
-      request: request.get({ plain: true }) // ✅ הכי נקי לתגובה
+      request: request.get({ plain: true }) 
     });
   } catch (error) {
     console.error('Error adding comment:', error);
