@@ -8,6 +8,10 @@ export default function SupportHistoryPage() {
   const [commentText, setCommentText] = useState('');
 
   useEffect(() => {
+    loadRequests();
+  }, []);
+
+  const loadRequests = () => {
     fetch('http://localhost:4002/support-requests')
       .then(res => res.json())
       .then(setRequests)
@@ -16,22 +20,28 @@ export default function SupportHistoryPage() {
         setError('לא ניתן להציג פניות כרגע');
       })
       .finally(() => setLoading(false));
-  }, []);
+  };
 
   const submitComment = async () => {
     if (!commentText.trim()) return;
-
+  
     try {
       const res = await fetch(`http://localhost:4002/support-requests/${activeRequestId}/comment`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ comment: commentText })
       });
-
+  
       if (res.ok) {
         alert('Comment sent successfully!');
         setCommentText('');
         setActiveRequestId(null);
+  
+        // ✅ טען מחדש את כל הפניות כדי לעדכן את ההערה בטבלה
+        fetch('http://localhost:4002/support-requests')
+          .then(res => res.json())
+          .then(setRequests);
+  
       } else {
         alert('Failed to send comment');
       }
@@ -40,6 +50,7 @@ export default function SupportHistoryPage() {
       console.error(err);
     }
   };
+  
 
   return (
     <div className="page-container">
@@ -61,7 +72,7 @@ export default function SupportHistoryPage() {
               <th>Date</th>
               <th>Status</th>
               <th>Response</th>
-              <th>Action</th> {/* כאן יהיה רק כפתור */}
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>

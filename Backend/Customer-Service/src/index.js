@@ -10,10 +10,11 @@ import { initDb } from './data-access/db.js';
 const app = express();  // ① מוודאים שמייד אחרי היבוא מגדירים את app
 
 // ② מגדירים CORS ו־JSON middleware
+
 app.use(cors({
-    origin: 'http://localhost:5174', // ← עדכון הפורט כאן
+    origin: 'http://localhost:5173', // כתובת ה-Frontend שלך
     credentials: true
-}));
+  }));
 
 app.use(express.json());
 

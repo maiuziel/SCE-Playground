@@ -100,4 +100,38 @@ export async function markResponseAsRead(req, res) {
       res.status(500).json({ message: 'Failed to mark response as read' });
     }
   }
-  
+
+export const getNewClientRequests = async (req, res) => {
+  try {
+    const newRequests = await SupportRequest.findAll({
+      where: {
+        response: null,
+        status: 'open'
+      },
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.json(newRequests);
+  } catch (error) {
+    console.error('❌ Error fetching new client requests:', error);
+    res.status(500).json({ error: 'Failed to load new client requests' });
+  }
+};
+
+export const addClientComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment } = req.body;
+
+    const request = await SupportRequest.findByPk(id);
+    if (!request) return res.status(404).json({ error: 'Request not found' });
+
+    request.clientComment = comment;
+    await request.save();
+
+    res.json({ message: 'Comment added successfully' });
+  } catch (err) {
+    console.error('Error adding comment:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
