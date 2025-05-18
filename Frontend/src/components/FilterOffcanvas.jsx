@@ -58,9 +58,7 @@ const FilterOffcanvas = ({
     const { category, minPrice, maxPrice, minLeadCount, maxLeadCount } =
       filters;
 
-    let filtered = [
-      ...(filteredProducts.length > 0 ? filteredProducts : displayedProducts),
-    ];
+    let filtered = [...displayedProducts];
 
     if (category && category !== 'Choose Category') {
       filtered = filtered.filter((product) =>
