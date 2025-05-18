@@ -118,20 +118,27 @@ export const getNewClientRequests = async (req, res) => {
   }
 };
 
-export const addClientComment = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { comment } = req.body;
+export async function addClientComment(req, res) {
+  const { comment } = req.body;
+  const { id } = req.params;
 
+  try {
     const request = await SupportRequest.findByPk(id);
     if (!request) return res.status(404).json({ error: 'Request not found' });
 
     request.clientComment = comment;
     await request.save();
 
-    res.json({ message: 'Comment added successfully' });
-  } catch (err) {
-    console.error('Error adding comment:', err);
+    res.status(200).json({
+      message: 'Comment added successfully',
+      request: request.get({ plain: true }) // ✅ הכי נקי לתגובה
+    });
+  } catch (error) {
+    console.error('Error adding comment:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
+}
+
+
+
+

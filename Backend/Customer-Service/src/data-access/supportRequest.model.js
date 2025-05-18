@@ -12,6 +12,11 @@ export const SupportRequest = sequelize.define('SupportRequest', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  clientComment: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  
   status: {
     type: DataTypes.ENUM('open', 'in_progress', 'closed'),
     allowNull: false,

@@ -35,10 +35,17 @@ export default function SupportHistoryPage() {
       const res = await fetch(`http://localhost:4002/support-requests/${activeRequestId}/comment`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ comment: commentText })
+        body: JSON.stringify({ comment: commentText }),
       });
 
       if (res.ok) {
+        const { request } = await res.json(); // משתמשים ב-request מהשרת
+
+        // עדכון הפנייה עם ההערה החדשה בטבלה
+        setRequests(prev =>
+          prev.map(r => r.id === request.id ? request : r)
+        );
+
         alert('Comment sent successfully!');
         setCommentText('');
         setActiveRequestId(null);
@@ -70,6 +77,9 @@ export default function SupportHistoryPage() {
               <th>Description</th>
               <th>Date</th>
               <th>Status</th>
+              <th>Response</th>
+              <th>Client Comment</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -80,6 +90,16 @@ export default function SupportHistoryPage() {
                 <td>{r.description}</td>
                 <td>{new Date(r.createdAt).toLocaleString()}</td>
                 <td>{r.status}</td>
+                <td>{r.response || <span style={{ color: '#aaa' }}>No response yet</span>}</td>
+                <td>{r.clientComment || <i style={{ color: '#777' }}>No comment</i>}</td>
+                <td>
+                  <button
+                    onClick={() => setActiveRequestId(r.id)}
+                    style={{ padding: '6px 10px' }}
+                  >
+                    Add Comment
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
