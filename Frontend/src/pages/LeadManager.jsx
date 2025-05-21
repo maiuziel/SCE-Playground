@@ -38,36 +38,17 @@ export default function LeadManager() {
   const [toDelete, setToDelete] = useState(new Set());
   const [successMsg, setSuccessMsg] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
-  const [notesByLead, setNotesByLead] = useState({});
+
+  // single-note per lead stored as lead.note
   const [showNotesModal, setShowNotesModal] = useState(false);
   const [currentLeadEmail, setCurrentLeadEmail] = useState(null);
-  const [newNoteText, setNewNoteText] = useState('');
-  const [editingNoteId, setEditingNoteId] = useState(null);
-  const [editedNoteText, setEditedNoteText] = useState('');
-
-  const currentUser = { email: 'yakov@example.com', isAdmin: false };
+  const [noteText, setNoteText] = useState('');
 
   const loadLeads = useCallback(async () => {
     try {
       const res = await fetch('/leads/getall');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setLeads(await res.json());
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  const loadNotes = useCallback(async () => {
-    try {
-      const res = await fetch('/leads/notes');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const all = await res.json();
-      const grouped = all.reduce((acc, n) => {
-        acc[n.email] = acc[n.email] || [];
-        acc[n.email].push(n);
-        return acc;
-      }, {});
-      setNotesByLead(grouped);
     } catch (err) {
       console.error(err);
     }
@@ -80,33 +61,28 @@ export default function LeadManager() {
   }, [loadLeads]);
 
   useEffect(() => {
-    loadNotes();
-  }, [loadLeads, loadNotes]);
-
-  useEffect(() => {
     const q = search.toLowerCase();
     const now = new Date();
 
     const timeFiltered = lead => {
       if (!filters.time_period) return true;
-      const leadDate = new Date(lead.submission_date);
+      const d = new Date(lead.submission_date);
       if (filters.time_period === '7') {
-        const weekAgo = new Date(); weekAgo.setDate(now.getDate() - 7);
-        return leadDate >= weekAgo;
+        const w = new Date(); w.setDate(now.getDate() - 7);
+        return d >= w;
       }
       if (filters.time_period === '30') {
-        const monthAgo = new Date(); monthAgo.setDate(now.getDate() - 30);
-        return leadDate >= monthAgo;
+        const m = new Date(); m.setDate(now.getDate() - 30);
+        return d >= m;
       }
       return true;
     };
 
     setFiltered(
       leads.filter(l =>
-        (
-          (l.full_name || '').toLowerCase().includes(q) ||
-          (l.email || '').toLowerCase().includes(q) ||
-          (l.phone || '').toLowerCase().includes(q)
+        ((l.full_name||'').toLowerCase().includes(q) ||
+         (l.email||'').toLowerCase().includes(q) ||
+         (l.phone||'').toLowerCase().includes(q)
         ) &&
         (!filters.lead_source || l.lead_source === filters.lead_source) &&
         (!filters.status || l.status === filters.status) &&
@@ -116,16 +92,12 @@ export default function LeadManager() {
   }, [leads, search, filters]);
 
   const requestSort = key => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
+    let dir = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') dir = 'desc';
+    setSortConfig({ key, direction: dir });
   };
   const getSortIcon = key => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === 'asc' ? '▲' : '▼';
-    }
+    if (sortConfig.key === key) return sortConfig.direction === 'asc' ? '▲' : '▼';
     return '▲▼';
   };
 
@@ -189,40 +161,33 @@ export default function LeadManager() {
 
   const totalLeads = leads.length;
   const convertedLeads = leads.filter(l => {
-    const tempStatus = tempStatuses[l.email];
-    return (tempStatus || l.status) === 'Converted';
+    const ts = tempStatuses[l.email];
+    return (ts || l.status) === 'Converted';
   }).length;
-  const conversionRate = totalLeads
-    ? ((convertedLeads / totalLeads) * 100).toFixed(1)
-    : 0;
+  const conversionRate = totalLeads ? ((convertedLeads / totalLeads) * 100).toFixed(1) : 0;
 
   const getCampaignPerformanceData = () => {
     const data = {};
-    filtered.forEach(lead => {
-      if (isEditingAll && toDelete.has(lead.email)) return;
-      const date = new Date(lead.submission_date).toISOString().split('T')[0];
-      const campaign = lead.campaign || 'Lead converted';
-      const status = isEditingAll
-        ? tempStatuses[lead.email] || lead.status
-        : lead.status;
-      if (status !== 'Converted') return;
-      if (!data[campaign]) data[campaign] = {};
-      if (!data[campaign][date]) data[campaign][date] = 0;
-      data[campaign][date]++;
+    filtered.forEach(l => {
+      if (isEditingAll && toDelete.has(l.email)) return;
+      const d = new Date(l.submission_date).toISOString().split('T')[0];
+      const camp = l.campaign || 'Lead converted';
+      const st = isEditingAll ? tempStatuses[l.email] || l.status : l.status;
+      if (st !== 'Converted') return;
+      if (!data[camp]) data[camp] = {};
+      data[camp][d] = (data[camp][d] || 0) + 1;
     });
-    const allDates = new Set();
-    Object.values(data).forEach(camp =>
-      Object.keys(camp).forEach(d => allDates.add(d))
-    );
-    const sortedDates = Array.from(allDates).sort();
-    const datasets = Object.entries(data).map(([campaign, campData], i) => ({
-      label: campaign,
-      data: sortedDates.map(d => campData[d] || 0),
+    const dates = new Set();
+    Object.values(data).forEach(c => Object.keys(c).forEach(d => dates.add(d)));
+    const sorted = Array.from(dates).sort();
+    const datasets = Object.entries(data).map(([camp, cmap], i) => ({
+      label: camp,
+      data: sorted.map(d => cmap[d] || 0),
       fill: false,
       borderColor: `hsl(${i * 50}, 70%, 50%)`,
       tension: 0.3,
     }));
-    return { labels: sortedDates, datasets };
+    return { labels: sorted, datasets };
   };
   const chartOptions = {
     responsive: true,
@@ -233,25 +198,21 @@ export default function LeadManager() {
     },
   };
   const getConversionRateByDayData = () => {
-    const dateMap = {};
-    filtered.forEach(lead => {
-      if (isEditingAll && toDelete.has(lead.email)) return;
-      const date = new Date(lead.submission_date).toISOString().split('T')[0];
-      const status = isEditingAll
-        ? tempStatuses[lead.email] || lead.status
-        : lead.status;
-      if (status === 'Converted') {
-        dateMap[date] = (dateMap[date] || 0) + 1;
-      }
+    const m = {};
+    filtered.forEach(l => {
+      if (isEditingAll && toDelete.has(l.email)) return;
+      const d = new Date(l.submission_date).toISOString().split('T')[0];
+      const st = isEditingAll ? tempStatuses[l.email] || l.status : l.status;
+      if (st === 'Converted') m[d] = (m[d] || 0) + 1;
     });
-    const labels = Object.keys(dateMap).sort();
+    const labs = Object.keys(m).sort();
     return {
-      labels,
+      labels: labs,
       datasets: [
         {
           label: 'Converted Leads',
-          data: labels.map(d => dateMap[d]),
-          backgroundColor: labels.map((_, i) => `hsl(${i * 35}, 70%, 60%)`),
+          data: labs.map(d => m[d]),
+          backgroundColor: labs.map((_, i) => `hsl(${i * 35}, 70%, 60%)`),
         },
       ],
     };
@@ -259,28 +220,26 @@ export default function LeadManager() {
 
   const openNotes = email => {
     setCurrentLeadEmail(email);
-    setNewNoteText('');
-    setEditingNoteId(null);
-    setEditedNoteText('');
+    const lead = leads.find(l => l.email === email);
+    setNoteText(lead?.note || '');
     setShowNotesModal(true);
   };
   const closeNotes = () => setShowNotesModal(false);
-  const canEdit = note => note.author === currentUser.email || currentUser.isAdmin;
+
+  const saveNote = async () => {
+    await fetch('/leads/note', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentLeadEmail, note: noteText }),
+    });
+    await loadLeads();
+    setShowNotesModal(false);
+  };
 
   const S = {
     page: { padding: 20, fontFamily: 'Arial, sans-serif' },
     header: { marginBottom: 16 },
-    dataWidget: {
-      display: 'flex',
-      gap: 24,
-      marginBottom: 16,
-      fontWeight: 'bold',
-      fontSize: '1rem',
-      backgroundColor: '#f9f9f9',
-      padding: '12px 20px',
-      borderRadius: 8,
-      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-    },
+    dataWidget: { display: 'flex', gap: 24, marginBottom: 16, fontWeight: 'bold', fontSize: '1rem', backgroundColor: '#f9f9f9', padding: '12px 20px', borderRadius: 8, boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
     dataItem: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', color: '#333' },
     chartBox: { marginBottom: 32, backgroundColor: '#fff', padding: 16, borderRadius: 8 },
     chartRow: { display: 'flex', flexWrap: 'wrap', gap: 32 },
@@ -292,41 +251,27 @@ export default function LeadManager() {
     saveAllBtn: { padding: '8px 12px', borderRadius: 6, border: 'none', backgroundColor: '#4CAF50', color: '#fff', cursor: 'pointer' },
     tableWrap: { width: '100%', overflowX: 'auto', backgroundColor: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' },
     table: { width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' },
-    th: {
-      textAlign: 'left',
-      padding: '10px',
-      borderBottom: '2px solid #ddd',
-      backgroundColor: '#f0f0f0',
-      color: '#000',
-      cursor: 'pointer',
-      userSelect: 'none'
-    },
-    numCol: { width: '5%', textAlign: 'center', padding: '10px', borderBottom: '2px solid #ddd', backgroundColor: '#f0f0f0', color: '#000' },
-    td: { padding: '10px', borderBottom: '1px solid #eee', backgroundColor: '#fff', color: '#000', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-    statusBadge: { padding: '4px 8px', borderRadius: 12, backgroundColor: '#ddd', color: '#333', fontWeight: 'bold', fontSize: '0.9em', cursor: 'default' },
-    notesBtn: { padding: '4px 8px', borderRadius: 12, backgroundColor: '#ddd', color: '#333', fontWeight: 'bold', fontSize: '0.9em', cursor: 'pointer', border: 'none' },
-    successMsg: { color: '#4CAF50', marginBottom: 12, fontWeight: 'bold' },
-    modalBackdrop: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    modal: { backgroundColor: '#fff', padding: 20, borderRadius: 8, width: '90%', maxWidth: 500, maxHeight: '80%', overflowY: 'auto' },
-    deleteBtn: {marginLeft: 8,padding: '4px 8px',borderRadius: 4,border: 'none',backgroundColor: '#F44336',color: '#fff',cursor: 'pointer'},
-      modalBtn: { marginTop: 8, padding: '6px 12px', borderRadius: 8, backgroundColor: '#ddd', color: '#333', fontWeight: 'bold', fontSize: '0.9em', cursor: 'pointer', border: 'none', marginRight: 8 }
+    th: { textAlign: ' left', padding: '10px', borderBottom: '2px solid #ddd', backgroundColor: '#f0f0f0', color: '#000',	cursor: 'pointer', userSelect:'none' },
+    numCol: { width:'5%', textAlign:'center', padding:'10px', borderBottom:'2px solid #ddd', backgroundColor:'#f0f0f0', color:'#000' },
+    td: { padding:'10px', borderBottom:'1px solid #eee', backgroundColor:'#fff', color:'#000', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' },
+    statusBadge: { padding:'4px 8px', borderRadius:12, backgroundColor:'#ddd', color:'#333', fontWeight:'bold', fontSize:'0.9em', cursor:'default' },
+    deleteBtn: { marginLeft:8, padding:'4px 8px', borderRadius:4, border:'none', backgroundColor:'#F44336', color:'#fff', cursor:'pointer' },
+    notesBtn: { padding:'4px 8px', borderRadius:12, backgroundColor:'#ddd', color:'#333', fontWeight:'bold', fontSize:'0.9em', cursor:'pointer', border:'none' },
+    successMsg: { color:'#4CAF50', marginBottom:12, fontWeight:'bold' },
+    modalBackdrop: { position:'fixed', top:0, left:0, width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center' },
+    modal: { backgroundColor:'#fff', padding:20, borderRadius:8, width:'90%', maxWidth:500, maxHeight:'80%', overflowY:'auto' },
+    modalBtn: { marginTop:8, padding:'6px 12px', borderRadius:8, backgroundColor:'#ddd', color:'#333', fontWeight:'bold', fontSize:'0.9em', cursor:'pointer', border:'none', marginRight:8 }
   };
 
   let displayedRows = filtered.filter(l => !(isEditingAll && toDelete.has(l.email)));
   if (sortConfig.key) {
     displayedRows = [...displayedRows].sort((a, b) => {
-      let aVal = a[sortConfig.key] ?? '';
-      let bVal = b[sortConfig.key] ?? '';
-      if (sortConfig.key === 'submission_date') {
-        aVal = new Date(aVal);
-        bVal = new Date(bVal);
-      }
-      if (typeof aVal === 'string') {
-        aVal = aVal.toLowerCase();
-        bVal = bVal.toLowerCase();
-      }
-      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      let aV = a[sortConfig.key] ?? '';
+      let bV = b[sortConfig.key] ?? '';
+      if (sortConfig.key === 'submission_date') { aV = new Date(aV); bV = new Date(bV); }
+      if (typeof aV === 'string') { aV = aV.toLowerCase(); bV = bV.toLowerCase(); }
+      if (aV < bV) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aV > bV) return sortConfig.direction === 'asc' ? 1 : -1;
       return 0;
     });
   }
@@ -336,25 +281,15 @@ export default function LeadManager() {
       <h2 style={S.header}>Lead Manager</h2>
 
       <div style={S.dataWidget}>
-        <div style={S.dataItem}>
-          <span>Total Leads</span>
-          <span>{totalLeads}</span>
-        </div>
-        <div style={S.dataItem}>
-          <span>Conversion Rate</span>
-          <span>{conversionRate}%</span>
-        </div>
+        <div style={S.dataItem}><span>Total Leads</span><span>{totalLeads}</span></div>
+        <div style={S.dataItem}><span>Conversion Rate</span><span>{conversionRate}%</span></div>
       </div>
 
       <div style={S.chartBox}>
         <h3 style={{ marginBottom: 16, color: '#333' }}>Conversion Analytics</h3>
         <div style={S.chartRow}>
-          <div style={S.chartColumn}>
-            <Line data={getCampaignPerformanceData()} options={chartOptions} />
-          </div>
-          <div style={S.chartColumn}>
-            <Doughnut data={getConversionRateByDayData()} />
-          </div>
+          <div style={S.chartColumn}><Line data={getCampaignPerformanceData()} options={chartOptions} /></div>
+          <div style={S.chartColumn}><Doughnut data={getConversionRateByDayData()} /></div>
         </div>
       </div>
 
@@ -374,9 +309,7 @@ export default function LeadManager() {
           <option value="">All Sources</option>
           {Array.from(new Set(leads.map(l => l.lead_source).filter(Boolean)))
             .sort()
-            .map(src => (
-              <option key={src}>{src}</option>
-            ))}
+            .map(src => (<option key={src}>{src}</option>))}
         </select>
         <select
           style={S.select}
@@ -384,9 +317,7 @@ export default function LeadManager() {
           onChange={e => setFilters(f => ({ ...f, status: e.target.value }))}
         >
           <option value="">All Statuses</option>
-          {['New', 'Contacted', 'Converted', 'Disqualified'].map(s => (
-            <option key={s}>{s}</option>
-          ))}
+          {['New', 'Contacted', 'Converted', 'Disqualified'].map(s => (<option key={s}>{s}</option>))}
         </select>
         <select
           style={S.select}
@@ -397,12 +328,8 @@ export default function LeadManager() {
           <option value="7">Last 7 days</option>
           <option value="30">Last 30 days</option>
         </select>
-        <button onClick={toggleEditAll} style={S.editAllBtn}>
-          {isEditingAll ? 'Cancel' : 'Update Status'}
-        </button>
-        {isEditingAll && (
-          <button onClick={onSaveAll} style={S.saveAllBtn}>Save</button>
-        )}
+        <button onClick={toggleEditAll} style={S.editAllBtn}>{isEditingAll ? 'Cancel' : 'Update Status'}</button>
+        {isEditingAll && (<button onClick={onSaveAll} style={S.saveAllBtn}>Save</button>)}
       </div>
 
       {successMsg && <div style={S.successMsg}>{successMsg}</div>}
@@ -412,27 +339,13 @@ export default function LeadManager() {
           <thead>
             <tr>
               <th style={S.numCol}>#</th>
-              <th style={S.th} onClick={() => requestSort('full_name')}>
-                Name <span style={{ color: '#000' }}>{getSortIcon('full_name')}</span>
-              </th>
-              <th style={S.th} onClick={() => requestSort('email')}>
-                Email <span style={{ color: '#000' }}>{getSortIcon('email')}</span>
-              </th>
-              <th style={S.th} onClick={() => requestSort('phone')}>
-                Phone <span style={{ color: '#000' }}>{getSortIcon('phone')}</span>
-              </th>
-              <th style={S.th} onClick={() => requestSort('submission_date')}>
-                Submitted <span style={{ color: '#000' }}>{getSortIcon('submission_date')}</span>
-              </th>
-              <th style={S.th} onClick={() => requestSort('product_interest')}>
-                Product interest <span style={{ color: '#000' }}>{getSortIcon('product_interest')}</span>
-              </th>
-              <th style={S.th} onClick={() => requestSort('lead_source')}>
-                Lead source <span style={{ color: '#000' }}>{getSortIcon('lead_source')}</span>
-              </th>
-              <th style={S.th} onClick={() => requestSort('status')}>
-                Status <span style={{ color: '#000' }}>{getSortIcon('status')}</span>
-              </th>
+              <th style={S.th} onClick={() => requestSort('full_name')}>Name <span style={{ color: '#000' }}>{getSortIcon('full_name')}</span></th>
+              <th style={S.th} onClick={() => requestSort('email')}>Email <span style={{ color: '#000' }}>{getSortIcon('email')}</span></th>
+              <th style={S.th} onClick={() => requestSort('phone')}>Phone <span style={{ color: '#000' }}>{getSortIcon('phone')}</span></th>
+              <th style={S.th} onClick={() => requestSort('submission_date')}>Submitted <span style={{ color: '#000' }}>{getSortIcon('submission_date')}</span></th>
+              <th style={S.th} onClick={() => requestSort('product_interest')}>Product interest <span style={{ color: '#000' }}>{getSortIcon('product_interest')}</span></th>
+              <th style={S.th} onClick={() => requestSort('lead_source')}>Lead source <span style={{ color: '#000' }}>{getSortIcon('lead_source')}</span></th>
+              <th style={S.th} onClick={() => requestSort('status')}>Status <span style={{ color: '#000' }}>{getSortIcon('status')}</span></th>
               <th style={S.th}>Notes</th>
             </tr>
           </thead>
@@ -442,11 +355,7 @@ export default function LeadManager() {
                 <td style={S.numCol}>{i + 1}</td>
                 <td style={S.td}>{l.full_name}</td>
                 <td style={S.td}>{l.email}</td>
-                <td style={S.td}>
-                  {l.phone && l.phone.length > 3
-                    ? `${l.phone.slice(0, 3)}-${l.phone.slice(3)}`
-                    : l.phone}
-                </td>
+                <td style={S.td}>{l.phone && l.phone.length > 3 ? `${l.phone.slice(0, 3)}-${l.phone.slice(3)}` : l.phone}</td>
                 <td style={S.td}>{new Date(l.submission_date).toLocaleDateString()}</td>
                 <td style={S.td}>{l.product_interest || '—'}</td>
                 <td style={S.td}>{l.lead_source || '—'}</td>
@@ -454,18 +363,10 @@ export default function LeadManager() {
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     {isEditingAll ? (
                       <>
-                        <select
-                          value={tempStatuses[l.email]}
-                          onChange={e => onTempChange(l.email, e.target.value)}
-                          style={S.select}
-                        >
-                          {['New', 'Contacted', 'Converted', 'Disqualified'].map(s => (
-                            <option key={s}>{s}</option>
-                          ))}
+                        <select value={tempStatuses[l.email]} onChange={e => onTempChange(l.email, e.target.value)} style={S.select}>
+                          {['New', 'Contacted', 'Converted', 'Disqualified'].map(s => (<option key={s}>{s}</option>))}
                         </select>
-                        <button onClick={() => toggleDelete(l.email)} style={S.deleteBtn}>
-                          Delete
-                        </button>
+                        <button onClick={() => toggleDelete(l.email)} style={S.deleteBtn}>Delete</button>
                       </>
                     ) : (
                       <span style={S.statusBadge}>{l.status}</span>
@@ -474,7 +375,7 @@ export default function LeadManager() {
                 </td>
                 <td style={S.td}>
                   <button onClick={() => openNotes(l.email)} style={S.notesBtn}>
-                    {(notesByLead[l.email] || []).length} note(s)
+                    {l.note ? 'Edit Note' : 'Add Note'}
                   </button>
                 </td>
               </tr>
@@ -486,73 +387,13 @@ export default function LeadManager() {
       {showNotesModal && currentLeadEmail && (
         <div style={S.modalBackdrop}>
           <div style={S.modal}>
-            <h4 style={{ color: '#000' }}>Notes for {currentLeadEmail}</h4>
-            <ul>
-              {(notesByLead[currentLeadEmail] || []).map(n => (
-                <li key={n.id} style={{ marginBottom: 12 }}>
-                  <small>
-                    {new Date(n.created_at).toLocaleString()} by {n.author}
-                  </small>
-                  {editingNoteId === n.id ? (
-                    <textarea
-                      style={{ width: '100%', minHeight: 60 }}
-                      value={editedNoteText}
-                      onChange={e => setEditedNoteText(e.target.value)}
-                    />
-                  ) : (
-                    <p>{n.text}</p>
-                  )}
-                  {canEdit(n) && (
-                    editingNoteId === n.id ? (
-                      <button
-                        style={S.modalBtn}
-                        onClick={async () => {
-                          await fetch(`/leads/notes/${n.id}`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ text: editedNoteText }),
-                          });
-                          await loadNotes();
-                          setEditingNoteId(null);
-                        }}
-                      >
-                        Save
-                      </button>
-                    ) : (
-                      <button
-                        style={S.modalBtn}
-                        onClick={() => {
-                          setEditingNoteId(n.id);
-                          setEditedNoteText(n.text);
-                        }}
-                      >
-                        Edit
-                      </button>
-                    )
-                  )}
-                </li>
-              ))}
-            </ul>
+            <h4 style={{ color: '#000' }}>Note for {currentLeadEmail}</h4>
             <textarea
               style={{ width: '100%', minHeight: 80 }}
-              placeholder="Add a new note…"
-              value={newNoteText}
-              onChange={e => setNewNoteText(e.target.value)}
+              value={noteText}
+              onChange={e => setNoteText(e.target.value)}
             />
-            <button
-              style={S.modalBtn}
-              onClick={async () => {
-                await fetch('/leads/notes', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ email: currentLeadEmail, text: newNoteText }),
-                });
-                await loadNotes();
-                setNewNoteText('');
-              }}
-            >
-              Add Note
-            </button>
+            <button style={S.modalBtn} onClick={saveNote}>Save</button>
             <button style={S.modalBtn} onClick={closeNotes}>Close</button>
           </div>
         </div>
