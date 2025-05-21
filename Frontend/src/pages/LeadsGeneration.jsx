@@ -1,6 +1,7 @@
 // src/pages/LeadsGeneration.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../App.css'; // for .loader-overlay and .spinner
 
 export default function LeadsGeneration() {
   const [fullName, setFullName]       = useState('');
@@ -10,6 +11,7 @@ export default function LeadsGeneration() {
   const [leadSource, setLeadSource]   = useState('');
   const [otherSource, setOtherSource] = useState('');
   const [response, setResponse]       = useState(null);
+  const [loading, setLoading]         = useState(false);
 
   const inputStyle = {
     padding: '12px',
@@ -20,14 +22,21 @@ export default function LeadsGeneration() {
     fontSize: '16px',
   };
 
+  const submitBtnStyle = {
+    padding: '8px 12px',
+    borderRadius: '6px',
+    border: 'none',
+    backgroundColor: '#2196F3',
+    color: '#fff',
+    cursor: loading ? 'not-allowed' : 'pointer',
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
-
     if (!fullName || !phone || !email || !productInterest || !leadSource) {
       alert('Please fill in all fields including lead source!');
       return;
     }
-    
     let finalSource = leadSource;
     if (leadSource === 'Other') {
       if (!otherSource) {
@@ -41,6 +50,7 @@ export default function LeadsGeneration() {
       finalSource = otherSource;
     }
 
+    setLoading(true);
     try {
       const result = await axios.post('/leads/createlead', {
         full_name: fullName,
@@ -58,17 +68,9 @@ export default function LeadsGeneration() {
         error.response?.statusText ||
         'An error occurred while creating the lead. Please try again later.';
       alert(`❌ ${errorMessage}`);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  // Styles matching the "Update Status" button in LeadManager:
-  const submitBtnStyle = {
-    padding: '8px 12px',
-    borderRadius: '6px',
-    border: 'none',
-    backgroundColor: '#2196F3',
-    color: '#fff',
-    cursor: 'pointer',
   };
 
   return (
@@ -81,6 +83,13 @@ export default function LeadsGeneration() {
         padding: '20px',
       }}
     >
+      {/* LOADER – sits above everything else when active */}
+      {loading && (
+        <div className="loader-overlay">
+          <div className="spinner" />
+        </div>
+      )}
+
       <div
         style={{
           background: '#fff',
@@ -109,6 +118,7 @@ export default function LeadsGeneration() {
             value={fullName}
             onChange={e => setFullName(e.target.value)}
             style={inputStyle}
+            disabled={loading}
           />
           <input
             type="email"
@@ -116,6 +126,7 @@ export default function LeadsGeneration() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             style={inputStyle}
+            disabled={loading}
           />
           <input
             type="text"
@@ -123,6 +134,7 @@ export default function LeadsGeneration() {
             value={phone}
             onChange={e => setPhone(e.target.value)}
             style={inputStyle}
+            disabled={loading}
           />
           <input
             type="text"
@@ -130,12 +142,14 @@ export default function LeadsGeneration() {
             value={productInterest}
             onChange={e => setProductInterest(e.target.value)}
             style={inputStyle}
+            disabled={loading}
           />
 
           <select
             value={leadSource}
             onChange={e => setLeadSource(e.target.value)}
             style={inputStyle}
+            disabled={loading}
           >
             <option value="">Select Lead Source</option>
             <option value="Facebook">Facebook</option>
@@ -153,11 +167,12 @@ export default function LeadsGeneration() {
               value={otherSource}
               onChange={e => setOtherSource(e.target.value)}
               style={inputStyle}
+              disabled={loading}
             />
           )}
 
           <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
-            <button type="submit" style={submitBtnStyle}>
+            <button type="submit" style={submitBtnStyle} disabled={loading}>
               Submit
             </button>
           </div>
