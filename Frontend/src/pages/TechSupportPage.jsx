@@ -30,6 +30,14 @@ export default function TechSupportPage() {
   const [isLoadingRequests, setIsLoadingRequests] = useState(true);
   const [isLoadingAgentRequests, setIsLoadingAgentRequests] = useState(true);
 
+  // star rating
+  const [showRatingForm, setShowRatingForm] = useState(true);
+  const [rating, setRating] = useState(0);
+  const [ratingSubmitted, setRatingSubmitted] = useState(false);
+
+
+
+
 
   // agent page requests.
   const [costumerReq, setCostumerReq] = useState([]);
@@ -110,6 +118,12 @@ export default function TechSupportPage() {
   
     fetchRequests();
   }, [pageState]);
+
+  useEffect(() => {
+    if (selectedRequest && selectedRequest.status === 3 && !selectedRequest.rating) {
+      setShowRatingForm(true);
+    }
+  }, [selectedRequest]);
 
   // Function to determine color by content
   const getStatusColor = (status) => {
@@ -779,15 +793,15 @@ export default function TechSupportPage() {
       <>
         <div className='tech-client-requests-page'>
           <h2 className='tech-client-requests-page-title'>My Requests</h2>
-
+  
           {error && <p className='tech-error'>{error}</p>}
-
+  
           {isLoadingRequests ? (
             <div className='tech-loading-messages'>
               <div className='spinner'></div>
               <p className='tech-loading-text'>Loading requests...</p>
             </div>
-          ) : requests.length === 0 ? ( 
+          ) : requests.length === 0 ? (
             <p className='tech-no-requests'>No requests yet.</p>
           ) : (
             <div className='tech-requests-list'>
@@ -795,7 +809,11 @@ export default function TechSupportPage() {
                 <div
                   key={req.id}
                   className='tech-request-row'
-                  onClick={() => setSelectedRequest(req)}
+                  onClick={() => {
+                    setSelectedRequest({ ...req });
+                    setRating(req.rating || 0);
+                    setShowRatingForm(req.status === 3 && req.rating === 0);
+                  }}
                 >
                   <span
                     className={`tech-status-circle ${getStatusColor(req.status)}`}
@@ -806,14 +824,14 @@ export default function TechSupportPage() {
               ))}
             </div>
           )}
-
+  
           <div className='tech-add-request-container'>
             <button className='tech-buttons' onClick={handleAddRequest}>
               Add Request +
             </button>
           </div>
         </div>
-
+  
         {/* view request popup */}
         {selectedRequest && (
           <>
@@ -822,15 +840,20 @@ export default function TechSupportPage() {
               onClick={() => {
                 setSelectedRequest(null);
                 setEnlargedImage(null);
+                setShowRatingForm(false);
               }}
             ></div>
-
+  
             <div className='tech-view-request'>
               <h3 className='tech-view-request-title'>
                 {selectedRequest.category || 'Request Category'}
               </h3>
               <p className='tech-view-request-subtitle'>
-              Date: {selectedRequest?.date?.replace('T', ' At ').replace('Z', '').replace(/\.\d+$/, '') || 'Unknown'}
+                Date:{' '}
+                {selectedRequest?.date
+                  ?.replace('T', ' At ')
+                  .replace('Z', '')
+                  .replace(/\.\d+$/, '') || 'Unknown'}
               </p>
               <div className='tech-view-request-history'>
                 {isLoadingMessages ? (
@@ -851,14 +874,12 @@ export default function TechSupportPage() {
                 <div className='tech-view-request-images'>
                   {selectedRequest.imgs.map((img, index) => {
                     if (!img || !img.data) return null;
-
                     const base64String = btoa(
                       new Uint8Array(img.data).reduce(
                         (data, byte) => data + String.fromCharCode(byte),
                         ''
                       )
                     );
-
                     return (
                       <img
                         key={index}
@@ -874,11 +895,11 @@ export default function TechSupportPage() {
               {enlargedImage && (
                 <div
                   className='tech-image-modal'
-                  onClick={() => setEnlargedImage(null)} // click outside closes modal
+                  onClick={() => setEnlargedImage(null)}
                 >
                   <div
                     className='tech-image-modal-content'
-                    onClick={(e) => e.stopPropagation()} // prevent click inside modal from closing it
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <img
                       src={`data:image/jpeg;base64,${enlargedImage}`}
@@ -894,7 +915,7 @@ export default function TechSupportPage() {
                   </div>
                 </div>
               )}
-
+  
               {selectedRequest.status !== 3 ? (
                 <>
                   <textarea
@@ -903,7 +924,6 @@ export default function TechSupportPage() {
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                   />
-
                   <div className='tech-view-request-buttons'>
                     <button
                       className='tech-buttons'
@@ -912,7 +932,6 @@ export default function TechSupportPage() {
                     >
                       Send
                     </button>
-
                     <button
                       className='tech-buttons'
                       onClick={() => setSelectedRequest(null)}
@@ -927,6 +946,14 @@ export default function TechSupportPage() {
                     This request is closed. No further messages can be sent.
                   </p>
                   <div className='tech-view-request-buttons'>
+                    {selectedRequest.rating === 0 && (
+                      <button
+                        className='tech-buttons'
+                        onClick={() => setShowRatingForm(true)}
+                      >
+                        Rate Our Service
+                      </button>
+                    )}
                     <button
                       className='tech-buttons'
                       onClick={() => setSelectedRequest(null)}
@@ -934,6 +961,87 @@ export default function TechSupportPage() {
                       Back
                     </button>
                   </div>
+  
+                  {/* Rating popup */}
+                  {showRatingForm && (
+                  <div
+                    className='tech-rating-overlay'
+                    onClick={() => setShowRatingForm(false)}
+                  >
+                    <div
+                      className='tech-rating-modal'
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {!ratingSubmitted ? (
+                        <>
+                          <h3 className='tech-rating-title'>Rate Our Service</h3>
+                          <p>Select 1 to 3 stars:</p>
+                          <div className='tech-rating-stars'>
+                            {[1, 2, 3].map((star) => (
+                              <span
+                                key={star}
+                                className={`star ${rating >= star ? 'selected' : ''}`}
+                                style={{
+                                  cursor: 'pointer',
+                                  color: rating >= star ? 'gold' : 'gray',
+                                  fontSize: '24px',
+                                  marginRight: '8px',
+                                }}
+                                onClick={() => setRating(star)}
+                              >
+                                ★
+                              </span>
+                            ))}
+                          </div>
+                          <div className='tech-rating-buttons'>
+                            <button
+                              className='tech-buttons'
+                              disabled={rating === 0}
+                              onClick={async () => {
+                                await api.patch(
+                                  `/ts/techsupportrate?pid=${selectedRequest.id}&rating=${rating}`
+                                );
+                                setRatingSubmitted(true);
+                                setSelectedRequest((prev) => ({
+                                  ...prev,
+                                  rating,
+                                }));
+                                setRequests((prev) =>
+                                  prev.map((req) =>
+                                    req.id === selectedRequest.id
+                                      ? { ...req, rating }
+                                      : req
+                                  )
+                                );
+                              }}
+                            >
+                              Submit
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                          <p style={{ color: 'green', fontSize: '16px' }}>
+                            ✅ Thank you for your feedback!
+                          </p>
+                        </div>
+                      )}
+
+                      <button
+                        className='tech-buttons'
+                        onClick={() => {
+                          setShowRatingForm(false);
+                          setRatingSubmitted(false); // reset for next time
+                        }}
+                        style={{ marginTop: '20px' }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+
                 </>
               )}
             </div>
@@ -942,6 +1050,8 @@ export default function TechSupportPage() {
       </>
     );
   }
+  
+  
 
   return (
     <div className='home-container'>
