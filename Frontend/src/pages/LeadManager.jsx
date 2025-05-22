@@ -267,12 +267,31 @@ export default function LeadManager() {
     table: { width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' },
     th: { textAlign: 'left', padding: '10px', borderBottom: '2px solid #ddd', backgroundColor: '#f0f0f0', color: '#000', cursor: 'pointer', userSelect: 'none' },
     numCol: { width: '5%', textAlign: 'center', padding: '10px', borderBottom: '2px solid #ddd', backgroundColor: '#f0f0f0', color: '#000' },
-    td: { padding: '10px', borderBottom: '1px solid #eee', backgroundColor: '#fff', color: '#000', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+    td: {
+  padding: '10px',
+  borderBottom: '1px solid #eee',
+  backgroundColor: '#fff',
+  color: '#000',
+  overflow: 'visible',
+  whiteSpace: 'normal',
+  wordBreak: 'break-word',
+},
     statusBadge: { padding: '4px 8px', borderRadius: 12, backgroundColor: '#ddd', color: '#333', fontWeight: 'bold', fontSize: '0.9em' },
     deleteBtn: { marginLeft: 8, padding: '4px 8px', borderRadius: 4, border: 'none', backgroundColor: '#F44336', color: '#fff', cursor: 'pointer' },
-    notesCell: { display: 'flex', alignItems: 'center', gap: 8 },
+    notesCell: {
+  display: 'flex',
+  alignItems: 'flex-start',
+  gap: 8,
+  flexWrap: 'wrap',
+},
     noteBtn: { padding: '4px 8px', borderRadius: 12, backgroundColor: '#ddd', color: '#333', fontWeight: 'bold', fontSize: '0.9em', border: 'none', cursor: 'pointer' },
-    noteText: { flex: 1, whiteSpace: 'normal', overflow: 'visible' , color: '#000', },
+    
+noteText: {
+  flex: 1,
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-word',
+  color: '#000',
+},
     successMsg: { color: '#4CAF50', marginBottom: 12, fontWeight: 'bold' },
 
     // modal styles
