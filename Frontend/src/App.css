@@ -250,6 +250,7 @@ body {
 }
 
 .tech-request-cell {
+  padding: 2px;
   flex: 1;
   text-align: left;
   display: flex;
