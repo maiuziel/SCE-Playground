@@ -217,7 +217,7 @@ body {
   /* important for vertical line height */
   gap: 20px;
   /* spacing between columns */
-  height: 60vh;
+  height: 36vh;
 }
 
 .tech-left-agent-panel,
