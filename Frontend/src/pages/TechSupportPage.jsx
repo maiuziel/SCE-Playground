@@ -1,8 +1,8 @@
-import { useContext } from "react";
-import { StoreContext } from "../store/StoreContext";
-import React, { useState, useEffect } from "react";
-import api from "../services/api.js";
-import "../App.css";
+import { useContext } from 'react';
+import { StoreContext } from '../store/StoreContext';
+import React, { useState, useEffect } from 'react';
+import api from '../services/api.js';
+import '../App.css';
 import {
   PieChart,
   Pie,
@@ -26,13 +26,13 @@ export default function TechSupportPage() {
   const loadingScreen = 5;
 
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [name, setName] = useState("");
-  const [content, setContent] = useState("");
+  const [name, setName] = useState('');
+  const [content, setContent] = useState('');
   const [error, setError] = useState(null);
   const [addedId, setAddedId] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null); // null means no popup yet
   const [forumMessages, setForumMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
 
   const [requests, setRequests] = useState([]);
 
@@ -59,7 +59,7 @@ export default function TechSupportPage() {
   // page state modifier.
   const [pageState, setPageState] = useState(loadingScreen);
 
-  let tempUrl = "/ts/techsupportadd/?name=";
+  const tempUrl = '/ts/techsupportadd/?name=';
 
   // Function to count the number of requests per status type
   const getStatusData = () => {
@@ -75,9 +75,9 @@ export default function TechSupportPage() {
 
     // Return the data formatted for the PieChart
     return [
-      { name: "Open", value: counts.open },
-      { name: "In Progress", value: counts.inProgress },
-      { name: "Closed", value: counts.closed },
+      { name: 'Open', value: counts.open },
+      { name: 'In Progress', value: counts.inProgress },
+      { name: 'Closed', value: counts.closed },
     ];
   };
 
@@ -95,9 +95,9 @@ export default function TechSupportPage() {
 
     // Return the data formatted for the BarChart
     return [
-      { name: "1 Star", value: counts.oneStar },
-      { name: "2 Stars", value: counts.twoStars },
-      { name: "3 Stars", value: counts.threeStars },
+      { name: '1 Star', value: counts.oneStar },
+      { name: '2 Stars', value: counts.twoStars },
+      { name: '3 Stars', value: counts.threeStars },
     ];
   };
   // Loading messages from the server when a request is selected
@@ -112,7 +112,7 @@ export default function TechSupportPage() {
         );
         setForumMessages(res.data.messages);
       } catch (err) {
-        console.error("Failed to fetch messages", err);
+        console.error('Failed to fetch messages', err);
       } finally {
         setIsLoadingMessages(false); // Stop loading
       }
@@ -128,15 +128,15 @@ export default function TechSupportPage() {
         // Prevent error if user or user.email is undefined
         return;
 
-      const res = await api.get("/ts/techsupportisagent/?email=" + user?.email);
+      const res = await api.get(`/ts/techsupportisagent/?email=${  user?.email}`);
 
       if (res?.data.agent === true) {
         setPageState(agentPage);
         try {
-          const ticketRes = await api.get("/ts/techsupport");
+          const ticketRes = await api.get('/ts/techsupport');
           setTickets(ticketRes.data);
         } catch (e) {
-          console.error("Error loading dashboard tickets", e);
+          console.error('Error loading dashboard tickets', e);
         } finally {
           setIsLoadingDashboard(false);
         }
@@ -152,14 +152,14 @@ export default function TechSupportPage() {
       if (pageState === agentPage) {
         setIsLoadingAgentRequests(true);
         try {
-          const res = await api.get("/ts/techsupport");
+          const res = await api.get('/ts/techsupport');
 
           res.data.sort((a, b) => a.urgency - b.urgency || a.id - b.id);
 
           setCostumerReq(res.data);
         } catch (err) {
           console.error(err);
-          setError("Failed to load support requests");
+          setError('Failed to load support requests');
         } finally {
           setIsLoadingAgentRequests(false);
         }
@@ -169,12 +169,12 @@ export default function TechSupportPage() {
         setIsLoadingRequests(true);
         try {
           const res = await api.get(
-            "/ts/techsupportfetchuserrequests/?email=" + user?.email
+            `/ts/techsupportfetchuserrequests/?email=${  user?.email}`
           );
           setRequests(res.data.userRequest);
         } catch (err) {
           console.error(err);
-          setError("Failed to load support requests");
+          setError('Failed to load support requests');
         } finally {
           setIsLoadingRequests(false);
         }
@@ -196,18 +196,18 @@ export default function TechSupportPage() {
 
   // Function to determine color by content
   const getStatusColor = (status) => {
-    if (status === 1) return "green";
-    if (status === 2) return "orange";
-    else return "red";
+    if (status === 1) return 'green';
+    if (status === 2) return 'orange';
+    else return 'red';
   };
 
   // convert urgency level into text
   const getUrgencyText = (level) => {
-    if (level === 1) return "high";
+    if (level === 1) return 'high';
 
-    if (level === 2) return "medium";
+    if (level === 2) return 'medium';
 
-    if (level === 3) return "low";
+    if (level === 3) return 'low';
   };
 
   // Clicking the Send button in the popup
@@ -221,7 +221,7 @@ export default function TechSupportPage() {
           user.firstName
         }&content=${newMessage}&isAgent=${pageState === agentPage}`
       );
-      setNewMessage("");
+      setNewMessage('');
 
       // Reload forum messages for the selected request
       const res = await api.get(
@@ -231,7 +231,7 @@ export default function TechSupportPage() {
 
       // If we're on the agent page, update the ticket list (to reflect status change)
       if (pageState === agentPage) {
-        const updatedRes = await api.get("/ts/techsupport");
+        const updatedRes = await api.get('/ts/techsupport');
 
         // Sort the updated list by urgency and ID
         updatedRes.data.sort((a, b) => {
@@ -254,7 +254,7 @@ export default function TechSupportPage() {
         }
       }
     } catch (err) {
-      console.error("Error sending message", err);
+      console.error('Error sending message', err);
     }
   };
 
@@ -265,7 +265,7 @@ export default function TechSupportPage() {
     // Check if there's an unsent message
     if (newMessage.trim()) {
       alert(
-        "Warning: You have an unsent message. Please send or discard it before closing."
+        'Warning: You have an unsent message. Please send or discard it before closing.'
       );
       return;
     }
@@ -275,7 +275,7 @@ export default function TechSupportPage() {
       await api.patch(`/ts/techsupportcloserequest?id=${selectedRequest.id}`);
 
       // Refresh the ticket list
-      const updatedRes = await api.get("/ts/techsupport");
+      const updatedRes = await api.get('/ts/techsupport');
       updatedRes.data.sort((a, b) => {
         if (a.urgency !== b.urgency) return a.urgency - b.urgency;
         return a.id - b.id;
@@ -291,20 +291,20 @@ export default function TechSupportPage() {
         setSelectedRequest(updated);
       }
     } catch (err) {
-      console.error("Error closing the request", err);
+      console.error('Error closing the request', err);
     }
   };
 
   //form fields
-  const [userType, setUserType] = useState("");
-  const [issueCategory, setIssueCategory] = useState("");
-  const [description, setDescription] = useState("");
+  const [userType, setUserType] = useState('');
+  const [issueCategory, setIssueCategory] = useState('');
+  const [description, setDescription] = useState('');
   const [files, setFiles] = useState([]);
   const [images, setImages] = useState([]);
 
   const [previews, setPreviews] = useState([]);
-  const [messageText, setMessageText] = useState("");
-  const [messageColor, setMessageColor] = useState("");
+  const [messageText, setMessageText] = useState('');
+  const [messageColor, setMessageColor] = useState('');
 
   const handleRemoveImage = (indexToRemove) => {
     setFiles((prevFiles) =>
@@ -331,15 +331,15 @@ export default function TechSupportPage() {
 
       // Validate size
       if (file.size > 3 * 1024 * 1024) {
-        setMessageText("Each image must be under 3MB.");
-        setMessageColor("red");
+        setMessageText('Each image must be under 3MB.');
+        setMessageColor('red');
         continue;
       }
 
       // Validate type
-      if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
-        setMessageText("Only JPG, PNG, and GIF files are allowed.");
-        setMessageColor("red");
+      if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+        setMessageText('Only JPG, PNG, and GIF files are allowed.');
+        setMessageColor('red');
         continue;
       }
 
@@ -358,24 +358,24 @@ export default function TechSupportPage() {
 
     if (validFiles.length > 0) {
       setFiles((prev) => [...prev, ...validFiles]);
-      setMessageText("");
-      setMessageColor("");
+      setMessageText('');
+      setMessageColor('');
     }
   };
 
   // Get urgency based on category
   const getUrgency = (category) => {
     const urgencyMap = {
-      "Security concern": "High",
-      "Crash or freezing issue": "High",
-      "Installation issue": "High",
-      "Update or version issue": "Medium",
-      "Integration issue with third-party software": "Medium",
-      "Bug report": "Medium",
-      "Performance issue": "Low",
-      Other: "Low",
+      'Security concern': 'High',
+      'Crash or freezing issue': 'High',
+      'Installation issue': 'High',
+      'Update or version issue': 'Medium',
+      'Integration issue with third-party software': 'Medium',
+      'Bug report': 'Medium',
+      'Performance issue': 'Low',
+      Other: 'Low',
     };
-    return urgencyMap[category] || "Low";
+    return urgencyMap[category] || 'Low';
   };
 
   const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] =
@@ -385,33 +385,33 @@ export default function TechSupportPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userType || !issueCategory || description.length < 10) {
-      setMessageText("Please fill out all required fields correctly.");
-      setMessageColor("red");
+      setMessageText('Please fill out all required fields correctly.');
+      setMessageColor('red');
       return;
     }
 
     if (description.length > 2000) {
-      setMessageText("Please enter a maximum of 2000 characters");
-      setMessageColor("red");
+      setMessageText('Please enter a maximum of 2000 characters');
+      setMessageColor('red');
       return;
     }
 
     if (files.length > 4) {
-      setMessageText("You can upload up to 4 images only.");
-      setMessageColor("red");
+      setMessageText('You can upload up to 4 images only.');
+      setMessageColor('red');
       return;
     }
 
     for (const file of files) {
       if (file.size > 3 * 1024 * 1024) {
-        setMessageText("Each image must be under 3MB.");
-        setMessageColor("red");
+        setMessageText('Each image must be under 3MB.');
+        setMessageColor('red');
         return;
       }
 
-      if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
-        setMessageText("Only JPG, PNG, and GIF files are allowed.");
-        setMessageColor("red");
+      if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+        setMessageText('Only JPG, PNG, and GIF files are allowed.');
+        setMessageColor('red');
         return;
       }
     }
@@ -442,13 +442,13 @@ export default function TechSupportPage() {
 
     let uType = 0;
 
-    if (userType === "before") {
+    if (userType === 'before') {
       uType = 2;
     } else {
       uType = 1;
     }
 
-    const res = await api.post("/ts/techsupportadd", {
+    const res = await api.post('/ts/techsupportadd', {
       type: uType,
       name: user?.firstName,
       email: user?.email,
@@ -458,7 +458,7 @@ export default function TechSupportPage() {
     });
 
     // So that the graphs on the dashboard will update automatically without refreshing
-    const ticketRes = await api.get("/ts/techsupport");
+    const ticketRes = await api.get('/ts/techsupport');
     setTickets(ticketRes.data);
 
     // const res = await api.post(
@@ -481,21 +481,21 @@ export default function TechSupportPage() {
     setFormSubmittedSuccessfully(true);
 
     // Reset the form
-    setUserType("");
-    setIssueCategory("");
-    setDescription("");
+    setUserType('');
+    setIssueCategory('');
+    setDescription('');
     setFiles([]);
     setPreviews([]);
   };
 
   // Reset form manually
   const resetForm = () => {
-    setUserType("");
-    setIssueCategory("");
-    setDescription("");
+    setUserType('');
+    setIssueCategory('');
+    setDescription('');
     setFiles([]);
     setPreviews([]);
-    setMessageText("");
+    setMessageText('');
     setFormSubmittedSuccessfully(false);
     setPageState(userPage); // Go back to the user page
   };
@@ -546,7 +546,7 @@ export default function TechSupportPage() {
                           className={`tech-status-circle ${getStatusColor(
                             req.status
                           )}`}
-                          style={{ marginRight: "8px" }}
+                          style={{ marginRight: '8px' }}
                         ></span>
                       </span>
                       <span className="tech-request-cell">{req.category}</span>
@@ -584,7 +584,7 @@ export default function TechSupportPage() {
                   .filter((req) => req.type === 2)
                   .map((req) => (
                     <div
-                      key={req.id + "-lead"}
+                      key={`${req.id  }-lead`}
                       className="tech-request-row"
                       onClick={() => setSelectedRequest(req)}
                     >
@@ -593,7 +593,7 @@ export default function TechSupportPage() {
                           className={`tech-status-circle ${getStatusColor(
                             req.status
                           )}`}
-                          style={{ marginRight: "8px" }}
+                          style={{ marginRight: '8px' }}
                         ></span>
                       </span>
                       <span className="tech-request-cell">{req.category}</span>
@@ -627,7 +627,7 @@ export default function TechSupportPage() {
                   {getStatusData().map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={["#4caf50", "#ff9800", "#f44336"][index % 3]}
+                      fill={['#4caf50', '#ff9800', '#f44336'][index % 3]}
                     />
                   ))}
                 </Pie>
@@ -647,7 +647,7 @@ export default function TechSupportPage() {
                   {getRatingData().map((entry, index) => (
                     <Cell
                       key={`cell-bar-${index}`}
-                      fill={["#f44336", "#ff9800", "#4caf50"][index % 3]}
+                      fill={['#f44336', '#ff9800', '#4caf50'][index % 3]}
                     />
                   ))}
                 </Bar>
@@ -668,14 +668,14 @@ export default function TechSupportPage() {
             ></div>
             <div className="tech-view-request">
               <h3 className="tech-view-request-title">
-                {selectedRequest.category || "Request Category"}
+                {selectedRequest.category || 'Request Category'}
               </h3>
               <p className="tech-view-request-subtitle">
-                Date:{" "}
+                Date:{' '}
                 {selectedRequest.date
-                  .replace("T", " At ")
-                  .replace("Z", "")
-                  .replace(/\.\d+$/, "") || "Unknown"}{" "}
+                  .replace('T', ' At ')
+                  .replace('Z', '')
+                  .replace(/\.\d+$/, '') || 'Unknown'}{' '}
                 | Urgency: {getUrgencyText(selectedRequest.urgency)}
               </p>
 
@@ -688,7 +688,7 @@ export default function TechSupportPage() {
                 ) : (
                   forumMessages.map((msg, idx) => (
                     <p key={idx} className="tech-view-request-message">
-                      <span className="tech-bold-label">{msg.name}:</span>{" "}
+                      <span className="tech-bold-label">{msg.name}:</span>{' '}
                       {msg.content}
                     </p>
                   ))
@@ -702,7 +702,7 @@ export default function TechSupportPage() {
                     const base64String = btoa(
                       new Uint8Array(img.data).reduce(
                         (data, byte) => data + String.fromCharCode(byte),
-                        ""
+                        ''
                       )
                     );
                     return (
@@ -811,8 +811,8 @@ export default function TechSupportPage() {
         </h1>
 
         {formSubmittedSuccessfully ? (
-          <div style={{ textAlign: "center", marginTop: "40px" }}>
-            <h2 style={{ color: "green" }}>Thank you for contacting us!</h2>
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <h2 style={{ color: 'green' }}>Thank you for contacting us!</h2>
             <p>
               We have received your request and will get back to you shortly.
             </p>
@@ -875,14 +875,14 @@ export default function TechSupportPage() {
             />
             <p
               style={{
-                fontSize: "12px",
-                color: description.length >= 2000 ? "red" : "#555",
+                fontSize: '12px',
+                color: description.length >= 2000 ? 'red' : '#555',
               }}
             >
               {description.length}/2000 characters
             </p>
             {description.length >= 2000 && (
-              <p style={{ color: "red", fontSize: "13px" }}>
+              <p style={{ color: 'red', fontSize: '13px' }}>
                 You've reached the maximum character limit.
               </p>
             )}
@@ -998,14 +998,14 @@ export default function TechSupportPage() {
 
             <div className="tech-view-request">
               <h3 className="tech-view-request-title">
-                {selectedRequest.category || "Request Category"}
+                {selectedRequest.category || 'Request Category'}
               </h3>
               <p className="tech-view-request-subtitle">
-                Date:{" "}
+                Date:{' '}
                 {selectedRequest?.date
-                  ?.replace("T", " At ")
-                  .replace("Z", "")
-                  .replace(/\.\d+$/, "") || "Unknown"}
+                  ?.replace('T', ' At ')
+                  .replace('Z', '')
+                  .replace(/\.\d+$/, '') || 'Unknown'}
               </p>
               <div className="tech-view-request-history">
                 {isLoadingMessages ? (
@@ -1016,7 +1016,7 @@ export default function TechSupportPage() {
                 ) : (
                   forumMessages.map((msg, idx) => (
                     <p key={idx} className="tech-view-request-message">
-                      <span className="tech-bold-label">{msg.name}:</span>{" "}
+                      <span className="tech-bold-label">{msg.name}:</span>{' '}
                       {msg.content}
                     </p>
                   ))
@@ -1029,7 +1029,7 @@ export default function TechSupportPage() {
                     const base64String = btoa(
                       new Uint8Array(img.data).reduce(
                         (data, byte) => data + String.fromCharCode(byte),
-                        ""
+                        ''
                       )
                     );
                     return (
@@ -1135,13 +1135,13 @@ export default function TechSupportPage() {
                                 <span
                                   key={star}
                                   className={`star ${
-                                    rating >= star ? "selected" : ""
+                                    rating >= star ? 'selected' : ''
                                   }`}
                                   style={{
-                                    cursor: "pointer",
-                                    color: rating >= star ? "gold" : "gray",
-                                    fontSize: "24px",
-                                    marginRight: "8px",
+                                    cursor: 'pointer',
+                                    color: rating >= star ? 'gold' : 'gray',
+                                    fontSize: '24px',
+                                    marginRight: '8px',
                                   }}
                                   onClick={() => setRating(star)}
                                 >
@@ -1177,9 +1177,9 @@ export default function TechSupportPage() {
                           </>
                         ) : (
                           <div
-                            style={{ textAlign: "center", marginTop: "20px" }}
+                            style={{ textAlign: 'center', marginTop: '20px' }}
                           >
-                            <p style={{ color: "green", fontSize: "16px" }}>
+                            <p style={{ color: 'green', fontSize: '16px' }}>
                               ✅ Thank you for your feedback!
                             </p>
                           </div>
@@ -1191,7 +1191,7 @@ export default function TechSupportPage() {
                             setShowRatingForm(false);
                             setRatingSubmitted(false); // reset for next time
                           }}
-                          style={{ marginTop: "20px" }}
+                          style={{ marginTop: '20px' }}
                         >
                           ×
                         </button>
