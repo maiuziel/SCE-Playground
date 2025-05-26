@@ -2,6 +2,7 @@
 // authentication-service/src/data-access/db.js
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';
+console.log('🔍 Connection string:', process.env.POSTGRES_URI);
 
 export const sequelize = new Sequelize(process.env.POSTGRES_URI, {
   dialect: 'postgres',

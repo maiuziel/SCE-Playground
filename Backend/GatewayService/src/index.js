@@ -8,9 +8,16 @@ import gatewayRoutes from './routes/gatewayRoutes.js';
 import cors from 'cors'; 
 
 
+
 const app = express();
 const PORT = process.env.PORT || 4000;
-
+app.use(
+  '/support-requests',
+  createProxyMiddleware({
+    target: 'http://localhost:4002', // כי את מריצה את Customer-Service מקומית
+    changeOrigin: true
+  })
+);
 app.use(json());
 app.use(cors());
 
