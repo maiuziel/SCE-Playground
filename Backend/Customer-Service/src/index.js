@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import feedbackRouter from './routes/feedbackRoutes.js';
 
 import supportRequestRouter from './routes/customerRoutes.js';
 import customerRouter from './controllers/CustomerServiceController.js';
@@ -27,6 +28,8 @@ initDb()
 // 4️⃣ מטעינים את כל ה־routers
 app.use('/support-requests', supportRequestRouter);
 app.use('/customers', customerRouter);
+app.use('/feedback', feedbackRouter);
+
 
 const port = 4002;
 app.listen(port, () => {

@@ -1,4 +1,4 @@
-// frontend/src/App.jsx
+// App.jsx (מעודכן עם FeedbackPage)
 import React, { useContext, useEffect, useState } from 'react';
 import {
   BrowserRouter,
@@ -20,6 +20,7 @@ import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
 import SupportHistoryPage from './pages/SupportHistoryPage.jsx';
 import ManageRequestsPage from './pages/ManageRequestsPage.jsx';
 import RespondPage from './pages/RespondRequestPage.jsx';
+import FeedbackPage from './pages/FeedbackPage.jsx'; // ✅ חדש
 
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
@@ -77,7 +78,6 @@ function Navbar() {
 
         {user && (
   <>
-    {/* פעמון התראה רק ללקוח */}
     {user.role === 'client' && (
       <div
         className='notification-bell'
@@ -94,7 +94,6 @@ function Navbar() {
     <div className='user-circle'>{userInitial}</div>
   </>
 )}
-
       </div>
     </div>
   );
@@ -128,6 +127,7 @@ export default function App() {
             <Route path='/manage-requests' element={<ManageRequestsPage />} />
             <Route path='/respond/:id' element={<RespondPage />} />
             <Route path='/support-requests/:id/respond' element={<RespondPage />} />
+            <Route path='/feedback/:id' element={<FeedbackPage />} /> {/* ✅ עמוד דירוג חדש */}
           </Routes>
         </div>
       </BrowserRouter>
