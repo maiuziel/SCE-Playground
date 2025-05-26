@@ -55,7 +55,6 @@ export default function ManageRequestsPage() {
         Here you can update the status of each request and respond to customers.
       </p>
 
-      {/* 🔍 Filter by ID and Status */}
       <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <input
           type="number"
@@ -93,7 +92,7 @@ export default function ManageRequestsPage() {
             <th>ID</th>
             <th>Subject</th>
             <th>Description</th>
-            <th>Client Comment</th> {/* ✅ Displays latest comment */}
+            <th>Client Comment</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -138,7 +137,7 @@ export default function ManageRequestsPage() {
         .action-button {
           padding: 8px 16px;
           font-size: 14px;
-          background-color: #007bff;
+          background-color: #00aaff;
           color: white;
           border: none;
           border-radius: 6px;
@@ -147,7 +146,7 @@ export default function ManageRequestsPage() {
         }
 
         .action-button:hover {
-          background-color: #0056b3;
+          background-color: #0077cc;
         }
 
         .requests-table td,
