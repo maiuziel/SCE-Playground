@@ -2,6 +2,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import feedbackRouter from './routes/feedbackRoutes.js';
 
 
 import supportRequestRouter from './routes/customerRoutes.js';
@@ -28,6 +29,8 @@ initDb()
 
 app.use('/support-requests', supportRequestRouter);
 app.use('/customers', customerRouter);
+app.use('/feedback', feedbackRouter);
+
 
 const port = 4002;
 app.listen(port, () => {
