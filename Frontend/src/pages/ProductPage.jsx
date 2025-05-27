@@ -26,32 +26,32 @@ export default function ProductPage() {
   }, [id]);
   console.log('Product data from DB:', product);
 
-  // async function deleteProductById() {
-  //   const confirmDelete = window.confirm(
-  //     'האם אתה בטוח שברצונך למחוק את המוצר?'
-  //   );
-  //   if (!confirmDelete) return;
+  async function deleteProductById() {
+    const confirmDelete = window.confirm(
+      'האם אתה בטוח שברצונך למחוק את המוצר?'
+    );
+    if (!confirmDelete) return;
 
-  //   try {
-  //     const response = await api.delete(`/products/delete-product/${id}`);
-  //     alert('המוצר נמחק בהצלחה');
-  //     navigate('/products');
-  //   } catch (err) {
-  //     console.error('Error loading product', err);
-  //     alert('אירעה שגיאה במחיקת המוצר');
-  //   }
-  // }
+    try {
+      const response = await api.delete(`/products/delete-product/${id}`);
+      alert('המוצר נמחק בהצלחה');
+      navigate('/products');
+    } catch (err) {
+      console.error('Error loading product', err);
+      alert('אירעה שגיאה במחיקת המוצר');
+    }
+  }
 
-  // function EditProduct() {
-  //   const confirmEdit = window.confirm('האם אתה בטוח שברצונך לערוך את המוצר?');
-  //   if (!confirmEdit) return;
+  function EditProduct() {
+    const confirmEdit = window.confirm('האם אתה בטוח שברצונך לערוך את המוצר?');
+    if (!confirmEdit) return;
 
-  //   navigate(`/products/update-product/${id}`);
-  // }
+    navigate(`/products/update-product/${id}`);
+  }
 
-  // function ProductLeads() {
-  //   navigate(`/products/${id}/leads`);
-  // }
+  function ProductLeads() {
+    navigate(`/products/${id}/leads`);
+  }
 
   if (!product) return <div>Loading...</div>;
 
