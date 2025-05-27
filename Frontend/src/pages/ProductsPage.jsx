@@ -20,7 +20,6 @@ export default function ProductsPage() {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const { user, token } = useContext(StoreContext);
-  const decoded = jwtDecode(token);
 
   useEffect(() => {
     fetchProducts();
@@ -61,7 +60,7 @@ export default function ProductsPage() {
 
   return (
     <div className="product-container">
-      {user?.email === 'admin@gmail.com' && (
+      {true && ( //user?.email === 'admin@gmail.com'
         <div>
           <Button className="add-button" variant="primary" onClick={handleOpen}>
             +

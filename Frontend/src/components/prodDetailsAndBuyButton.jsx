@@ -19,26 +19,13 @@ export default function ProductPageUI({
 }) {
   const [selectedImage, setSelectedImage] = useState(product.image_url);
   const [showModal, setShowModal] = useState(false);
-<<<<<<< Updated upstream
   const allImages = [
     product.image_url,
-    ...(product.additional_images?.map((img) => img.image_url) || []),
+    ...(product.extra_images?.map((img) => img.image_url) || []),
   ];
-=======
-  const [additionalImages, setAdditionalImages] = useState(
-    product.additional_images
-  );
-  additionalImages;
-  console.log('additionalImages', additionalImages);
->>>>>>> Stashed changes
 
   const handleDownloadProduct = () => {
-    const link = document.createElement('a');
-    link.href = product.datasheet_url;
-    link.download = 'datasheet.pdf'; // אפשר לשנות לשם מתאים
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open(product.datasheet_url, '_blank');
   };
 
   return (
@@ -100,19 +87,11 @@ export default function ProductPageUI({
                 backgroundColor: 'transparent',
               }}
             >
-<<<<<<< Updated upstream
               {allImages.map((img, i) => (
                 <Image
                   key={i}
                   src={img}
                   onClick={() => setSelectedImage(img)}
-=======
-              {additionalImages.map((img, i) => (
-                <Image
-                  key={i}
-                  src={img.image_url}
-                  onClick={() => setSelectedImage(img.image_url)}
->>>>>>> Stashed changes
                   rounded
                   style={{
                     width: '80px',

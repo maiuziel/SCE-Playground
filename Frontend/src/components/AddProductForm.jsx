@@ -30,7 +30,7 @@ function AddProductForm({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === 'price' ? value.replace(/[^0-9.]/g, '') : value,
     }));
   };
 
@@ -47,9 +47,36 @@ function AddProductForm({
     setUploading(true);
 
     try {
+      const {
+        name,
+        category,
+        description,
+        price,
+        image_url,
+        datasheet_url,
+        extra_images,
+      } = formData;
+
+      const parsedPrice = parseFloat(price);
+      if (
+        !name.trim() ||
+        !category.trim() ||
+        !description.trim() ||
+        isNaN(parsedPrice) ||
+        parsedPrice <= 0 ||
+        !image_url ||
+        !datasheet_url ||
+        extra_images.length === 0
+      ) {
+        setError('נא למלא את כל השדות. המחיר חייב להיות מספר חיובי.');
+        setUploading(false);
+        return;
+      }
+
       const fullProduct = {
         ...formData,
-        extra_images: formData.extra_images.map((f) => f.url),
+        price: parsedPrice, // שלח כ־number אמיתי
+        extra_images: extra_images.map((f) => f.url),
       };
 
       if (onSubmit) {
@@ -79,9 +106,9 @@ function AddProductForm({
       }
 
       setTimeout(() => setSuccess(''), 4000);
-      console.log('Server response:', response.data);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      setError('אירעה שגיאה בשליחת הטופס');
     } finally {
       setUploading(false);
     }
@@ -163,6 +190,8 @@ function AddProductForm({
             step="1"
             name="price"
             value={formData.price}
+            defaultValue={0}
+            min={0}
             onChange={handleChange}
             placeholder="Enter price"
           />

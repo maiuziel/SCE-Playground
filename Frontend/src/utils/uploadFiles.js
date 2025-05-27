@@ -1,25 +1,25 @@
-export const uploadFiles = async (file, resourceType = 'image') => {
+export const uploadFiles = async (file) => {
   const formData = new FormData();
+  console.log(file);
+
   formData.append('file', file);
   formData.append('upload_preset', 'unsigned_upload');
 
-  const cloudName = 'deyb2gso9';
-  const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+  const isPDF = file.type === 'application/pdf' || file.name.endsWith('.pdf');
 
-  console.log('Uploading to Cloudinary:', file.name);
+  const resourceType = isPDF ? 'raw' : 'image';
 
-  const res = await fetch(url, {
+  const uploadUrl = `https://api.cloudinary.com/v1_1/deyb2gso9/${resourceType}/upload`;
+
+  const response = await fetch(uploadUrl, {
     method: 'POST',
     body: formData,
   });
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    console.error('Cloudinary upload error:', data);
+  if (!response.ok) {
     throw new Error('Upload failed');
   }
 
-  console.log('Upload success:', data.secure_url);
+  const data = await response.json();
   return data.secure_url;
 };
