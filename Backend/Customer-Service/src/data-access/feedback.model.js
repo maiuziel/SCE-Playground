@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../data-access/db.js';
-
+import { sequelize } from './db.js';
 export const Feedback = sequelize.define('Feedback', {
   rating: {
     type: DataTypes.INTEGER,

@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ManageRequestsPage() {
   const [requests, setRequests] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchId, setSearchId] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     loadRequests();
+    loadNotifications();
   }, []);
 
   const loadRequests = () => {
@@ -17,12 +19,16 @@ export default function ManageRequestsPage() {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch support requests');
-        return res.json();
-      })
+      .then(res => res.json())
       .then(setRequests)
       .catch(err => console.error('Error loading requests:', err));
+  };
+
+  const loadNotifications = () => {
+    fetch('http://localhost:4002/feedback/notifications')
+      .then(res => res.json())
+      .then(setNotifications)
+      .catch(err => console.error('Failed to load feedback notifications:', err));
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -46,6 +52,27 @@ export default function ManageRequestsPage() {
     }
   };
 
+  const handleViewFeedback = async (notif) => {
+    try {
+      const res = await fetch(`http://localhost:4002/feedback/notifications/${notif.id}/mark-read`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (res.ok) {
+        setNotifications(prev => prev.filter(n => n.id !== notif.id));
+        const { supportRequestId } = notif;
+
+        const feedbackRes = await fetch(`http://localhost:4000/feedback/by-request/${supportRequestId}`);
+        const feedback = await feedbackRes.json();
+
+        alert(`⭐ Rating: ${feedback.rating}/5\n📝 Comment: ${feedback.comment || 'No comment'}`);
+      }
+    } catch (err) {
+      console.error('Error viewing feedback:', err);
+    }
+  };
+
   const maxId = Math.max(...requests.map(r => r.id), 0);
 
   return (
@@ -54,6 +81,32 @@ export default function ManageRequestsPage() {
       <p className="page-description">
         Here you can update the status of each request and respond to customers.
       </p>
+
+      {notifications.length > 0 && (
+        <div style={{ background: '#fff3cd', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
+          <strong>📢 New Feedback Received!</strong>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {notifications.map(notif => (
+              <li key={notif.id} style={{ marginTop: '0.5rem' }}>
+                Request #{notif.supportRequestId}
+                <button
+                  onClick={() => handleViewFeedback(notif)}
+                  style={{
+                    marginLeft: '10px',
+                    backgroundColor: '#ffc107',
+                    border: 'none',
+                    padding: '6px 12px',
+                    borderRadius: '6px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  View Feedback
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <input

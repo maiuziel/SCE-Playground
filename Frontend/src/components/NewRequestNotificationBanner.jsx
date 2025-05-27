@@ -1,0 +1,61 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function NewRequestNotificationBanner() {
+  const [newRequestNotifs, setNewRequestNotifs] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('http://localhost:4002/support-requests/notifications');
+        const notifications = await res.json();
+
+        const newNotifs = notifications.filter(
+          (notif) => notif.type === 'new_request' && !notif.read
+        );
+
+        setNewRequestNotifs(newNotifs);
+      } catch (err) {
+        console.error('❌ Failed to fetch notifications:', err);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleClick = async () => {
+    try {
+      for (const notif of newRequestNotifs) {
+        await fetch(`http://localhost:4002/support-requests/notifications/${notif.id}/mark-read`, {
+          method: 'PATCH',
+        });
+      }
+
+      setNewRequestNotifs([]);
+      navigate('/manage-requests');
+    } catch (err) {
+      console.error('❌ Failed to mark notifications as read:', err);
+    }
+  };
+
+  if (newRequestNotifs.length === 0) return null;
+
+  return (
+    <div
+      className="notification-banner"
+      onClick={handleClick}
+      style={{
+        backgroundColor: '#ffefb4',
+        padding: '12px',
+        borderRadius: '10px',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        marginBottom: '16px',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+      }}
+    >
+      📬 A new support request has been received – Click here to manage it
+    </div>
+  );
+}

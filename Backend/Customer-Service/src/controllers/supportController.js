@@ -6,14 +6,25 @@ import { Notification } from '../data-access/notification.model.js';
 // POST /support-requests/
 export async function createSupportRequest(req, res) {
   const { subject, description } = req.body;
+
   try {
-    await SupportRequest.create({ subject, description });
+    const request = await SupportRequest.create({ subject, description });
+
+    // ✅ יצירת התראה חדשה לנציג שירות
+    await Notification.create({
+      type: 'new_request',
+      supportRequestId: request.id,
+      message: `📩 New support request #${request.id} received.`,
+      read: false
+    });
+
     res.status(201).json({ message: 'Support request received' });
   } catch (err) {
-    console.error('Error saving support request:', err);
+    console.error('❌ Error saving support request:', err);
     res.status(500).json({ message: 'Failed to save support request' });
   }
 }
+
 
 // GET /support-requests/
 export async function getSupportRequests(req, res) {
@@ -171,8 +182,7 @@ export async function getClientNotifications(req, res) {
     res.status(500).json({ message: 'Failed to fetch notifications' });
   }
 }
-// PATCH /support-requests/notifications/:id/mark-read
-// PATCH /notifications/:supportRequestId/mark-read
+
 export async function markNotificationAsRead(req, res) {
   const { id } = req.params;
 
@@ -189,5 +199,31 @@ export async function markNotificationAsRead(req, res) {
   } catch (err) {
     console.error('Error marking notification as read:', err);
     res.status(500).json({ message: 'Failed to mark notification as read' });
+  }
+}
+export async function getAgentFeedbackNotifications(req, res) {
+  try {
+    const notifications = await Notification.findAll({
+      where: {
+        type: 'new_feedback',
+        read: false
+      },
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(notifications);
+  } catch (err) {
+    console.error('Error fetching agent notifications:', err);
+    res.status(500).json({ message: 'Failed to fetch notifications' });
+  }
+}
+
+export async function markAgentNotificationAsRead(req, res) {
+  const { id } = req.params;
+  try {
+    await Notification.update({ read: true }, { where: { id } });
+    res.json({ message: 'Agent notification marked as read' });
+  } catch (err) {
+    console.error('Error marking agent notification as read:', err);
+    res.status(500).json({ message: 'Failed to update notification' });
   }
 }
