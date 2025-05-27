@@ -12,7 +12,7 @@ export default function FeedbackPage() {
   const submitFeedback = async () => {
     try {
       // שליחת הפידבק
-      await fetch('http://localhost:4000/feedback', {
+      await fetch('http://localhost:4002/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

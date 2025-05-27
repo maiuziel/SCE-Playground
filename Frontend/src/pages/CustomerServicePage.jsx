@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import AgentNotificationBanner from '../components/AgentNotificationBanner'; // ✅ ייבוא הקומפוננטה
+import AgentFeedbackBanner from '../components/AgentFeedbackBanner'; // 🔔 ייבוא
+import NewRequestNotificationBanner from '../components/NewRequestNotificationBanner';
 
 export default function CustomerServicePage() {
   const navigate = useNavigate();
@@ -8,7 +9,11 @@ export default function CustomerServicePage() {
   return (
     <div className="page-container">
       {/* ✅ הצגת באנר התראה אם קיימות פניות חדשות */}
-      <AgentNotificationBanner />
+      <NewRequestNotificationBanner />
+
+
+      <AgentFeedbackBanner /> {/* ✅ להציג התראות דירוג */}
+
 
       <h1 className="page-title">Customer Service Dashboard</h1>
 
