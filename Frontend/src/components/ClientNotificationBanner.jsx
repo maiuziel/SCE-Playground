@@ -29,7 +29,7 @@ export default function ClientNotificationBanner() {
   if (!newMessages.length) return null;
 
   return (
-    <div style={{ background: '#fff3cd', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
+    <div style={{ background: '#fff3cd', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', border: '1px solid #ffeeba' }}>
       <strong>📬 You have {newMessages.length} new message{newMessages.length > 1 ? 's' : ''} from support:</strong>
       <ul style={{ listStyle: 'none', padding: 0, marginTop: '0.5rem' }}>
         {newMessages.map(msg => (

@@ -35,27 +35,34 @@ export async function updateSupportRequestStatus(req, res) {
 
   try {
     const reqItem = await SupportRequest.findByPk(id);
-    if (!reqItem) return res.status(404).json({ message: 'Not found' });
+    if (!reqItem) {
+      console.warn(`❌ Request ID ${id} not found`);
+      return res.status(404).json({ message: 'Not found' });
+    }
 
     reqItem.status = status;
     await reqItem.save();
 
-    // ✅ יוצרת התראה אם סטטוס עודכן ל-done
-    if (status === 'done') {
-      await Notification.create({
+    console.log(`✅ Updated status for request #${id} to: ${status}`);
+
+    // ✅ יצירת התראה כאשר הסטטוס הוא "done"
+    if (status.toLowerCase() === 'closed') {
+      const notif = await Notification.create({
         type: 'feedback_prompt',
         supportRequestId: reqItem.id,
         message: 'Your request has been closed. Please rate your experience.',
         read: false,
       });
+      console.log(`📢 Notification created successfully for request #${reqItem.id}:`, notif.toJSON());
     }
 
     res.json({ message: 'Status updated' });
   } catch (err) {
-    console.error('Error updating status:', err);
+    console.error('❌ Error updating status:', err);
     res.status(500).json({ message: 'Failed to update status' });
   }
 }
+
 
 // PATCH /support-requests/:id/respond
 export async function respondToSupportRequest(req, res) {
@@ -162,5 +169,25 @@ export async function getClientNotifications(req, res) {
   } catch (err) {
     console.error('Error fetching notifications:', err);
     res.status(500).json({ message: 'Failed to fetch notifications' });
+  }
+}
+// PATCH /support-requests/notifications/:id/mark-read
+// PATCH /notifications/:supportRequestId/mark-read
+export async function markNotificationAsRead(req, res) {
+  const { id } = req.params;
+
+  try {
+    const notification = await Notification.findByPk(id);
+    if (!notification) {
+      return res.status(404).json({ message: 'Notification not found' });
+    }
+
+    notification.read = true;
+    await notification.save();
+
+    res.status(200).json({ message: 'Notification marked as read' });
+  } catch (err) {
+    console.error('Error marking notification as read:', err);
+    res.status(500).json({ message: 'Failed to mark notification as read' });
   }
 }
