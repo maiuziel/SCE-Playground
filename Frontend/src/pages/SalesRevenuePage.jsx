@@ -58,8 +58,8 @@ export default function SalesRevenuePage() {
         >
           💰 Get Total Revenue
         </button>
-        {typeof totalRevenue !== null && (
-            <p dir="ltr">Total Revenue: <strong>{totalRevenue} ₪</strong></p>
+        {totalRevenue !== null && (
+            <p>Total Revenue: <strong>{totalRevenue} ₪</strong></p>
         )}
       </div>
 

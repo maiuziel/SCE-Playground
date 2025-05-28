@@ -27,6 +27,8 @@ router.get('/doneRevenue/:id', controller.doneRevenueLead);
 router.get('/unDoneRevenue', controller.unDoneRevenueLead);
 
 router.get('/isOwner/:email', controller.isOwner);
+router.get('/getAllSalesPriceByTime', controller.getAllSalesPriceByTime);
+router.get('/getAllSalesPrice', controller.getAllSalesPrice);
 
 router.get('/reportByRep/:email', controller.reportByRep);
 router.get('/totalSalesByRep/:email', controller.totalSalesByRep);

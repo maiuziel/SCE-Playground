@@ -234,3 +234,13 @@ exports.getAllRepresentatives = async () => {
     return null;
   } 
 };
+
+exports.getAllSalesPrice = async () => {
+  const result = await pool.query('SELECT SUM(amount) AS total_amount FROM sales');
+  return result.rows[0];
+};
+
+exports.getAllSalesPriceByTime = async () => {
+  const result = await pool.query('SELECT (SELECT SUM(amount) FROM sales WHERE DATE(date) = CURRENT_DATE) AS total_today, (SELECT SUM(amount) FROM sales WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)) AS total_month, (SELECT SUM(amount) FROM sales WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE)) AS total_year');
+  return result.rows;
+};
