@@ -96,3 +96,11 @@ exports.totalSalesByRep = async(email) => {
 exports.getAllRepresentatives = async () => {
   return await salesDataAccess.getAllRepresentatives();
 };
+
+exports.getAllSalesPrice = async () => {
+  return await salesDataAccess.getAllSalesPrice();
+};
+
+exports.getAllSalesPriceByTime = async () => {
+  return await salesDataAccess.getAllSalesPriceByTime();
+};
