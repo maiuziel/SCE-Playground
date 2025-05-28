@@ -227,11 +227,11 @@ exports.totalSalesByRep = async(email) => {
 
 exports.getAllRepresentatives = async () => {
   try{
-    const result = await pool.query('SELECT * FROM sales_representatives ORDER BY firstName, lastName');
+    const result = await pool.query('SELECT email FROM sales_representatives ORDER BY email');
     return result.rows;
   }catch(error){
     console.error("DB access failed:", error);
-    return null;
+    return ;
   } 
 };
 
