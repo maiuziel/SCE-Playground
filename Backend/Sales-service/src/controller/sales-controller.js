@@ -220,3 +220,22 @@ exports.isOwner = async (req, res) => {
   }
 };
 
+exports.getAllSalesPrice = async(req, res) => {
+  try{
+    const price = await salesService.getAllSalesPrice();
+    res.json(price);
+  }catch (err) {
+    console.error('Error calculate price:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+};
+
+exports.getAllSalesPriceByTime = async(req, res) => {
+  try{
+    const price = await salesService.getAllSalesPriceByTime();
+    res.json(price);
+  }catch (err) {
+    console.error('Error calculate price:', err);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+};
