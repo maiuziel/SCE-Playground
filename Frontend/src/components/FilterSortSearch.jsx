@@ -8,23 +8,28 @@ function FilterSortSearch(props) {
       <Search
         allProducts={props.allProducts}
         setDisplayedProducts={props.setDisplayedProducts}
+        setFilteredProducts={props.setFilteredProducts}
         setLastSearchTerm={props.setLastSearchTerm}
       />
       <FilterOffcanvas
-        allProducts={props.allProducts}
         displayedProducts={props.displayedProducts}
         filteredProducts={props.filteredProducts}
-        setDisplayedProducts={props.setDisplayedProducts}
         setFilteredProducts={props.setFilteredProducts}
         isAdmin={props.isAdmin}
       />
-      <SortDropdown
-        displayedProducts={props.displayedProducts}
-        filteredProducts={props.filteredProducts}
-        setDisplayedProducts={props.setDisplayedProducts}
-        setFilteredProducts={props.setFilteredProducts}
-        isAdmin={props.isAdmin}
-      />
+      {props.filteredProducts.length > 0 ? (
+        <SortDropdown
+          productsToSort={props.filteredProducts}
+          setProductsToSort={props.setFilteredProducts}
+          isAdmin={props.isAdmin}
+        />
+      ) : (
+        <SortDropdown
+          productsToSort={props.displayedProducts}
+          setProductsToSort={props.setDisplayedProducts}
+          isAdmin={props.isAdmin}
+        />
+      )}
     </>
   );
 }

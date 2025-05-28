@@ -18,6 +18,7 @@ function Search(props) {
         product.name.toLowerCase().includes(searchTerm) ||
         product.description.toLowerCase().includes(searchTerm)
     );
+    props.setFilteredProducts([]);
     props.setDisplayedProducts(searched);
   }
 

@@ -12,10 +12,10 @@ import { useState } from 'react';
 
 export default function ProductPageUI({
   product,
+  user,
   onEdit,
   onDelete,
   onViewLeads,
-  user,
 }) {
   const [selectedImage, setSelectedImage] = useState(product.image_url);
   const [showModal, setShowModal] = useState(false);

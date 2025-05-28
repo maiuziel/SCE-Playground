@@ -5,10 +5,8 @@ import RangeSlider from './RangeSlider';
 import './buttons.css';
 
 const FilterOffcanvas = ({
-  allProducts,
   displayedProducts,
   filteredProducts,
-  setDisplayedProducts,
   setFilteredProducts,
   isAdmin,
 }) => {
@@ -17,32 +15,42 @@ const FilterOffcanvas = ({
     category: [],
     minPrice: 0,
     maxPrice: 0,
+    priceRangeMin: 0,
+    priceRangeMax: 0,
     minLeadCount: 0,
     maxLeadCount: 0,
+    leadRangeMin: 0,
+    leadRangeMax: 0,
   });
+
+  const productsToFilter =
+    filteredProducts.length > 0 ? filteredProducts : displayedProducts;
+
   const categories = [
     ...new Set(
-      displayedProducts
+      [...displayedProducts]
         .map((product) => product.category)
         .filter((category) => category)
     ),
   ];
   useEffect(() => {
     if (displayedProducts.length > 0) {
-      const prices = displayedProducts.map((product) => product.price);
-      const lead_counts = displayedProducts.map(
-        (product) => product.lead_count
-      );
+      const prices = displayedProducts.map((p) => p.price);
+      const leads = displayedProducts.map((p) => p.lead_count);
       const minP = Math.min(...prices);
       const maxP = Math.max(...prices);
-      const minL = Math.min(...lead_counts);
-      const maxL = Math.max(...lead_counts);
+      const minL = Math.min(...leads);
+      const maxL = Math.max(...leads);
       setFilters((prev) => ({
         ...prev,
         minPrice: minP,
         maxPrice: maxP,
+        priceRangeMin: minP,
+        priceRangeMax: maxP,
         minLeadCount: minL,
         maxLeadCount: maxL,
+        leadRangeMin: minL,
+        leadRangeMax: maxL,
       }));
     }
   }, [displayedProducts]);
@@ -60,7 +68,7 @@ const FilterOffcanvas = ({
 
     let filtered = [...displayedProducts];
 
-    if (category && category !== 'Choose Category') {
+    if (category.length > 0) {
       filtered = filtered.filter((product) =>
         filters.category.includes(product.category)
       );
@@ -81,20 +89,35 @@ const FilterOffcanvas = ({
     handleClose();
   };
 
-  const handlePriceChange = (newPriceRange) => {
-    setFilters({
-      ...filters,
-      minPrice: newPriceRange[0],
-      maxPrice: newPriceRange[1],
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+    const checked = e.target.checked;
+
+    setFilters((prev) => {
+      const updatedCategories = checked
+        ? [...prev.category, value]
+        : prev.category.filter((c) => c !== value);
+      return {
+        ...prev,
+        category: updatedCategories,
+      };
     });
   };
 
+  const handlePriceChange = (newPriceRange) => {
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: newPriceRange[0],
+      maxPrice: newPriceRange[1],
+    }));
+  };
+
   const handleLeadCountChange = (newLeadCountRange) => {
-    setFilters({
-      ...filters,
+    setFilters((prev) => ({
+      ...prev,
       minLeadCount: newLeadCountRange[0],
       maxLeadCount: newLeadCountRange[1],
-    });
+    }));
   };
 
   const handleClear = () => {
@@ -106,7 +129,7 @@ const FilterOffcanvas = ({
     const maxL = Math.max(...lead_counts);
 
     setFilters({
-      category: '',
+      category: [],
       minPrice: minP,
       maxPrice: maxP,
       minLeadCount: minL,
@@ -114,7 +137,6 @@ const FilterOffcanvas = ({
     });
 
     setFilteredProducts([]);
-    setDisplayedProducts(allProducts);
   };
 
   return (
@@ -148,16 +170,7 @@ const FilterOffcanvas = ({
                         checked={filters.category.includes(category)}
                         className="checkbox-right"
                         style={{ display: 'flex', gap: '0.5rem' }}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const checked = e.target.checked;
-                          setFilters((prev) => {
-                            const updatedCategories = checked
-                              ? [...prev.category, value]
-                              : prev.category.filter((c) => c !== value);
-                            return { ...prev, category: updatedCategories };
-                          });
-                        }}
+                        onChange={handleCategoryChange}
                       />
                     ))}
                   </Form.Group>

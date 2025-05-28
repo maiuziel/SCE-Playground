@@ -26,41 +26,54 @@ export default function ProductPage() {
   }, [id]);
   console.log('Product data from DB:', product);
 
-  // async function deleteProductById() {
-  //   const confirmDelete = window.confirm(
-  //     'האם אתה בטוח שברצונך למחוק את המוצר?'
-  //   );
-  //   if (!confirmDelete) return;
+  async function deleteProductById() {
+    const confirmDelete = window.confirm('Are you sure you want to delete?');
+    if (!confirmDelete) return;
 
-  //   try {
-  //     const response = await api.delete(`/products/delete-product/${id}`);
-  //     alert('המוצר נמחק בהצלחה');
-  //     navigate('/products');
-  //   } catch (err) {
-  //     console.error('Error loading product', err);
-  //     alert('אירעה שגיאה במחיקת המוצר');
-  //   }
-  // }
+    try {
+      const response = await api.delete(`/products/delete-product/${id}`);
+      alert('Product deleted successfully.');
+      navigate('/products');
+    } catch (err) {
+      console.error('Error loading product', err);
+      alert('Error: Product deletion failed.');
+    }
+  }
 
-  // function EditProduct() {
-  //   const confirmEdit = window.confirm('האם אתה בטוח שברצונך לערוך את המוצר?');
-  //   if (!confirmEdit) return;
+  function EditProduct() {
+    navigate(`/products/update-product/${id}`);
+  }
 
-  //   navigate(`/products/update-product/${id}`);
-  // }
+  function ProductLeads() {
+    navigate(`/products/${id}/leads`);
+  }
 
-  // function ProductLeads() {
-  //   navigate(`/products/${id}/leads`);
-  // }
-
-  if (!product) return <div>Loading...</div>;
+  if (!product)
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+          height: '100vh',
+        }}
+      >
+        Loading...
+      </div>
+    );
 
   return (
     <div className="product-page">
       <div className="product-container">
-        <ProductPageUI product={product} user={user} />
+        <ProductPageUI
+          product={product}
+          user={user}
+          onEdit={EditProduct}
+          onDelete={deleteProductById}
+          onViewLeads={ProductLeads}
+        />
       </div>
     </div>
   );
-  // };
 }
