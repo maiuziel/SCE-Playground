@@ -78,14 +78,7 @@ function App() {
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/reports" element={<ReportsPage />} />
-            <Route
-              path="/products"
-              element={
-                <ProtectedRoute>
-                  <ProductsPage />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:id" element={<ProductPage />} />
 
             <Route

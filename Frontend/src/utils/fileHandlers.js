@@ -12,7 +12,7 @@ export const handleMainImageChange = async (
   setUploading(true);
 
   try {
-    const url = await uploadFiles(file, 'image');
+    const url = await uploadFiles(file);
     setFormData((prev) => ({ ...prev, image_url: url }));
   } catch (err) {
     setError('Failed to upload main image');
@@ -33,7 +33,7 @@ export const handlePdfUpload = async (
   setUploading(true);
 
   try {
-    const url = await uploadFiles(file, 'raw');
+    const url = await uploadFiles(file);
     setFormData((prev) => ({ ...prev, datasheet_url: url }));
   } catch (err) {
     setError('Failed to upload PDF');

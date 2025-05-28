@@ -21,7 +21,7 @@ export default function ProductPageUI({
   const [showModal, setShowModal] = useState(false);
   const allImages = [
     product.image_url,
-    ...(product.additional_images?.map((img) => img.image_url) || []),
+    ...(product.extra_images?.map((img) => img.image_url) || []),
   ];
 
   const handleDownloadProduct = () => {

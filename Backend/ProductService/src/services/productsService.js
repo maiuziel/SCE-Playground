@@ -43,13 +43,35 @@ export const productsService = {
 
   async updateProductById(productId, updateData) {
     try {
-      const [updatedRows] = await Products.update(updateData, {
+      const { extra_images = [], ...productFields } = updateData;
+
+      const [updatedRows] = await Products.update(productFields, {
         where: { id: productId },
       });
+
       if (updatedRows === 0) {
-        throw new Error('Product not found or no changes made');
+        throw new Error('Product not found or no changes made!');
       }
-      return await Products.findByPk(productId);
+
+      await ProductsImages.destroy({
+        where: { product_id: productId },
+      });
+
+      for (const url of extra_images) {
+        await ProductsImages.create({
+          product_id: productId,
+          image_url: url,
+        });
+      }
+
+      const updatedProduct = await Products.findByPk(productId);
+      const additional_images = await ProductsImages.findAll({
+        where: { product_id: productId },
+      });
+      return {
+        ...updatedProduct.get({ plain: true }),
+        extra_images: additional_images,
+      };
     } catch (err) {
       console.error('Error updating product:', err);
       throw new Error('Failed to update product');
@@ -81,7 +103,10 @@ export const productsService = {
       });
       const productPlain = product.get({ plain: true });
 
-      const mergedProduct = { ...productPlain, additional_images };
+      const mergedProduct = {
+        ...productPlain,
+        extra_images: additional_images,
+      };
       if (!product) {
         throw new Error('Product not found');
       }
