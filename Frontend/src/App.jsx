@@ -17,15 +17,6 @@ function Navbar() {
   const { user, signOut, isLoading, isValidating } = useContext(StoreContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-        const publicPaths = [ '/createlead'];
-
-    if (!isLoading && !isValidating && !user  && !publicPaths.includes(location.pathname)) {
-      console.log('No valid user found after validation. Redirecting to /signin');
-      navigate('/signin');
-    }
-  }, [isLoading, isValidating, user, navigate]);
-
   function signUserOut() {
     signOut();
     navigate('/signin');
@@ -62,12 +53,12 @@ function Navbar() {
       <div className='nav-right'>
         <div className='nav-links'>
           <Link to='/'>Home</Link>
-          <Link to='/products'>Products</Link>
-          <Link to='/createlead'>Leads Generation</Link>
           {!user ? (
              <div className='nav-links'>
                <Link to='/signin'>Sign In</Link>
                <Link to='/signup'>Sign Up</Link>
+              <Link to='/createlead'>Leads Generation</Link>
+
              </div>
            ) : (
              <a onClick={signUserOut}>Sign out</a>
@@ -86,14 +77,26 @@ function App() {
         <Navbar />
         <div style={{ backgroundImage: 'url(/background.png)'  }}>
           <Routes>
-            <Route path='/' element={<HomePage />} />
+            <Route
+              path='/'
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/signup' element={<SignUpPage />} />
-            <Route path='/reports' element={<ReportsPage />} />
+            <Route
+              path='/reports'
+              element={
+                <ProtectedRoute>
+                  <ReportsPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path='/createlead' element={<LeadsGeneration />} />
             <Route path="/lead-manager" element={<LeadManager />} />
-           
-
             <Route
               path='/products'
               element={
