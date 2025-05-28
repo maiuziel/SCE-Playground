@@ -59,7 +59,7 @@ export default function SalesRevenuePage() {
           💰 Get Total Revenue
         </button>
         {totalRevenue !== null && (
-            <p>Total Revenue: <strong>{totalRevenue} ₪</strong></p>
+            <p>Total Revenue: <strong>{totalRevenue} $</strong></p>
         )}
       </div>
 
@@ -74,9 +74,9 @@ export default function SalesRevenuePage() {
         </button>
         {(timeRevenue.today !== null || timeRevenue.month !== null || timeRevenue.year !== null) && (
           <div>
-            <p>Today: <strong>{timeRevenue.today}</strong> ₪</p>
-            <p>This Month: <strong>{timeRevenue.month}</strong> ₪</p>
-            <p>This Year: <strong>{timeRevenue.year}</strong> ₪</p>
+            <p>Today: <strong>{timeRevenue.today}</strong> $</p>
+            <p>This Month: <strong>{timeRevenue.month}</strong> $</p>
+            <p>This Year: <strong>{timeRevenue.year}</strong> $</p>
           </div>
         )}
       </div>
