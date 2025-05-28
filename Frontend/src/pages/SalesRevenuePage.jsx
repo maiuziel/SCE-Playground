@@ -8,7 +8,8 @@ export default function SalesRevenuePage() {
   const fetchTotalRevenue = async () => {
     try {
       const res = await api.get('/sales/getAllSalesPrice');
-      setTotalRevenue(res.data.total);
+      console.log('Total Revenue Response:', res.data);
+      setTotalRevenue(res.data.total_amount);
     } catch (err) {
       console.error('Error fetching total revenue:', err);
     }
@@ -17,10 +18,11 @@ export default function SalesRevenuePage() {
   const fetchTimeRevenue = async () => {
     try {
       const res = await api.get('/sales/getAllSalesPriceByTime');
+      console.log('Total Revenue by time Response:', res.data);
       setTimeRevenue({
-        today: res.data.total_today,
-        month: res.data.total_month,
-        year: res.data.total_year
+        today: res.data[0].total_today,
+        month: res.data[0].total_month,
+        year: res.data[0].total_year
       });
     } catch (err) {
       console.error('Error fetching time-based revenue:', err);
@@ -56,8 +58,8 @@ export default function SalesRevenuePage() {
         >
           💰 Get Total Revenue
         </button>
-        {totalRevenue !== null && (
-          <p>Total Revenue: <strong>{totalRevenue}</strong> ₪</p>
+        {typeof totalRevenue !== null && (
+            <p dir="ltr">Total Revenue: <strong>{totalRevenue} ₪</strong></p>
         )}
       </div>
 
@@ -70,7 +72,7 @@ export default function SalesRevenuePage() {
         >
           🕒 Get Revenue By Time
         </button>
-        {timeRevenue.today !== null && (
+        {(timeRevenue.today !== null || timeRevenue.month !== null || timeRevenue.year !== null) && (
           <div>
             <p>Today: <strong>{timeRevenue.today}</strong> ₪</p>
             <p>This Month: <strong>{timeRevenue.month}</strong> ₪</p>
