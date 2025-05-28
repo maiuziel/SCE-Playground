@@ -10,7 +10,6 @@ import { jwtDecode } from 'jwt-decode';
 import ProductCard from '../components/ProductCard.jsx';
 import AddProductForm from '../components/AddProductForm';
 import FilterSortSearch from '../components/FilterSortSearch.jsx';
-import leads from './leads.js';
 
 export default function ProductsPage() {
   const [allProducts, setAllProducts] = useState([]);
@@ -30,11 +29,13 @@ export default function ProductsPage() {
     try {
       const response = await api.get('/products/read-all-products');
       console.log('products from API:', response.data);
+
+      const leads = await api.get('/products/read-all-leads');
       console.log('leads:', leads);
 
       const productsWithLeadCount = response.data.map((product) => {
         const count = leads.filter(
-          (lead) => Number(lead.product_id) === Number(product.id)
+          (lead) => Number(lead.product_interest) === Number(product.name)
         ).length;
         return {
           ...product,

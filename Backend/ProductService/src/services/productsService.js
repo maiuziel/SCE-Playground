@@ -2,6 +2,7 @@
 
 import { Products } from '../data-access/productsModel.js';
 import { ProductsImages } from '../data-access/productsImagesModel.js';
+import axios from 'axios';
 
 export const productsService = {
   async createProduct(productData) {
@@ -124,6 +125,18 @@ export const productsService = {
     } catch (err) {
       console.error('Error fetching products:', err);
       throw new Error('Failed to fetch products');
+    }
+  },
+
+  async fetchAllLeads() {
+    try {
+      const leads = await axios.get(
+        'https://sce-playground-leads-server.onrender.com/getall'
+      );
+      return leads.data;
+    } catch (err) {
+      console.error('Error fetching leads from Lead Service:', err.message);
+      throw new Error(`Failed to fetch leads: ${err.message}`);
     }
   },
 };
