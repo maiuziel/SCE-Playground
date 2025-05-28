@@ -3,6 +3,7 @@ import { Form, Button, Container, Alert, Spinner } from 'react-bootstrap';
 import api from '../services/api';
 import { handleMainImageChange, handlePdfUpload } from '../utils/fileHandlers';
 import { uploadFiles } from '../utils/uploadFiles';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function AddProductForm({
   onProductAdded,
@@ -25,6 +26,12 @@ function AddProductForm({
   const [uploading, setUploading] = useState(false);
   const mainImageInputRef = useRef(null);
   const pdfInputRef = useRef(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const editHandleClose = () => {
+    navigate(`/products/${id}`);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -336,7 +343,7 @@ function AddProductForm({
           </Button>
           <Button
             variant="secondary"
-            onClick={handleClose}
+            onClick={!onSubmit ? handleClose : editHandleClose}
             disabled={uploading}
             className="me-2"
           >
