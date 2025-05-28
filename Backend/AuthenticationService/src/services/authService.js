@@ -34,31 +34,6 @@ export const authService = {
   },
 
   async signin(email, password) {
-    if (
-      (email === 'aaa@gmail.com' && password === 'aaa') ||
-      (email === 'admin@gmail.com' && password === 'admin')
-    ) {
-      const token = jwt.sign(
-        {
-          id: 'hardcoded-id',
-          email: 'admin@gmail.com',
-          firstName: 'Hard',
-          lastName: 'Coded',
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '7d' }
-      );
-
-      return {
-        user: {
-          id: 'hardcoded-id',
-          email: 'admin@gmail.com',
-          firstName: 'Hard',
-          lastName: 'Coded',
-        },
-        token,
-      };
-    }
     // Find user
     const user = await User.findOne({ where: { email } });
     if (!user) {
