@@ -31,11 +31,11 @@ export default function ProductsPage() {
       console.log('products from API:', response.data);
 
       const leads = await api.get('/products/read-all-leads');
-      console.log('leads:', leads);
+      console.log('leads:', leads.data);
 
       const productsWithLeadCount = response.data.map((product) => {
-        const count = leads.filter(
-          (lead) => Number(lead.product_interest) === Number(product.name)
+        const count = leads.data.filter(
+          (lead) => lead.product_interest === product.name
         ).length;
         return {
           ...product,
