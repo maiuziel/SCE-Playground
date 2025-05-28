@@ -30,7 +30,7 @@ export default function ProductsPage() {
       const response = await api.get('/products/read-all-products');
       console.log('products from API:', response.data);
 
-      const leads = await api.get('/products/read-all-leads');
+      const leads = (await api.get('/products/read-all-leads')).data;
       console.log('leads:', leads);
 
       const productsWithLeadCount = response.data.map((product) => {
