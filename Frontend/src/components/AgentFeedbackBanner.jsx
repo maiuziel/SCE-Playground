@@ -1,4 +1,3 @@
-// src/components/AgentFeedbackBanner.jsx
 import React, { useEffect, useState } from 'react';
 
 export default function AgentFeedbackBanner() {
@@ -29,7 +28,8 @@ export default function AgentFeedbackBanner() {
   };
 
   const handleView = (n) => {
-    let msg = `⭐ Feedback for request #${n.supportRequestId}\n\nRating: ${n.rating || 'N/A'} / 5`;
+    const ratingText = typeof n.rating === 'number' ? `${n.rating} / 5` : 'N/A / 5';
+    let msg = `⭐ Feedback for request #${n.supportRequestId}\n\nRating: ${ratingText}`;
     if (n.comment) msg += `\nComment: ${n.comment}`;
     window.alert(msg);
     markAsRead(n.id);
