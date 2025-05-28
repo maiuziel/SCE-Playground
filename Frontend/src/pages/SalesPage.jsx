@@ -92,6 +92,9 @@ export default function SalesPage() {
   <button className="SalesForecastbtn" onClick={() => navigate('/SalesForecastPage')}>
     Sales Forecast
   </button>
+  <button className="SalesForecastbtn" onClick={() => navigate('/SalesRevenuePage')}>
+    Sales Revenue
+  </button>
 
 
 </div>

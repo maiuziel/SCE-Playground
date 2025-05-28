@@ -9,6 +9,7 @@ import SalesPage from './pages/SalesPage.jsx';
 import SalesConverstaionPage from './pages/SalesConverstaionPage.jsx';
 import SalesSearchHistoryPage from './pages/SalesSearchHistoryPage.jsx';
 import SalesForecastPage from './pages/SalesForecastPage.jsx';
+import SalesRevenuePage from './pages/SalesRevenuePage.jsx';
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
@@ -70,6 +71,7 @@ function App() {
             <Route path='/salesSearchHistory' element={<SalesSearchHistoryPage />}/>
             <Route path='/SalesLeadsPage' element={<SalesLeadsPage />}/>
             <Route path='/SalesForecastPage' element={<SalesForecastPage/>}/>
+            <Route path='/SalesRevenuePage' element={<SalesRevenuePage/>}/>
 
             <Route
               path='/products'
