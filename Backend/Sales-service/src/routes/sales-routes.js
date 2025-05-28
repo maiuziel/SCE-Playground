@@ -26,6 +26,8 @@ router.post('/unassignLead', controller.unassignLead);
 router.get('/doneRevenue/:id', controller.doneRevenueLead);
 router.get('/unDoneRevenue', controller.unDoneRevenueLead);
 
+router.get('/isOwner/:email', controller.isOwner);
+
 
 
 

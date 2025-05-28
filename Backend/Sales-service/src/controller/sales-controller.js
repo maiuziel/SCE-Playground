@@ -207,3 +207,16 @@ exports.unDoneRevenueLead = async(req, res) => {
   }
 };
 
+exports.isOwner = async(req, res) =>{
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ error: 'Missing email' });
+
+  try {
+    const isRep = await salesService.isOwner(email);
+    res.status(200).json({ isRep });
+  } catch (error) {
+    console.error('DB error in isOwner:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+

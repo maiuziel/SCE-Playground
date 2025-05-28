@@ -79,3 +79,7 @@ exports.doneRevenue = async(leadId) => {
 exports.unDoneRevenue = async() => {
   return await salesDataAccess.unDoneRevenue();
 };
+
+exports.isOwner = async (email) => {
+  return await salesDataAccess.isOwner(email);
+};

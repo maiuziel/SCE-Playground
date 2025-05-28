@@ -190,3 +190,12 @@ exports.unDoneRevenue = async() => {
   );
   return result.rows[0];
 };
+
+isOwner
+exports.isOwner = async (email) => {
+  const result = await pool.query(
+    'SELECT * FROM sales_representatives WHERE email = $1 AND title = $2',
+    [email, 'Business owner']
+  );
+  return result.rows.length > 0;
+};
