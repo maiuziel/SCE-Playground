@@ -50,7 +50,6 @@ function Navbar() {
       <div className='nav-right'>
         <div className='nav-links'>
           <Link to='/'>Home</Link>
-          <Link to='/products'>Products</Link>
           {!user ? (
             <div className='nav-links'>
               <Link to='/signin'>Sign In</Link>
