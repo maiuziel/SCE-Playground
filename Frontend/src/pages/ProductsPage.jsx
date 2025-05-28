@@ -16,6 +16,7 @@ export default function ProductsPage() {
   const [allProducts, setAllProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filtersOn, setFiltersOn] = useState(false);
   const [lastSearchTerm, setLastSearchTerm] = useState('');
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -86,6 +87,7 @@ export default function ProductsPage() {
             allProducts={allProducts}
             displayedProducts={displayedProducts}
             filteredProducts={filteredProducts}
+            setFiltersOn={setFiltersOn}
             setDisplayedProducts={setDisplayedProducts}
             setFilteredProducts={setFilteredProducts}
             setLastSearchTerm={setLastSearchTerm}
@@ -107,27 +109,30 @@ export default function ProductsPage() {
               Search results for: '{lastSearchTerm}'
             </div>
           )}
-
-          <div className="product-list">
-            <div className="products-catalog">
-              {(filteredProducts.length > 0
-                ? filteredProducts
-                : displayedProducts
-              ).map((product) => (
-                <div key={product.id}>
-                  <ProductCard
-                    id={product.id}
-                    name={product.name}
-                    category={product.category}
-                    img={product.image_url}
-                    price={product.price}
-                    lead_count={product.lead_count}
-                    isAdmin={user?.email === 'admin@gmail.com'}
-                  />
-                </div>
-              ))}
+          {filteredProducts.length === 0 && filtersOn ? (
+            <div className="no-results-message">No results found</div>
+          ) : (
+            <div className="product-list">
+              <div className="products-catalog">
+                {(filteredProducts.length > 0 || filtersOn
+                  ? filteredProducts
+                  : displayedProducts
+                ).map((product) => (
+                  <div key={product.id}>
+                    <ProductCard
+                      id={product.id}
+                      name={product.name}
+                      category={product.category}
+                      img={product.image_url}
+                      price={product.price}
+                      lead_count={product.lead_count}
+                      isAdmin={user?.email === 'admin@gmail.com'}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </>
       ) : allProducts.length > 0 ? (
         <div className="no-results-message">No results found</div>

@@ -9,6 +9,7 @@ const FilterOffcanvas = ({
   filteredProducts,
   setFilteredProducts,
   isAdmin,
+  setFiltersOn,
 }) => {
   const [show, setShow] = useState(false);
   const [filters, setFilters] = useState({
@@ -84,7 +85,7 @@ const FilterOffcanvas = ({
         product.lead_count >= Number(minLeadCount) &&
         product.lead_count <= Number(maxLeadCount)
     );
-
+    setFiltersOn(true);
     setFilteredProducts(filtered);
     handleClose();
   };
@@ -136,6 +137,7 @@ const FilterOffcanvas = ({
       maxLeadCount: maxL,
     });
 
+    setFiltersOn(false);
     setFilteredProducts([]);
   };
 

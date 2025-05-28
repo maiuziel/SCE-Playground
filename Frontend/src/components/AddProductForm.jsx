@@ -68,14 +68,16 @@ function AddProductForm({
         !datasheet_url ||
         extra_images.length === 0
       ) {
-        setError('נא למלא את כל השדות. המחיר חייב להיות מספר חיובי.');
+        setError(
+          'Please fill in all fields. The price must be a positive number.'
+        );
         setUploading(false);
         return;
       }
 
       const fullProduct = {
         ...formData,
-        price: parsedPrice, // שלח כ־number אמיתי
+        price: parsedPrice,
         extra_images: extra_images.map((f) => f.url),
       };
 
@@ -108,7 +110,7 @@ function AddProductForm({
       setTimeout(() => setSuccess(''), 4000);
     } catch (err) {
       console.error(err);
-      setError('אירעה שגיאה בשליחת הטופס');
+      setError('An error occurred while submitting the form.');
     } finally {
       setUploading(false);
     }

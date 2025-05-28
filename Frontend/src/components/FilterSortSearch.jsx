@@ -16,6 +16,7 @@ function FilterSortSearch(props) {
         filteredProducts={props.filteredProducts}
         setFilteredProducts={props.setFilteredProducts}
         isAdmin={props.isAdmin}
+        setFiltersOn={props.setFiltersOn}
       />
       {props.filteredProducts.length > 0 ? (
         <SortDropdown
