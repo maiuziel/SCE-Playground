@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api.js';
 import { useNavigate } from 'react-router-dom';
-import { StoreContext } from '../store/StoreContext.jsx';
-import { useContext } from 'react';
 
 export default function SalesPage() {
 
@@ -14,12 +12,9 @@ export default function SalesPage() {
   const [products, setProducts] = useState('');
   const [notes, setNotes] = useState('');
   const [result, setResult] = useState(null);
-  const [isSalesRep, setIsSalesRep] = useState(null); // null = עדיין בטעינה
-  const [isOwner, setIsOwner] = useState(null); // נבדוק גם אם בעל עסק
+  const [isSalesRep, setIsSalesRep] = useState(null); //null כדי לדעת מתי הבדיקה עדיין לא הסתיימה
 
-  //const user = JSON.parse(localStorage.getItem('user'));
-  const { user } = useContext(StoreContext);
-
+  const user = JSON.parse(localStorage.getItem('user'));
   if (user) {
     console.log('connected:', user.email);
   }
@@ -30,29 +25,13 @@ export default function SalesPage() {
         try {
           const res = await api.get(`sales/representatives/is-rep?email=${user.email}`);
           setIsSalesRep(res.data.isRep);
-          console.log(res.data.isRep);
         } catch (err) {
           console.error('Failed to check if sales rep:', err);
-          setIsSalesRep(false);
+          setIsSalesRep(false); // ברירת מחדל במקרה של שגיאה
         }
       }
     }
-
-    async function checkOwner() {
-      if (user?.email) {
-        try {
-          const res = await api.get(`sales/isOwner/${user.email}`);
-          console.log('Owner check:', res.data);
-          setIsOwner(res.data.isOwner); // הנח שיש שדה isOwner בתגובה
-        } catch (err) {
-          console.error('Failed to check if owner:', err);
-          setIsOwner(false);
-        }
-      }
-    }
-
     checkSalesRep();
-    checkOwner();
   }, [user?.email]);
 
   const handleSubmit = async (e) => {
@@ -84,43 +63,44 @@ export default function SalesPage() {
     }
   };
 
-  
   if (isSalesRep === null) {
-    return <p>Checking permissions...</p>;
+    return <p>Checking permissions...</p>; // עדיין טוען
   }
 
   if (!isSalesRep) {
     console.log(user.email);
-    return <p>You are not authorized to access this page.</p>;
+    return <p>You are not authorized to access this page.</p>; // לא איש מכירות
   }
-    
 
   return(
+    
     <div className='sales-container'>
       <h1>Welcome to Sales.</h1>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <button className="addSalesConverstaionBtn"
-          onClick={() => navigate('/salesConverstaion')}>
-          Add conversation
-        </button>
-        <button className="addSalesConverstaionBtn"
-          onClick={() => navigate('/SalesLeadsPage')}>
-          Leads
-        </button>
-        <button className="searchSaleHistorybtn" onClick={() => navigate('/salesSearchHistory')}>
-          Search Sale History
-        </button>
-        <button className="SalesForecastbtn" onClick={() => navigate('/SalesForecastPage')}>
-          Sales Forecast
-        </button>
-        {isOwner && (
-          <button className="SalesForecastbtn" onClick={() => navigate('/SalesRevenuePage')}>
-            Sales Revenue
-          </button>
-        )}
-      </div>
+  <button className="addSalesConverstaionBtn"
+    onClick={() => navigate('/salesConverstaion')}>
+    Add conversation
+  </button>
+  <button className="addSalesConverstaionBtn"
+    onClick={() => navigate('/SalesLeadsPage')}>
+    Leads
+  </button>
+  <button className="searchSaleHistorybtn" onClick={() => navigate('/salesSearchHistory')}>
+  Search Sale History
+  </button>
+  <button className="SalesForecastbtn" onClick={() => navigate('/SalesForecastPage')}>
+    Sales Forecast
+  </button>
+
+
+</div>
+
+
     </div>
+    
   );
 
+
+  
 }
