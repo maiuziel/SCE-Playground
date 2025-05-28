@@ -119,6 +119,11 @@ export default function SalesPage() {
             Sales Revenue
           </button>
         )}
+      {isOwner && (
+        <button className="SalesForecastbtn" onClick={() => navigate('/reports')}>
+          Sales Reports
+        </button>
+      )}
       </div>
     </div>
   );

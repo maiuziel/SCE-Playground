@@ -198,3 +198,34 @@ exports.isOwner = async (email) => {
   );
   return result.rows.length > 0;
 };
+
+exports.reportByRep = async(email) => {
+  try {
+    const result = await pool.query(
+      'SELECT sales.id, sales.product, sales.amount, sales.customer_id, sales.date FROM sales WHERE rep_mail=$1 ORDER BY date DESC',
+      [email]  // Note: Add the comma after the query string
+    );
+    return result.rows;
+  } catch(err) {
+    console.error("Error querying representative report:", err);
+    return null;
+  }
+};
+
+exports.totalSalesByRep = async(email) => {
+  try {
+    const result = await pool.query(
+      'SELECT SUM(sales.amount) FROM sales WHERE sales.rep_mail = $1',
+      [email]  // Note: Add the comma after the query string
+    );
+    return result.rows[0];
+  } catch(err) {
+    console.error("Error querying representative total sales:", err);
+    return null;
+  }
+};
+
+exports.getAllRepresentatives = async () => {
+  const result = await pool.query('SELECT * FROM sales_representatives ORDER BY firstName, lastName');
+  return result.rows;
+};

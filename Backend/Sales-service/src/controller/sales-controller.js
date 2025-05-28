@@ -220,3 +220,35 @@ exports.isOwner = async (req, res) => {
   }
 };
 
+exports.getAllRepresentatives = async (req, res) => {
+  try {
+    const representatives = await salesService.getAllRepresentatives();
+    res.status(200).json(representatives);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get representatives' });
+  }
+};
+
+
+exports.reportByRep = async (req, res) => {
+  try{
+    const email = req.params.email;
+    const repReport = await salesService.reportByRep(email);
+    res.status(200).json(repReport);
+  }catch(error){
+    console.error('DB error in reportByRep:',error)
+    res.status(500).json({error: 'Internal server error'});
+  }
+};
+
+exports.totalSalesByRep = async (req, res) => {
+  try{
+    const email = req.params.email;
+    const repTotal = await salesService.totalSalesByRep(email);
+    res.status(200).json(repTotal);
+  }catch(error){
+    console.error('DB totalSalesByRep:',error)
+    res.status(500).json({error: 'Internal server error'});
+  }
+};
+

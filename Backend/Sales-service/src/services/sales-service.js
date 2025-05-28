@@ -83,3 +83,16 @@ exports.unDoneRevenue = async() => {
 exports.isOwner = async (email) => {
   return await salesDataAccess.isOwner(email);
 };
+
+
+exports.reportByRep = async(email) => {
+  return await salesDataAccess.reportByRep(email);
+};
+
+exports.totalSalesByRep = async(email) => {
+  return await salesDataAccess.totalSalesByRep(email);
+};
+
+exports.getAllRepresentatives = async () => {
+  return await salesDataAccess.getAllRepresentatives();
+};

@@ -17,6 +17,7 @@ import ReportsPage from './pages/ReportsPage.jsx';
 import SalesLeadsPage from  './pages/SalesLeadsPage.jsx';
 
 
+
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
   const navigate = useNavigate();
@@ -72,6 +73,8 @@ function App() {
             <Route path='/SalesLeadsPage' element={<SalesLeadsPage />}/>
             <Route path='/SalesForecastPage' element={<SalesForecastPage/>}/>
             <Route path='/SalesRevenuePage' element={<SalesRevenuePage/>}/>
+            <Route path='/reports' element={<ReportsPage />} />
+
 
             <Route
               path='/products'

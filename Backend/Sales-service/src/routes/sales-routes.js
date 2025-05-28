@@ -28,6 +28,10 @@ router.get('/unDoneRevenue', controller.unDoneRevenueLead);
 
 router.get('/isOwner/:email', controller.isOwner);
 
+router.get('/reportByRep/:email', controller.reportByRep);
+router.get('/totalSalesByRep/:email', controller.totalSalesByRep);
+router.get('/representatives', controller.getAllRepresentatives);
+
 
 
 
