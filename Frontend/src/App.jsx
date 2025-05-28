@@ -14,13 +14,6 @@ function Navbar() {
   const { user, signOut, isLoading, isValidating } = useContext(StoreContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isLoading && !isValidating && !user) {
-      console.log('No valid user found after validation. Redirecting to /signin');
-      navigate('/signin');
-    }
-  }, [isLoading, isValidating, user, navigate]);
-
   function signUserOut() {
     signOut();
     navigate('/signin');
@@ -80,10 +73,24 @@ function App() {
         <Navbar />
         <div style={{ backgroundImage: 'url(/background.png)' }}>
           <Routes>
-            <Route path='/' element={<HomePage />} />
+            <Route
+              path='/'
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/signup' element={<SignUpPage />} />
-            <Route path='/reports' element={<ReportsPage />} />
+            <Route
+              path='/reports'
+              element={
+                <ProtectedRoute>
+                  <ReportsPage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path='/products'
               element={
