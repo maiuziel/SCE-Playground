@@ -13,7 +13,7 @@ const forwardAuthRequests = async (req, res, next) => {
     console.log('Forwarding request to ' + url, ' body: ' + req.body);
 
     // Forward the exact method and body
-    const response = await axios({
+    const response = await axios.request({
       method: req.method,
       url,
       data: req.body
@@ -32,6 +32,15 @@ const forwardAuthRequests = async (req, res, next) => {
     return next(error);
   }
 };
+
+export async function ping(req, res, next) {
+  try {
+    return res.status(200).json({ message: 'pong' });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 
 // gateway-service/src/controllers/gatewayController.js
 const forwardSalesRequests = async (req, res, next) => {
@@ -73,5 +82,14 @@ const forwardSalesRequests = async (req, res, next) => {
   
 };
 
+/*
+export async function ping(req, res, next) {
+  try {
+    return res.status(200).json({ message: 'pong' });
+  } catch (error) {
+    return next(error);
+  }
+}
+  */
 
 export { forwardAuthRequests,forwardSalesRequests };

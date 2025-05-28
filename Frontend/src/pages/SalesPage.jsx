@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api.js';
 import { useNavigate } from 'react-router-dom';
+import { StoreContext } from '../store/StoreContext.jsx';
+import { useContext } from 'react';
 
 export default function SalesPage() {
 
@@ -15,7 +17,9 @@ export default function SalesPage() {
   const [isSalesRep, setIsSalesRep] = useState(null); // null = עדיין בטעינה
   const [isOwner, setIsOwner] = useState(null); // נבדוק גם אם בעל עסק
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  //const user = JSON.parse(localStorage.getItem('user'));
+  const { user } = useContext(StoreContext);
+
   if (user) {
     console.log('connected:', user.email);
   }
@@ -26,6 +30,7 @@ export default function SalesPage() {
         try {
           const res = await api.get(`sales/representatives/is-rep?email=${user.email}`);
           setIsSalesRep(res.data.isRep);
+          console.log(res.data.isRep);
         } catch (err) {
           console.error('Failed to check if sales rep:', err);
           setIsSalesRep(false);
@@ -79,6 +84,7 @@ export default function SalesPage() {
     }
   };
 
+  
   if (isSalesRep === null) {
     return <p>Checking permissions...</p>;
   }
@@ -87,6 +93,7 @@ export default function SalesPage() {
     console.log(user.email);
     return <p>You are not authorized to access this page.</p>;
   }
+    
 
   return(
     <div className='sales-container'>
