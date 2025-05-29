@@ -67,7 +67,7 @@ export default function ReportsPage() {
     setLoading(true);
     try {
       // This would require a new endpoint in your backend
-      const res = await api.get(`/sales/reportByRepMonthly/${selectedRep}`);
+      const res = await api.get(`/sales/reportByRepMonthly/${email}`);
       setMonthlyData(res.data || []);
       setShowCharts(false);
       setShowAllReps(false);
