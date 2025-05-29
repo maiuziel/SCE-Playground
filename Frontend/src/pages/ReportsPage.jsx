@@ -107,20 +107,36 @@ export default function ReportsPage() {
   };
 
   const handleAllRepsSales = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/sales/allRepresentativesSales');
-      setAllRepsSales((res.data || []).sort((a, b) => b.total_amount - a.total_amount));
-      setShowAllReps(true);
-      setShowCharts(false);
-    } catch (error) {
-      console.error('Failed to fetch all representatives sales:', error);
-      alert('Failed to load all representatives sales');
-      setAllRepsSales([]);
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const allSales = [];
+
+    for (const rep of representatives) {
+      const email = rep.email;
+      const salesRes = await api.get(`/sales/reportByRep/${email}`);
+      const sales = salesRes.data || [];
+      const totalAmount = sales.reduce((sum, s) => sum + parseFloat(s.amount), 0);
+
+      allSales.push({
+        name: `${rep.firstName} ${rep.lastName}`,
+        email,
+        total_amount: totalAmount,
+        count: sales.length,
+      });
     }
-  };
+
+    setAllRepsSales(allSales.sort((a, b) => b.total_amount - a.total_amount));
+    setShowAllReps(true);
+    setShowCharts(false);
+  } catch (error) {
+    console.error('Failed to fetch all representatives sales:', error);
+    alert('Failed to load all representatives sales');
+    setAllRepsSales([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleShowCharts = () => {
     if (!selectedRep && !showAllReps) return alert('Please select a representative or show all representatives data first');
@@ -168,30 +184,29 @@ export default function ReportsPage() {
   );
 
   const renderAllRepsSales = () => (
-    <div>
-      <h3>All Representatives Sales</h3>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th style={tableHeaderStyle}>Representative</th>
-            <th style={tableHeaderStyle}>Email</th>
-            <th style={tableHeaderStyle}>Total Sales</th>
-            <th style={tableHeaderStyle}>Number of Sales</th>
+  <div>
+    <h3>All Representatives Sales</h3>
+    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <thead>
+        <tr>
+          <th style={tableHeaderStyle}>Email</th>
+          <th style={tableHeaderStyle}>Total Sales</th>
+          <th style={tableHeaderStyle}>Number of Sales</th>
+        </tr>
+      </thead>
+      <tbody>
+        {allRepsSales.map((rep, index) => (
+          <tr key={index}>
+            <td style={tableCellStyle}>{rep.email}</td>
+            <td style={tableCellStyle}>${parseFloat(rep.total_amount).toFixed(2)}</td>
+            <td style={tableCellStyle}>{rep.count}</td>
           </tr>
-        </thead>
-        <tbody>
-          {allRepsSales.map((rep, index) => (
-            <tr key={index}>
-              <td style={tableCellStyle}>{rep.name || rep.email}</td>
-              <td style={tableCellStyle}>{rep.email}</td>
-              <td style={tableCellStyle}>${parseFloat(rep.total_amount).toFixed(2)}</td>
-              <td style={tableCellStyle}>{rep.count}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
 
   return (
     <div style={{ padding: '20px' }}>
