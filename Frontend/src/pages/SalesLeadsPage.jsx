@@ -97,19 +97,25 @@ export default function SalesLeadsPage() {
       });
 
       if (res.status === 200) {
-        const updatedLeads = leads.map(lead =>
-          lead.lead_id === leadId ? { ...lead, status: 'done' } : lead
-        );
-        setLeads(updatedLeads);
         alert('Lead marked as done!');
+
+        // טען את הלידים מחדש לפי התצוגה הנוכחית
+        if (isPersonalView) {
+          await fetchMyLeads();
+        } else if (showActiveOnly) {
+          await showActiveLeads();
+        } else {
+          await fetchAllLeads();
+        }
       }
-    } catch (error) {
+    }   catch (error) {
       console.error('Error updating lead status: ', error);
       alert('Error updating lead status. Please try again.');
-    } finally {
+    }   finally {
       setLoading(false);
     }
   };
+
 
   const unassignLead = async (leadId) => {
     setLoading(true);
