@@ -1,6 +1,5 @@
 import express from 'express';
 
-
 import dotenv from 'dotenv';
 import leadsRoutes from './routes/leadsRoutes.js';
 import app from './app.js';
