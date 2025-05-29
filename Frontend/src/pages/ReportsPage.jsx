@@ -199,22 +199,25 @@ export default function ReportsPage() {
       <thead>
         <tr>
           <th style={tableHeaderStyle}>Email</th>
-          <th style={tableHeaderStyle}>Total Sales</th>
-          <th style={tableHeaderStyle}>Number of Sales</th>
+          <th style={tableHeaderStyle}>Total Sales Amount</th>
+          <th style={tableHeaderStyle}>Average Sale Amount</th>
         </tr>
       </thead>
       <tbody>
         {allRepsSales.map((rep, index) => (
           <tr key={index}>
             <td style={tableCellStyle}>{rep.email}</td>
-            <td style={tableCellStyle}>${parseFloat(rep.total_amount).toFixed(2)}</td>
-            <td style={tableCellStyle}>{rep.count}</td>
+            <td style={tableCellStyle}>${rep.total_amount.toFixed(2)}</td>
+            <td style={tableCellStyle}>
+              {rep.count > 0 ? `$${(rep.total_amount / rep.count).toFixed(2)}` : 'N/A'}
+            </td>
           </tr>
         ))}
       </tbody>
     </table>
   </div>
 );
+
 
 
   return (
