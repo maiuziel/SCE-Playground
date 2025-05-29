@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../App.css'; // for .loader-overlay and .spinner
+import { useEffect } from 'react';
+
 
 export default function LeadsGeneration() {
   const [fullName, setFullName]       = useState('');
@@ -12,6 +14,23 @@ export default function LeadsGeneration() {
   const [otherSource, setOtherSource] = useState('');
   const [response, setResponse]       = useState(null);
   const [loading, setLoading]         = useState(false);
+  const [products, setProducts]       = useState([]); // ✅ אין סוגר מיותר כאן
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+
+  const fetchProducts = async () => {
+  try {
+    const response = await fetch('/leads/getallproducts');
+    const data = await response.json(); // ← צריך לעשות .json()
+    console.log('✅ Products fetched successfully:', data);
+    setProducts(data);
+  } catch (error) {
+    console.error('❌ Error fetching products:', error);
+  }
+};
 
   const inputStyle = {
     padding: '12px',
@@ -136,14 +155,19 @@ export default function LeadsGeneration() {
             style={inputStyle}
             disabled={loading}
           />
-          <input
-            type="text"
-            placeholder="Product Interest"
-            value={productInterest}
-            onChange={e => setProductInterest(e.target.value)}
-            style={inputStyle}
-            disabled={loading}
-          />
+          <select
+  value={productInterest}
+  onChange={e => setProductInterest(e.target.value)}
+  style={inputStyle}
+  disabled={loading}
+>
+  <option value="">Select Product</option>
+  {products.map(product => (
+    <option key={product.id} value={product.name}>
+      {product.name}
+    </option>
+  ))}
+</select>
 
           <select
             value={leadSource}
