@@ -33,6 +33,12 @@ export default function ReportsPage() {
   // Fetch sales data when a representative is selected
   const handleRepSelection = async (email) => {
     setSelectedRep(email);
+
+    setMonthlyData([]);
+    setShowAllReps(false);
+    setShowCharts(false);
+
+
     if (!email) {
       setSalesData([]);
       setTotalSales(0);
@@ -67,7 +73,7 @@ export default function ReportsPage() {
     setLoading(true);
     try {
       // This would require a new endpoint in your backend
-      const res = await api.get(`/sales/reportByRepMonthly/${email}`);
+      const res = await api.get(`/sales/reportByRepMonthly/${selectedRep}`);
       setMonthlyData(res.data || []);
       setShowCharts(false);
       setShowAllReps(false);
@@ -126,36 +132,39 @@ export default function ReportsPage() {
 
   // Function to render monthly sales data
   const renderMonthlySales = () => {
-    if (monthlyData.length === 0) {
-      return <p>No monthly sales data available for this representative.</p>;
-    }
+  if (monthlyData.length === 0) {
+    return <p>No monthly sales data available for this representative.</p>;
+  }
 
-    return (
-      <div>
-        <h3>Monthly Sales for {selectedRep}</h3>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th style={tableHeaderStyle}>Month</th>
-              <th style={tableHeaderStyle}>Year</th>
-              <th style={tableHeaderStyle}>Total Sales</th>
-              <th style={tableHeaderStyle}>Number of Sales</th>
+  return (
+    <div>
+      <h3>Monthly Sales for {selectedRep}</h3>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th style={tableHeaderStyle}>Sale ID</th>
+            <th style={tableHeaderStyle}>Product</th>
+            <th style={tableHeaderStyle}>Amount</th>
+            <th style={tableHeaderStyle}>Customer ID</th>
+            <th style={tableHeaderStyle}>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {monthlyData.map((sale, index) => (
+            <tr key={index}>
+              <td style={tableCellStyle}>{sale.id}</td>
+              <td style={tableCellStyle}>{sale.product}</td>
+              <td style={tableCellStyle}>${parseFloat(sale.amount).toFixed(2)}</td>
+              <td style={tableCellStyle}>{sale.customer_id}</td>
+              <td style={tableCellStyle}>{new Date(sale.date).toLocaleDateString()}</td>
             </tr>
-          </thead>
-          <tbody>
-            {monthlyData.map((item, index) => (
-              <tr key={index}>
-                <td style={tableCellStyle}>{item.month}</td>
-                <td style={tableCellStyle}>{item.year}</td>
-                <td style={tableCellStyle}>${parseFloat(item.total_amount).toFixed(2)}</td>
-                <td style={tableCellStyle}>{item.count}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
 
   // Function to render all representatives sales
   const renderAllRepsSales = () => {
