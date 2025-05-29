@@ -83,10 +83,21 @@ function App() {
 
             <Route
               path="/products/update-product/:id"
-              element={<EditProductPage />}
+              element={
+                <ProductsAdminRoute>
+                  <EditProductPage />
+                </ProductsAdminRoute>
+              }
             />
 
-            <Route path="/products/:id/leads" element={<LeadsPage />}></Route>
+            <Route
+              path="/products/:id/leads"
+              element={
+                <ProductsAdminRoute>
+                  <LeadsPage />
+                </ProductsAdminRoute>
+              }
+            />
           </Routes>
         </div>
       </BrowserRouter>

@@ -6,7 +6,6 @@ import api from '../services/api.js';
 import '../App.css';
 import { StoreContext } from '../store/StoreContext.jsx';
 import { useContext } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import ProductCard from '../components/ProductCard.jsx';
 import AddProductForm from '../components/AddProductForm';
 import FilterSortSearch from '../components/FilterSortSearch.jsx';
@@ -62,7 +61,7 @@ export default function ProductsPage() {
 
   return (
     <div className="product-container">
-      {true && ( //user?.email === 'admin@gmail.com'
+      {user?.email === 'admin@gmail.com' && (
         <div>
           <Button className="add-button" variant="primary" onClick={handleOpen}>
             +
