@@ -126,6 +126,14 @@ export default function ReportsPage() {
     }
 
     setAllRepsSales(allSales.sort((a, b) => b.total_amount - a.total_amount));
+    // כאן מוסיפים את הניקוי:
+    setMonthlyData([]);
+    setMonthlyTotal(0);
+    setYearlyData([]);
+    setYearlyTotal(0);
+    setSalesData([]);
+    setTotalSales(0);
+    setSelectedRep('');
     setShowAllReps(true);
     setShowCharts(false);
   } catch (error) {
@@ -136,6 +144,7 @@ export default function ReportsPage() {
     setLoading(false);
   }
 };
+
 
 
   const handleShowCharts = () => {
