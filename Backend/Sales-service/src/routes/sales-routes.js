@@ -33,7 +33,7 @@ router.get('/getAllSalesPrice', controller.getAllSalesPrice);
 router.get('/reportByRep/:email', controller.reportByRep);
 router.get('/totalSalesByRep/:email', controller.totalSalesByRep);
 router.get('/representatives', controller.getAllRepresentatives);
-
+router.get('/reportByRepMonthly/:email', controller.reportByRepMonthly);
 
 
 

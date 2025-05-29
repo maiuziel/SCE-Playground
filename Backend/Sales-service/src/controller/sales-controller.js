@@ -272,3 +272,14 @@ exports.getAllSalesPriceByTime = async(req, res) => {
   }
 };
 
+
+exports.reportByRepMonthly = async (req, res) => {
+  try{
+    const email = req.params.email;
+    const repReportMonthly = await salesService.reportByRepMonthly(email);
+    res.status(200).json(repReportMonthly);
+  }catch(error){
+    console.error('DB error in reportByRepMonthly:',error)
+    res.status(500).json({error: 'Internal server error'});
+  }
+};
