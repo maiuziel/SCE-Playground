@@ -87,6 +87,32 @@ export default function ReportsPage() {
     }
   };
 
+  // Fetch sales data by year for the selected representative
+  const [yearlyData, setYearlyData] = useState([]);
+
+  const handleYearlySales = async () => {
+    if (!selectedRep) {
+      alert('Please select a representative first');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await api.get(`/sales/reportByRepYearly/${selectedRep}`);
+      setYearlyData((res.data || []).sort((a, b) => b.amount - a.amount));
+      setShowCharts(false);
+      setShowAllReps(false);
+      setMonthlyData([]);
+    } catch (error) {
+      console.error('Failed to fetch yearly sales data:', error);
+      alert('Failed to load yearly sales data');
+      setYearlyData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   // Fetch sales data for all representatives
   const handleAllRepsSales = async () => {
     setLoading(true);
@@ -167,6 +193,42 @@ export default function ReportsPage() {
 };
 
 
+  const renderYearlySales = () => {
+    if (yearlyData.length === 0) {
+      return <p>No yearly sales data available for this representative.</p>;
+    }
+
+    return (
+      <div>
+        <h3>Yearly Sales for {selectedRep}</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th style={tableHeaderStyle}>Sale ID</th>
+              <th style={tableHeaderStyle}>Product</th>
+              <th style={tableHeaderStyle}>Amount</th>
+              <th style={tableHeaderStyle}>Customer ID</th>
+              <th style={tableHeaderStyle}>Date</th>
+           </tr>
+          </thead>
+          <tbody>
+            {yearlyData.map((sale, index) => (
+              <tr key={index}>
+                <td style={tableCellStyle}>{sale.id}</td>
+                <td style={tableCellStyle}>{sale.product}</td>
+                <td style={tableCellStyle}>${parseFloat(sale.amount).toFixed(2)}</td>
+                <td style={tableCellStyle}>{sale.customer_id}</td>
+                <td style={tableCellStyle}>{new Date(sale.date).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+
+
   // Function to render all representatives sales
   const renderAllRepsSales = () => {
     if (allRepsSales.length === 0) {
@@ -237,6 +299,14 @@ export default function ReportsPage() {
           Show Monthly Sales
         </button>
         <button 
+          onClick={handleYearlySales}
+          style={buttonStyle}
+          disabled={!selectedRep || loading}
+        >
+        Show Yearly Sales
+        </button>
+
+        <button 
           onClick={handleAllRepsSales}
           style={buttonStyle}
           disabled={loading}
@@ -260,6 +330,8 @@ export default function ReportsPage() {
           {showCharts && renderCharts()}
           
           {monthlyData.length > 0 && !showCharts && !showAllReps && renderMonthlySales()}
+
+          {yearlyData.length > 0 && !showCharts && !showAllReps && renderYearlySales()}
           
           {showAllReps && !showCharts && renderAllRepsSales()}
           

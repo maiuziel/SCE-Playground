@@ -283,3 +283,14 @@ exports.reportByRepMonthly = async (req, res) => {
     res.status(500).json({error: 'Internal server error'});
   }
 };
+
+exports.reportByRepYearly = async (req, res) => {
+  try{
+    const email = req.params.email;
+    const repReportYearly = await salesService.reportByRepYearly(email);
+    res.status(200).json(repReportYearly);
+  }catch(error){
+    console.error('DB error in reportByRepYearly:',error)
+    res.status(500).json({error: 'Internal server error'});
+  }
+};

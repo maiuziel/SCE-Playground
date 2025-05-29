@@ -109,3 +109,7 @@ exports.getAllSalesPriceByTime = async () => {
 exports.reportByRepMonthly = async(email) => {
   return await salesDataAccess.reportByRepMonthly(email);
 };
+
+exports.reportByRepYearly = async(email) => {
+  return await salesDataAccess.reportByRepYearly(email);
+};
