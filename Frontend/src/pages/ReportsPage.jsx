@@ -244,7 +244,6 @@ export default function ReportsPage() {
         <button onClick={handleMonthlySales} style={buttonStyle} disabled={!selectedRep || loading}>Show Monthly Sales</button>
         <button onClick={handleYearlySales} style={buttonStyle} disabled={!selectedRep || loading}>Show Yearly Sales</button>
         <button onClick={handleAllRepsSales} style={buttonStyle} disabled={loading}>Show All Representatives Sales</button>
-        <button onClick={handleShowCharts} style={buttonStyle} disabled={(!selectedRep && !showAllReps) || loading}>Create Charts</button>
       </div>
 
       {loading ? <p>Loading data...</p> : (
