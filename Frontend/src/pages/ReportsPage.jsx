@@ -49,7 +49,8 @@ export default function ReportsPage() {
     try {
       // Fetch sales data for the selected representative
       const salesRes = await api.get(`/sales/reportByRep/${email}`);
-      setSalesData(salesRes.data || []);
+      setSalesData((salesRes.data || []).sort((a, b) => b.amount - a.amount));
+
       
       // Fetch total sales amount
       const totalRes = await api.get(`/sales/totalSalesByRep/${email}`);
@@ -74,7 +75,7 @@ export default function ReportsPage() {
     try {
       // This would require a new endpoint in your backend
       const res = await api.get(`/sales/reportByRepMonthly/${selectedRep}`);
-      setMonthlyData(res.data || []);
+      setMonthlyData((res.data || []).sort((a, b) => b.amount - a.amount));
       setShowCharts(false);
       setShowAllReps(false);
     } catch (error) {
@@ -92,7 +93,7 @@ export default function ReportsPage() {
     try {
       // You'll need to create this endpoint in your backend
       const res = await api.get('/sales/allRepresentativesSales');
-      setAllRepsSales(res.data || []);
+      setAllRepsSales((res.data || []).sort((a, b) => b.total_amount - a.total_amount));
       setShowAllReps(true);
       setShowCharts(false);
     } catch (error) {
