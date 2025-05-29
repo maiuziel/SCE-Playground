@@ -11,7 +11,9 @@ export default function ReportsPage() {
   const [totalSales, setTotalSales] = useState(0);
   const [loading, setLoading] = useState(false);
   const [monthlyData, setMonthlyData] = useState([]);
+  const [monthlyTotal, setMonthlyTotal] = useState(0);
   const [yearlyData, setYearlyData] = useState([]);
+  const [yearlyTotal, setYearlyTotal] = useState(0);
   const [allRepsSales, setAllRepsSales] = useState([]);
   const [showAllReps, setShowAllReps] = useState(false);
   const [showCharts, setShowCharts] = useState(false);
@@ -31,7 +33,9 @@ export default function ReportsPage() {
   const handleRepSelection = async (email) => {
     setSelectedRep(email);
     setMonthlyData([]);
+    setMonthlyTotal(0);
     setYearlyData([]);
+    setYearlyTotal(0);
     setShowAllReps(false);
     setShowCharts(false);
 
@@ -61,14 +65,19 @@ export default function ReportsPage() {
     setLoading(true);
     try {
       const res = await api.get(`/sales/reportByRepMonthly/${selectedRep}`);
-      setMonthlyData((res.data || []).sort((a, b) => b.amount - a.amount));
+      const sortedData = (res.data || []).sort((a, b) => b.amount - a.amount);
+      setMonthlyData(sortedData);
+      const total = sortedData.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+      setMonthlyTotal(total);
       setYearlyData([]);
+      setYearlyTotal(0);
       setShowCharts(false);
       setShowAllReps(false);
     } catch (error) {
       console.error('Failed to fetch monthly sales data:', error);
       alert('Failed to load monthly sales data');
       setMonthlyData([]);
+      setMonthlyTotal(0);
     } finally {
       setLoading(false);
     }
@@ -79,14 +88,19 @@ export default function ReportsPage() {
     setLoading(true);
     try {
       const res = await api.get(`/sales/reportByRepYearly/${selectedRep}`);
-      setYearlyData((res.data || []).sort((a, b) => b.amount - a.amount));
+      const sortedData = (res.data || []).sort((a, b) => b.amount - a.amount);
+      setYearlyData(sortedData);
+      const total = sortedData.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+      setYearlyTotal(total);
       setMonthlyData([]);
+      setMonthlyTotal(0);
       setShowCharts(false);
       setShowAllReps(false);
     } catch (error) {
       console.error('Failed to fetch yearly sales data:', error);
       alert('Failed to load yearly sales data');
       setYearlyData([]);
+      setYearlyTotal(0);
     } finally {
       setLoading(false);
     }
@@ -124,9 +138,10 @@ export default function ReportsPage() {
     </div>
   );
 
-  const renderTable = (title, data) => (
+  const renderTable = (title, data, total) => (
     <div>
       <h3>{title}</h3>
+      <h4>Total Sales: ${total.toFixed(2)}</h4>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -208,8 +223,8 @@ export default function ReportsPage() {
       {loading ? <p>Loading data...</p> : (
         <>
           {showCharts && renderCharts()}
-          {!showCharts && monthlyData.length > 0 && renderTable(`Monthly Sales for ${selectedRep}`, monthlyData)}
-          {!showCharts && yearlyData.length > 0 && renderTable(`Yearly Sales for ${selectedRep}`, yearlyData)}
+          {!showCharts && monthlyData.length > 0 && renderTable(`Monthly Sales for ${selectedRep}`, monthlyData, monthlyTotal)}
+          {!showCharts && yearlyData.length > 0 && renderTable(`Yearly Sales for ${selectedRep}`, yearlyData, yearlyTotal)}
           {!showCharts && showAllReps && renderAllRepsSales()}
           {!showCharts && selectedRep && !showAllReps && monthlyData.length === 0 && yearlyData.length === 0 && (
             <>
