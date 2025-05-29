@@ -13,8 +13,10 @@ import {
     updateNoteByEmail,
     updateStatusByEmail,
     deleteMultipleLeads,
-    getLeadsByProductName
+    getLeadsByProductName,
+    getProducts
 } from '../controllers/leadsController.js';
+
 
 
 const router = express.Router();
@@ -43,4 +45,6 @@ router.put('/note', updateNoteByEmail);
 router.put('/status', updateStatusByEmail);
 
 router.delete('/delete', deleteMultipleLeads);
+
+router.get('/getallproducts',getProducts);
 export default router;

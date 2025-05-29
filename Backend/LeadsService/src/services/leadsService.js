@@ -1,5 +1,5 @@
 import * as data from '../data-access/leadsDataAccess.js';
-
+import axios from 'axios';
 export const create = async (leadData) => {
   const { full_name, phone, email, product_interest,lead_source } = leadData;
 
@@ -107,6 +107,19 @@ export const sortByDateAsc = async () => await data.sortByDateAsc();
 
 export const sortByDateDesc = async () => await data.sortByDateDesc();
 
+ export const fetchAllproducts = async () => {
+  try {
+    const product = await axios.get(
+      'https://sce-playground-e9ie.onrender.com/read-all-products'
+    );
+    console.log('Products fetched successfully:', product.data);
+    return product.data;
+  } catch (err) {
+    console.error('Error fetching products from product Service:', err.message);
+    throw new Error(`Failed to fetch products: ${err.message}`);
+  }
+};
+
 export const updateNoteByEmail = async (email, note) => {
     if (!email || email.trim() === '') {
         throw new Error('Email is required');
@@ -171,3 +184,4 @@ export const getLeadsProductName = async (productName) => {
     
     return await data.getLeadsByProductName(productName);
 };
+

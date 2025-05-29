@@ -15,7 +15,17 @@ export const createLead = async (req, res) => {
       res.status(400).json({ message: error.message });
     }
   };
-  
+  export const getProducts = async (req, res) => {
+  try {
+    const products = await leadsService.fetchAllproducts();
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res
+      .status(500)
+      .json({ message: 'Failed to fetch products', details: error.message });
+  }
+};
 
 export const getAllLeads = async (req, res) => {
     
@@ -145,7 +155,7 @@ export const deleteMultipleLeads = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching leads', error });
     }
-};
+    };
 
 
 
