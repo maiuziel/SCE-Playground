@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 4001;
 
 app.use(express.json());
 
-// Initialize the database connection
+
 
 
 // Authentication routes
