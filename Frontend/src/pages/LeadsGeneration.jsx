@@ -14,7 +14,7 @@ export default function LeadsGeneration() {
   const [otherSource, setOtherSource] = useState('');
   const [response, setResponse]       = useState(null);
   const [loading, setLoading]         = useState(false);
-  const [products, setProducts]       = useState([]); // ✅ אין סוגר מיותר כאן
+  const [products, setProducts]       = useState([]); 
 
   useEffect(() => {
     fetchProducts();
@@ -24,7 +24,7 @@ export default function LeadsGeneration() {
   const fetchProducts = async () => {
   try {
     const response = await fetch('/leads/getallproducts');
-    const data = await response.json(); // ← צריך לעשות .json()
+    const data = await response.json(); 
     console.log('✅ Products fetched successfully:', data);
     setProducts(data);
   } catch (error) {
