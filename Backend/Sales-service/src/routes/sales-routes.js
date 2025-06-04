@@ -37,7 +37,7 @@ router.get('/reportByRepMonthly/:email', controller.reportByRepMonthly);
 router.get('/reportByRepYearly/:email', controller.reportByRepYearly);
 
 router.get('/read-all-leads', controller.readAllLeads);
-router.post('/update-leads', controller.updateLeadsTable);
+//router.post('/update-leads', controller.updateLeadsTable);
 
 
 
