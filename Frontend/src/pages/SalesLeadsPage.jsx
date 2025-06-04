@@ -10,18 +10,27 @@ export default function SalesLeadsPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchAllLeads();
+    //fetchAllLeads();
     fetchAndLogRawLeads();
   }, []);
 
-  const fetchAndLogRawLeads = async () => {
-    try {
-      const res = await api.get('sales/read-all-leads');
-      console.log('🔍 Raw leads from /read-all-leads:', res.data);
-    } catch (error) {
-      console.error('❌ Failed to fetch raw leads from /read-all-leads:', error);
-    }
-  };
+const fetchAndLogRawLeads = async () => {
+  try {
+    const res = await api.get('sales/read-all-leads');
+    const rawLeads = res.data;
+    console.log('🔍 Raw leads from /read-all-leads:', rawLeads);
+
+    // שליחה לסנכרון מול הדאטהבייס
+    const syncRes = await api.post('sales/syncExternalLeads', rawLeads);
+    console.log('✅ Sync result:', syncRes.data);
+
+    // לאחר סנכרון, טען את הלידים המעודכנים
+    await fetchAllLeads();
+  } catch (error) {
+    console.error('❌ Failed to fetch or sync leads:', error);
+  }
+};
+
 
   const fetchAllLeads = async () => {
     try {

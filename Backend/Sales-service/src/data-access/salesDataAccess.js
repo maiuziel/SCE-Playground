@@ -276,16 +276,16 @@ exports.reportByRepYearly = async(email) => {
 
 
 exports.getLeadById = async (phone) => {
-  const result = await db.query('SELECT * FROM leads_table WHERE lead_id = $1', [phone]);
+  const result = await pool.query('SELECT * FROM leads_table WHERE lead_id = $1', [phone]);
   return result.rows[0] || null;
 };
 
 // הכנסת ליד חדש
 exports.insertLead = async ({ lead_id, status, application_date }) => {
-  await db.query(
+  await pool.query(
     `INSERT INTO leads_table
      (lead_id, status, rep_mail, application_date, closing_date)
      VALUES ($1, $2, NULL, $3, NULL)`,
-    [lead_id, status, application_date]
+    [lead_id, 'new', application_date]
   );
 };
