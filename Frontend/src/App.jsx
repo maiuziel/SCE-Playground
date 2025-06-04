@@ -9,6 +9,9 @@ import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
+import LeadsGeneration from './pages/LeadsGeneration.jsx';
+import LeadManager     from './pages/LeadManager.jsx';  
+
 
 function Navbar() {
   const { user, signOut, isLoading, isValidating } = useContext(StoreContext);
@@ -51,13 +54,15 @@ function Navbar() {
         <div className='nav-links'>
           <Link to='/'>Home</Link>
           {!user ? (
-            <div className='nav-links'>
-              <Link to='/signin'>Sign In</Link>
-              <Link to='/signup'>Sign Up</Link>
-            </div>
-          ) : (
-            <a onClick={signUserOut}>Sign out</a>
-          )}
+             <div className='nav-links'>
+               <Link to='/signin'>Sign In</Link>
+               <Link to='/signup'>Sign Up</Link>
+              <Link to='/createlead'>Leads Generation</Link>
+
+             </div>
+           ) : (
+             <a onClick={signUserOut}>Sign out</a>
+           )}
         </div>
         {user && <div className='user-circle'>{userInitial}</div>}
       </div>
@@ -70,7 +75,7 @@ function App() {
     <StoreProvider>
       <BrowserRouter>
         <Navbar />
-        <div style={{ backgroundImage: 'url(/background.png)' }}>
+        <div style={{ backgroundImage: 'url(/background.png)'  }}>
           <Routes>
             <Route
               path='/'
@@ -90,6 +95,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path='/createlead' element={<LeadsGeneration />} />
+            <Route path="/lead-manager" element={<LeadManager />} />
             <Route
               path='/products'
               element={
@@ -99,7 +106,9 @@ function App() {
               }
             />
           </Routes>
+
         </div>
+        
       </BrowserRouter>
     </StoreProvider>
   );
