@@ -16,7 +16,7 @@ export default function SalesLeadsPage() {
 
   const fetchAndLogRawLeads = async () => {
     try {
-      const res = await api.get('/read-all-leads');
+      const res = await api.get('sales/read-all-leads');
       console.log('🔍 Raw leads from /read-all-leads:', res.data);
     } catch (error) {
       console.error('❌ Failed to fetch raw leads from /read-all-leads:', error);
