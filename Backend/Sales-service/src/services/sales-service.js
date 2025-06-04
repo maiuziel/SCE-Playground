@@ -113,3 +113,15 @@ exports.reportByRepMonthly = async(email) => {
 exports.reportByRepYearly = async(email) => {
   return await salesDataAccess.reportByRepYearly(email);
 };
+
+exports.fetchAllLeads = async() => {
+    try {
+      const leads = await axios.get(
+        'https://sce-playground-leads-server.onrender.com/getall'
+      );
+      return leads.data;
+    } catch (err) {
+      console.error('Error fetching leads from Lead Service:', err.message);
+      throw new Error(`Failed to fetch leads: ${err.message}`);
+    }
+  };

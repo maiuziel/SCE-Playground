@@ -11,7 +11,17 @@ export default function SalesLeadsPage() {
 
   useEffect(() => {
     fetchAllLeads();
+    fetchAndLogRawLeads();
   }, []);
+
+  const fetchAndLogRawLeads = async () => {
+    try {
+      const res = await api.get('/read-all-leads');
+      console.log('🔍 Raw leads from /read-all-leads:', res.data);
+    } catch (error) {
+      console.error('❌ Failed to fetch raw leads from /read-all-leads:', error);
+    }
+  };
 
   const fetchAllLeads = async () => {
     try {

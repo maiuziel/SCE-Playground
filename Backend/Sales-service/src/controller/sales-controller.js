@@ -294,3 +294,16 @@ exports.reportByRepYearly = async (req, res) => {
     res.status(500).json({error: 'Internal server error'});
   }
 };
+
+
+exports.readAllLeads = async (req, res) => {
+  try {
+    const leads = await salesService.fetchAllLeads();
+    res.status(200).json(leads);
+  } catch (error) {
+    console.error('Error fetching leads:', error);
+    res
+      .status(500)
+      .json({ message: 'Failed to fetch leads', details: error.message });
+  }
+};
