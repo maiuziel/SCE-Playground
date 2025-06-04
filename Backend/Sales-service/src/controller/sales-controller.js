@@ -307,3 +307,15 @@ exports.readAllLeads = async (req, res) => {
       .json({ message: 'Failed to fetch leads', details: error.message });
   }
 };
+
+exports.syncExternalLeads = async (req, res) => {
+  const externalLeads = req.body; // מערך לידים
+
+  try {
+    await salesService.syncExternalLeads(externalLeads);
+    res.json({ success: true, message: 'Leads synchronized successfully' });
+  } catch (error) {
+    console.error('Error syncing leads:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};

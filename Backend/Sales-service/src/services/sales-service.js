@@ -126,3 +126,27 @@ exports.fetchAllLeads = async() => {
       throw new Error(`Failed to fetch leads: ${err.message}`);
     }
   };
+
+
+exports.syncExternalLeads = async (externalLeads) => {
+  for (const lead of externalLeads) {
+    const existing = await salesDataAccess.getLeadById(lead.phone);
+
+    const applicationDate = new Date(lead.submission_date).toISOString().split('T')[0]; // YYYY-MM-DD
+
+    if (existing) {
+      if (
+        existing.status.toLowerCase() === 'new' &&
+        existing.application_date.toISOString().split('T')[0] !== applicationDate
+      ) {
+        await salesDataAccess.updateLead(lead.phone, lead.status, applicationDate);
+      }
+    } else {
+      await salesDataAccess.insertLead({
+        lead_id: lead.phone,
+        status: lead.status,
+        application_date: applicationDate,
+      });
+    }
+  }
+};
