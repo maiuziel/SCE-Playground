@@ -280,16 +280,6 @@ exports.getLeadById = async (phone) => {
   return result.rows[0] || null;
 };
 
-// עדכון ליד קיים (רק סטטוס ותאריך)
-exports.updateLead = async (lead_id, status, application_date) => {
-  await db.query(
-    `UPDATE leads_table 
-     SET status = $1, application_date = $2
-     WHERE lead_id = $3`,
-    [status, application_date, lead_id]
-  );
-};
-
 // הכנסת ליד חדש
 exports.insertLead = async ({ lead_id, status, application_date }) => {
   await db.query(
