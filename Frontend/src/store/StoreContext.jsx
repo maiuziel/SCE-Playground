@@ -79,9 +79,9 @@ export function StoreProvider({ children }) {
     token,
     signIn,
     signOut,
+    isLoading,
+    isValidating
   };
 
-  return (
-    <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
-  );
+  return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

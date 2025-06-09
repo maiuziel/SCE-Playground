@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 // tests/HomePage.test.jsx
->>>>>>> 2e676cd2042be2ad73ea73cea0baeb69e2162d0b
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
