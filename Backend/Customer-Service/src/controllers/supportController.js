@@ -227,3 +227,18 @@ export async function markAgentNotificationAsRead(req, res) {
     res.status(500).json({ message: 'Failed to update notification' });
   }
 }
+export async function getNewRequestNotifications(req, res) {
+  try {
+    const notifications = await Notification.findAll({
+      where: {
+        type: 'new_request',
+        read: false
+      },
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(notifications);
+  } catch (err) {
+    console.error('Error fetching new request notifications:', err);
+    res.status(500).json({ message: 'Failed to fetch notifications' });
+  }
+}

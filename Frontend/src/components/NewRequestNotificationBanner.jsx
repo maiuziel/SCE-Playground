@@ -8,18 +8,15 @@ export default function NewRequestNotificationBanner() {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch('http://localhost:4002/support-requests/notifications');
+        const res = await fetch('http://localhost:4002/support-requests/notifications/new-requests');
+        if (!res.ok) throw new Error('Failed to fetch new request notifications');
         const notifications = await res.json();
 
-        const newNotifs = notifications.filter(
-          (notif) => notif.type === 'new_request' && !notif.read
-        );
-
-        setNewRequestNotifs(newNotifs);
+        setNewRequestNotifs(notifications);
       } catch (err) {
         console.error('❌ Failed to fetch notifications:', err);
       }
-    }, 5000);
+    }, 5000); // Fetch every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
