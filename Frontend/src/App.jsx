@@ -1,4 +1,3 @@
-// App.jsx (מעודכן עם FeedbackPage)
 import React, { useContext, useEffect, useState } from 'react';
 import {
   BrowserRouter,
@@ -20,7 +19,7 @@ import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
 import SupportHistoryPage from './pages/SupportHistoryPage.jsx';
 import ManageRequestsPage from './pages/ManageRequestsPage.jsx';
 import RespondPage from './pages/RespondRequestPage.jsx';
-import FeedbackPage from './pages/FeedbackPage.jsx'; // ✅ חדש
+import FeedbackPage from './pages/FeedbackPage.jsx';
 
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
@@ -40,7 +39,7 @@ function Navbar() {
 
   useEffect(() => {
     if (user) {
-      fetch('http://localhost:4001/support-requests/unread')
+      fetch(`${import.meta.env.VITE_GATEWAY_URL}/support-requests/unread`)
         .then((res) => res.json())
         .then((data) => {
           setUnreadCount(data.length);
@@ -77,23 +76,23 @@ function Navbar() {
         </div>
 
         {user && (
-  <>
-    {user.role === 'client' && (
-      <div
-        className='notification-bell'
-        onClick={() => navigate('/support-history')}
-        title="View notifications"
-        style={{ fontSize: '24px', cursor: 'pointer', marginRight: '10px' }}
-      >
-        🔔
-        {unreadCount > 0 && (
-          <span className='notification-badge'>{unreadCount}</span>
+          <>
+            {user.role === 'client' && (
+              <div
+                className='notification-bell'
+                onClick={() => navigate('/support-history')}
+                title="View notifications"
+                style={{ fontSize: '24px', cursor: 'pointer', marginRight: '10px' }}
+              >
+                🔔
+                {unreadCount > 0 && (
+                  <span className='notification-badge'>{unreadCount}</span>
+                )}
+              </div>
+            )}
+            <div className='user-circle'>{userInitial}</div>
+          </>
         )}
-      </div>
-    )}
-    <div className='user-circle'>{userInitial}</div>
-  </>
-)}
       </div>
     </div>
   );
@@ -127,7 +126,7 @@ export default function App() {
             <Route path='/manage-requests' element={<ManageRequestsPage />} />
             <Route path='/respond/:id' element={<RespondPage />} />
             <Route path='/support-requests/:id/respond' element={<RespondPage />} />
-            <Route path='/feedback/:id' element={<FeedbackPage />} /> {/* ✅ עמוד דירוג חדש */}
+            <Route path='/feedback/:id' element={<FeedbackPage />} />
           </Routes>
         </div>
       </BrowserRouter>

@@ -6,6 +6,8 @@ import { getClientNotifications } from '../controllers/supportController.js';
 import { markNotificationAsRead } from '../controllers/supportController.js';
 import { getAgentFeedbackNotifications } from '../controllers/supportController.js';
 import {markAgentNotificationAsRead} from '../controllers/supportController.js'
+import { getNewRequestNotifications } from '../controllers/supportController.js';
+
 import {
   createSupportRequest,
   getSupportRequests,
@@ -30,6 +32,7 @@ router.get('/notifications', getClientNotifications);
 router.patch('/notifications/:id/mark-read', markNotificationAsRead);
 router.get('/notifications/feedbacks', getAgentFeedbackNotifications);
 router.patch('/agent-feedback-notifications/:id/mark-read', markAgentNotificationAsRead);
+router.get('/notifications/new-requests', getNewRequestNotifications);
 
 
 export default router;
