@@ -8,7 +8,12 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "start:gateway": "cd Backend/GatewayService && npm run dev",
+    "start:auth": "cd Backend/AuthenticationService && npm run dev",
+    "start:products": "cd Backend/ProductService && npm run dev",
+    "start:frontend": "cd Frontend && npm run dev",
+    "start:all": "concurrently \"npm run start:gateway\" \"npm run start:auth\" \"npm run start:products\" \"npm run start:frontend\""
   },
   "jest": {
     "testEnvironment": "jsdom",
@@ -18,10 +23,15 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
+    "bootstrap": "^5.3.6",
+    "bootstrap-icons": "^1.13.1",
     "chart.js": "^4.4.9",
     "chartjs-adapter-date-fns": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jwt-decode": "^4.0.0",
+    "rc-slider": "^11.1.8",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.10",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.1"

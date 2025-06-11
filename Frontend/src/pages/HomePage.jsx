@@ -22,7 +22,7 @@ export default function HomePage() {
   };
   const btnStyle = {
     marginTop: '15px',
-    background: '#FF9992', 
+    background: '#FF9992',
     color: 'white',
     padding: '10px 20px',
     border: 'none',
@@ -32,9 +32,6 @@ export default function HomePage() {
     cursor: 'pointer',
     transition: 'transform 0.3s ease',
   };
-
-  
-  
 
   return (
     <div className="home-container">
@@ -56,24 +53,33 @@ export default function HomePage() {
             src="/reports.jpg"
             alt="Reports"
             onClick={() => navigate('/reports')}
-            
-            
           />
         </div>
 
-        
+        <div style={tileStyle}>
+          <img src="/reports.jpg" alt="Products" />
+          <button
+            onClick={() => navigate('/products')}
+            style={btnStyle}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = 'scale(1.05)')
+            }
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+          >
+            Products
+          </button>
+        </div>
+
         {/* ── MANAGE LEADS TILE ── */}
         <div style={tileStyle}>
-          <img
-            src="/lead_manager.png"
-            alt="Lead Manager"
-            
-          />
+          <img src="/lead_manager.png" alt="Lead Manager" />
           <button
             onClick={() => navigate('/lead-manager')}
             style={btnStyle}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = 'scale(1.05)')
+            }
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             Lead Manager
           </button>
