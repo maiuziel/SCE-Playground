@@ -70,6 +70,15 @@ export default function HomePage() {
           </button>
         </div>
 
+        {/* ── TECH SUPPORT TILE ── */}
+        <div style={tileStyle}>
+          <img
+            src="/tech-sup.jpg"
+            alt="Tech Support"
+            onClick={() => navigate('/techsupport')}
+          />
+        </div>
+
         {/* ── MANAGE LEADS TILE ── */}
         <div style={tileStyle}>
           <img src="/lead_manager.png" alt="Lead Manager" />

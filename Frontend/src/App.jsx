@@ -13,11 +13,13 @@ import HomePage from './pages/HomePage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
+import TechSupportPage from './pages/TechSupportPage.jsx';
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ProductsAdminRoute from './components/ProductsAdminRoute';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
+import TechSupport from './pages/TechSupportPage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
 import EditProductPage from './pages/UpdateProductPage.jsx';
 import LeadsPage from './pages/LeadsPage.jsx';
@@ -120,6 +122,16 @@ function App() {
             />
             <Route path="/createlead" element={<LeadsGeneration />} />
             <Route path="/lead-manager" element={<LeadManager />} />
+              
+            <Route
+              path='/techsupport'
+              element={
+                <ProtectedRoute>
+                  <TechSupport />
+                </ProtectedRoute>
+              }
+            />
+                
             <Route
               path="/products/update-product/:id"
               element={
