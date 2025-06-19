@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DB_CON_STR: ${{ secrets.DB_CON_STR }}
+      POSTGRES_URI: ${{ secrets.DB_CON_STR }}
 
     steps:
       - uses: actions/checkout@v4

@@ -3,7 +3,7 @@ const { Pool } = pkg;
 import 'dotenv/config';
 
 // Your external PostgreSQL URL
-const connectionString = process.env.DB_CON_STR;
+const connectionString = process.env.POSTGRES_URI;
 
 // Create a pool of connections
 const pool = new Pool({
