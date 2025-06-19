@@ -27,6 +27,11 @@ jobs:
         run: npm run lint
         working-directory: Backend/TechSupportService
 
+      - name: Print POSTGRES_URI (for debugging, remove password for safety)
+        run: echo "POSTGRES_URI=${POSTGRES_URI}"
+        env:
+          POSTGRES_URI: ${{ secrets.DB_CON_STR }}
+
       - name: Run tests
         run: npm run test
         working-directory: Backend/TechSupportService
