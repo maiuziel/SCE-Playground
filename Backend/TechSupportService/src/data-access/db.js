@@ -7,7 +7,7 @@ const connectionString = process.env.POSTGRES_URI;
 
 // Create a pool of connections
 const pool = new Pool({
-  connectionString,
+  connectionString: process.env.POSTGRES_URI,
   ssl: {
     rejectUnauthorized: false,
   },
