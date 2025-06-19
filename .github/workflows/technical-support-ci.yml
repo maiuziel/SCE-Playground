@@ -10,9 +10,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    env:
-      POSTGRES_URI: ${{ secrets.DB_CON_STR }}
-
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 18.x
@@ -29,12 +26,8 @@ jobs:
 
       - name: Print POSTGRES_URI (for debugging, remove password for safety)
         run: echo "POSTGRES_URI=${POSTGRES_URI}"
-        env:
-          POSTGRES_URI: ${{ secrets.DB_CON_STR }}
 
       - name: Run tests
-        env:
-          POSTGRES_URI: ${{ secrets.DB_CON_STR }}
         run: npm run test
         working-directory: Backend/TechSupportService
 
