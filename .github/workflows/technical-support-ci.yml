@@ -33,6 +33,8 @@ jobs:
           POSTGRES_URI: ${{ secrets.DB_CON_STR }}
 
       - name: Run tests
+        env:
+        POSTGRES_URI: ${{ secrets.DB_CON_STR }}
         run: npm run test
         working-directory: Backend/TechSupportService
 
