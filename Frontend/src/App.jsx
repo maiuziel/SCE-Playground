@@ -36,6 +36,8 @@ import LeadManager from './pages/LeadManager.jsx';
 
 function Navbar() {
   const { user, signOut } = useContext(StoreContext);
+  const { isLoading, isValidating } = useContext(StoreContext);
+
   const navigate = useNavigate();
 
   function signUserOut() {
