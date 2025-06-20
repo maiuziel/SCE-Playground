@@ -83,7 +83,7 @@ export default function HomePage() {
         <div style={tileStyle}>
           <img src="/lead_manager.png" alt="Lead Manager" />
           <button
-            onClick={() => navigate('/salse')}
+            onClick={() => navigate('/lead-manager')}
             style={btnStyle}
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = 'scale(1.05)')
@@ -94,8 +94,13 @@ export default function HomePage() {
           </button>
         </div>
         <div style={tileStyle}>
-            <button className="salesBtn"
-              onClick={() => navigate('/sales')}>go to sales</button>
+            <button
+  className="salesBtn"
+  onClick={() => navigate('/sales')}
+>
+  Sales
+</button>
+
         </div>
       </div>
     </div>
