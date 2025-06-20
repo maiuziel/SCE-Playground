@@ -1,6 +1,7 @@
 // src/pages/HomePage.jsx
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { StoreContext } from '../store/StoreContext';
 
 export default function HomePage() {
   const navigate = useNavigate();
