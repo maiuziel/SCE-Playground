@@ -93,8 +93,10 @@ export default function HomePage() {
             Lead Manager
           </button>
         </div>
-        <button className="salesBtn"
-          onClick={() => navigate('/sales')}>go to sales</button>
+        <div style={tileStyle}>
+            <button className="salesBtn"
+              onClick={() => navigate('/sales')}>go to sales</button>
+        </div>
       </div>
     </div>
   );
