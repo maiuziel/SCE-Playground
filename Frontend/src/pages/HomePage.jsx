@@ -94,7 +94,6 @@ export default function HomePage() {
           </button>
         </div>
       </div>
-
       <button className="salesBtn"
       onClick={() => navigate('/sales')}>go to sales</button>
     </div>
