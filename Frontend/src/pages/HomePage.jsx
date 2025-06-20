@@ -94,9 +94,19 @@ export default function HomePage() {
           </button>
         </div>
         <div style={tileStyle}>
-            <button className="salesBtn"
-              onClick={() => navigate('/sales')}>go to sales</button>
-        </div>
+  <button
+    style={btnStyle}
+    onClick={() => navigate('/sales')}
+    onMouseEnter={(e) =>
+      (e.currentTarget.style.transform = 'scale(1.05)')
+    }
+    onMouseLeave={(e) =>
+      (e.currentTarget.style.transform = 'scale(1)')}
+  >
+    Sales
+  </button>
+</div>
+
       </div>
     </div>
   );
