@@ -1,11 +1,25 @@
-// gateway-service/src/routes/gatewayRoutes.js
 import { Router } from 'express';
-import { forwardAuthRequests, forwardSalesRequests, ping} from '../controllers/gatewayController.js';
+import {
+  forwardAuthRequests,
+  forwardLeadsRequests,
+  forwardProductsRequests,
+  forwardTechSupportRequests,
+  forwardSalesRequests,
+  ping,
+} from '../controllers/gatewayController.js';
+
 
 const router = Router();
 
 router.use('/auth', forwardAuthRequests);
+router.use('/products', forwardProductsRequests);
 router.get('/ping', ping);
 router.use('/sales', forwardSalesRequests);
+
+
+router.use('/leads', forwardLeadsRequests);
+// Forward all /ts/* requests - for tech support.
+router.use('/ts', forwardTechSupportRequests);
+
 
 export default router;

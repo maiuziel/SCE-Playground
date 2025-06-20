@@ -30,36 +30,28 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="auth-container">
-       <img
-          className="university-icon"
-          src="https://www.sce.ac.il/ver/14/tpl/website/img/SamiSH-logo_2.png"
-          alt="University Icon"
-        />
-      <h3>Sign In</h3>
-      {error && <p className="error-message">{error}</p>}
-      
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            value={email} 
-            placeholder="Email"
-            onChange={e => setEmail(e.target.value)}
-            required 
-          />
+    <div className='auth-container'>
+      {/* LOADER – sits above everything else when active */}
+      {loading && (
+        <div className='loader-overlay'>
+          <div className='spinner' />
         </div>
-        <div>
-          <input 
-            type="password"
-            value={password} 
-            placeholder="Password"
-            onChange={e => setPassword(e.target.value)}
-            required 
-          />
-        </div>
+      )}
 
-        <button type="submit">Sign In</button>
+      <img
+        className='university-icon'
+        src='https://www.sce.ac.il/ver/14/tpl/website/img/SamiSH-logo_2.png'
+        alt='University Icon'
+      />
+
+      <h3 style={{ color: '#000' }}>Sign In</h3>
+      {error && <p className='error-message'>{error}</p>}
+      <form className='auth-form' onSubmit={handleSubmit}>
+        <input type='email' value={email} placeholder='Email' onChange={e => setEmail(e.target.value)} required />
+        <input type='password' value={password} placeholder='Password' onChange={e => setPassword(e.target.value)} required />
+        <button type='submit' disabled={loading}>
+          {loading ? 'Signing in…' : 'Sign In'}
+        </button>
       </form>
     </div>
   );
