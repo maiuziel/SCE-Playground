@@ -95,11 +95,11 @@ export default function HomePage() {
         </div>
         <div style={tileStyle}>
             <button
-  className="salesBtn"
-  onClick={() => navigate('/sales')}
->
-  Sales
-</button>
+              className="salesBtn"
+              onClick={() => navigate('/sales')}
+            >
+              Sales
+            </button>
 
         </div>
       </div>
