@@ -115,10 +115,10 @@ const forwardSalesRequests = async (req, res, next) => {
     // Use environment variable instead of hardcoded URL
     const salesServiceUrl = process.env.SALES_SERVICE_URL;
     const path = req.originalUrl.replace('/sales', '');
-    const url = `${salesServiceUrl}${path}`;
+    const url = `${salesServiceUrl}/sales${path}`;
 
     console.log('Forwarding request to sales service:', url);
-    console.log('Forwarding data to sales service:', req.data);
+    console.log('Forwarding data to sales service:', req.body);
 
     const response = await axios({
       method: req.method,
