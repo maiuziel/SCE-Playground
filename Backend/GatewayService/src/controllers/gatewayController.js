@@ -137,6 +137,9 @@ const forwardSalesRequests = async (req, res, next) => {
   
     try {
       console.log('📛 error.toJSON:', error.toJSON());
+      console.log('📛 error.response?.status:', error.response?.status);
+      console.log('📛 error.response?.data:', error.response?.data);
+
     } catch (jsonErr) {
       console.log('📛 error.message:', error.message);
     }
