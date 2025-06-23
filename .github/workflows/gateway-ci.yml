@@ -34,10 +34,10 @@ jobs:
           cd Backend/GatewayService
           npm run lint
 
-      #- name: Run Tests
-       # run: |
-        #  cd Backend/GatewayService
-         # npm test
+      - name: Run Tests
+        run: |
+          cd Backend/GatewayService
+          npm test
           
   deploy-to-render:
     runs-on: ubuntu-latest
