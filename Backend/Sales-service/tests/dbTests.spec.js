@@ -56,7 +56,7 @@ describe('sales_conversationsTest Table', () => {
       WHERE id = $3 RETURNING *`,
       ['New Product', 'Updated Note', inserted.rows[0].id]
     );
-
+    expect(updated.rows.length).to.equal(1);
     expect(updated.rows[0].products).to.equal('New Product');
     expect(updated.rows[0].notes).to.equal('Updated Note');
   });
