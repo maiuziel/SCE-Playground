@@ -20,7 +20,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      POSTGRES_URI: ${{ secrets.POSTGRES_URI }}
+      DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
     strategy:
       matrix:
         node-version: [20.x]
