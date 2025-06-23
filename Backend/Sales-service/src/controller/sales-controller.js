@@ -294,7 +294,6 @@ exports.reportByRepYearly = async (req, res) => {
   }
 };
 
-
 exports.readAllLeads = async (req, res) => {
   try {
     const leads = await salesService.fetchAllLeads();
