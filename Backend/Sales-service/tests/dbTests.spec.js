@@ -40,7 +40,7 @@ describe('sales_conversationsTest Table', () => {
       VALUES (202, 'Product X', 'Note X') RETURNING *`
     );
 
-    const found = await pool.query(`SELECT * FROM sales_conversationsTest WHERE id = $1`, [inserted.rows[0].id]);
+    const found = await pool.query('SELECT * FROM sales_conversationsTest WHERE id = $1', [inserted.rows[0].id]);
     expect(found.rows[0]).to.deep.equal(inserted.rows[0]);
   });
 
@@ -67,9 +67,9 @@ describe('sales_conversationsTest Table', () => {
       VALUES (404, 'Delete Me', 'Delete Note') RETURNING *`
     );
 
-    await pool.query(`DELETE FROM sales_conversationsTest WHERE id = $1`, [inserted.rows[0].id]);
+    await pool.query('DELETE FROM sales_conversationsTest WHERE id = $1', [inserted.rows[0].id]);
 
-    const check = await pool.query(`SELECT * FROM sales_conversationsTest WHERE id = $1`, [inserted.rows[0].id]);
+    const check = await pool.query('SELECT * FROM sales_conversationsTest WHERE id = $1', [inserted.rows[0].id]);
     expect(check.rows.length).to.equal(0);
   });
 });

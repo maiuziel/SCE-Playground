@@ -7,7 +7,7 @@ exports.createSale = async (req, res) => {
   console.log('Headers:', req.headers);
   console.log('Body:', req.body);
   try {
-    console.log("been here");
+    console.log('been here');
     const sale = await salesService.createSale(req.body);
     console.log('New sale created:', sale); 
     res.status(201).json(sale);
@@ -186,9 +186,9 @@ exports.unassignLead = async(req, res) => {
 exports.doneRevenueLead = async (req, res) => {
   try {
     const leadId = req.params.id;
-    console.log("Controller: Processing request for leadId:", leadId);
+    console.log('Controller: Processing request for leadId:', leadId);
     const revenue = await salesService.doneRevenue(leadId);
-    console.log("Controller: Got revenue result:", revenue);
+    console.log('Controller: Got revenue result:', revenue);
     res.json(revenue);
   } catch (err) {
     console.error('Error calculating lead revenue:', err);

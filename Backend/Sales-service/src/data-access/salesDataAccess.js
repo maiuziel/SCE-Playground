@@ -3,7 +3,7 @@ const pool = require('../db');
 
 // Insert a new sale into the database
 exports.insertSale = async ({customerId, date, time, products, notes }) => {
-  console.log("been here 3");
+  console.log('been here 3');
   const result = await pool.query(
     `INSERT INTO sales_conversations (customer_id, date, time, products, notes)
      VALUES ($1, $2, $3, $4, $5) RETURNING *`,
@@ -110,6 +110,7 @@ exports.assignLead = async (leadId, email) => {
 exports.updateLeadToInProgress = async (number) => {
   const newStatus = 'in progress';
   const oldStatus = 'new';
+  console.log(number);
   const result = await pool.query(
     'UPDATE leads_table SET status = $1 WHERE status = $2 AND rep_mail IS NOT NULL',
     [newStatus,oldStatus]
@@ -135,7 +136,7 @@ exports.unassignLead = async (leadId) => {
 
 
 exports.doneRevenue = async (leadId) => {
-  console.log("Checking done revenue for lead:", leadId);
+  console.log('Checking done revenue for lead:', leadId);
 
   try {
     const newStr = 'new';
@@ -152,15 +153,14 @@ exports.doneRevenue = async (leadId) => {
       return doneResult.rows[0];  // הצליח, מחזירים
     }
   } catch (err) {
-    console.error("Error querying done revenue:", err);
+    console.error('Error querying done revenue:', err);
   }
 
   // אם לא מצאנו תוצאה מתאימה, מנסים את השאילתה השנייה
-  console.log("Falling back to undone revenue...");
+  console.log('Falling back to undone revenue...');
 
   try {
     const month = 'month';
-    const oneMonth = '1 month';
     const undoneResult = await pool.query(
       `SELECT AVG(COALESCE(total.total_amount, 0)) AS avg 
    FROM (
@@ -175,7 +175,7 @@ exports.doneRevenue = async (leadId) => {
 
     return undoneResult.rows[0];
   } catch (err) {
-    console.error("Error querying undone revenue:", err);
+    console.error('Error querying undone revenue:', err);
     return null;
   }
 };
@@ -207,7 +207,7 @@ exports.reportByRep = async(email) => {
     );
     return result.rows;
   } catch(err) {
-    console.error("Error querying representative report:", err);
+    console.error('Error querying representative report:', err);
     return null;
   }
 };
@@ -220,7 +220,7 @@ exports.totalSalesByRep = async(email) => {
     );
     return result.rows[0];
   } catch(err) {
-    console.error("Error querying representative total sales:", err);
+    console.error('Error querying representative total sales:', err);
     return null;
   }
 };
@@ -230,7 +230,7 @@ exports.getAllRepresentatives = async () => {
     const result = await pool.query('SELECT email FROM sales_representatives ORDER BY email');
     return result.rows;
   }catch(error){
-    console.error("DB access failed:", error);
+    console.error('DB access failed:', error);
     return ;
   } 
 };
@@ -255,7 +255,7 @@ exports.reportByRepMonthly = async(email) => {
     );
     return result.rows;
   } catch(err) {
-    console.error("Error querying representative report by month:", err);
+    console.error('Error querying representative report by month:', err);
     return null;
   }
 };
@@ -269,7 +269,7 @@ exports.reportByRepYearly = async(email) => {
     );
     return result.rows;
   } catch(err) {
-    console.error("Error querying representative report by year:", err);
+    console.error('Error querying representative report by year:', err);
     return null;
   }
 };
@@ -282,6 +282,7 @@ exports.getLeadById = async (phone) => {
 
 // הכנסת ליד חדש
 exports.insertLead = async ({ lead_id, status, application_date }) => {
+  console.log(status);
   await pool.query(
     `INSERT INTO leads_table
      (lead_id, status, rep_mail, application_date, closing_date)
