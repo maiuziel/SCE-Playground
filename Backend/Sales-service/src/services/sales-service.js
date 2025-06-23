@@ -139,7 +139,7 @@ exports.syncExternalLeads = async (externalLeads) => {
         existing.status.toLowerCase() === 'new' &&
         existing.application_date.toISOString().split('T')[0] !== applicationDate
       ) {
-        console.log('already exist\n');
+        console.log("already exist\n");
       }
     } else {
       await salesDataAccess.insertLead({
