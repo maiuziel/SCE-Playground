@@ -307,6 +307,7 @@ exports.readAllLeads = async (req, res) => {
   }
 };
 
+
 exports.syncExternalLeads = async (req, res) => {
   const externalLeads = req.body; // מערך לידים
 
