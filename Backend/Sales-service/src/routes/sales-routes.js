@@ -39,8 +39,4 @@ router.get('/reportByRepYearly/:email', controller.reportByRepYearly);
 router.get('/read-all-leads', controller.readAllLeads);
 router.post('/syncExternalLeads', controller.syncExternalLeads);
 
-
-
-
-
 module.exports = router;
