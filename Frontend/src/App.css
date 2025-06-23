@@ -120,6 +120,70 @@ body {
 }
 
 /* =====================
+   Sales Pages
+===================== */
+
+.salesBtn {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: #00897b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.salesBtn:hover{
+  background: #1976d2;
+}
+
+.addSalesConverstaionBtn {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: #00897b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.SalesForecastbtn{
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: #00897b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.salesBtn:hover{
+  background: #1976d2;
+}
+
+.searchSaleHistorybtn {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: #00897b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.searchSaleHistorybtn:hover {
+  background: #1976d2;
+}
+
+
+/* =====================
    Auth Pages
 ===================== */
 .auth-container {

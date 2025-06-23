@@ -13,12 +13,20 @@ import HomePage from './pages/HomePage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
+import SalesPage from './pages/SalesPage.jsx';
+import SalesConverstaionPage from './pages/SalesConverstaionPage.jsx';
+import SalesSearchHistoryPage from './pages/SalesSearchHistoryPage.jsx';
+import SalesForecastPage from './pages/SalesForecastPage.jsx';
+import SalesRevenuePage from './pages/SalesRevenuePage.jsx';
 import TechSupportPage from './pages/TechSupportPage.jsx';
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ProductsAdminRoute from './components/ProductsAdminRoute';
 import './App.css'; // Import the new CSS
 import ReportsPage from './pages/ReportsPage.jsx';
+import SalesLeadsPage from  './pages/SalesLeadsPage.jsx';
+
+
 import TechSupport from './pages/TechSupportPage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
 import EditProductPage from './pages/UpdateProductPage.jsx';
@@ -28,6 +36,7 @@ import LeadManager from './pages/LeadManager.jsx';
 
 function Navbar() {
   const { user, signOut, isLoading, isValidating } = useContext(StoreContext);
+
   const navigate = useNavigate();
 
   function signUserOut() {
@@ -84,6 +93,7 @@ function Navbar() {
         </div>
         {user && <div className="user-circle">{userInitial}</div>}
       </div>
+
     </div>
   );
 }
@@ -112,14 +122,15 @@ function App() {
             />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
-            <Route
-              path="/reports"
-              element={
-                <ProtectedRoute>
-                  <ReportsPage />
-                </ProtectedRoute>
-              }
-            />
+            <Route path='/reports' element={<ReportsPage />} />
+            <Route path='/sales' element={<SalesPage />} />
+
+            <Route path='/salesConverstaion' element={<SalesConverstaionPage />} />
+            <Route path='/salesSearchHistory' element={<SalesSearchHistoryPage />}/>
+            <Route path='/SalesLeadsPage' element={<SalesLeadsPage />}/>
+            <Route path='/SalesForecastPage' element={<SalesForecastPage/>}/>
+            <Route path='/SalesRevenuePage' element={<SalesRevenuePage/>}/>
+
             <Route path="/createlead" element={<LeadsGeneration />} />
             <Route path="/lead-manager" element={<LeadManager />} />
               

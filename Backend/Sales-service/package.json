@@ -1,0 +1,30 @@
+{
+  "name": "sales-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "test": "npx mocha tests/**/*.spec.js",
+    "lint": "eslint --ext .js src/ tests/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.1",
+    "@types/mocha": "^10.0.10",
+    "chai": "^4.3.10",
+    "eslint": "^8.57.0",
+    "mocha": "^11.1.0",
+    "nodemon": "^3.1.9"
+  }
+}

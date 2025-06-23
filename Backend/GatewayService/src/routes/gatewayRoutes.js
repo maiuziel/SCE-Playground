@@ -4,6 +4,7 @@ import {
   forwardLeadsRequests,
   forwardProductsRequests,
   forwardTechSupportRequests,
+  forwardSalesRequests,
   ping,
 } from '../controllers/gatewayController.js';
 
@@ -13,6 +14,7 @@ const router = Router();
 router.use('/auth', forwardAuthRequests);
 router.use('/products', forwardProductsRequests);
 router.get('/ping', ping);
+router.use('/sales', forwardSalesRequests);
 
 
 router.use('/leads', forwardLeadsRequests);
