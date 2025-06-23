@@ -35,14 +35,22 @@ describe('sales_conversationsTest Table', () => {
   });
 
   it('should retrieve a row by ID', async () => {
-    const inserted = await pool.query(`
-      INSERT INTO sales_conversationsTest (customer_id, products, notes)
-      VALUES (202, 'Product X', 'Note X') RETURNING *`
-    );
+  const inserted = await pool.query(`
+    INSERT INTO sales_conversationsTest (customer_id, products, notes)
+    VALUES (202, 'Product X', 'Note X') RETURNING *`
+  );
 
-    const found = await pool.query('SELECT * FROM sales_conversationsTest WHERE id = $1', [inserted.rows[0].id]);
-    expect(found.rows[0]).to.deep.equal(inserted.rows[0]);
-  });
+  const insertedRow = inserted.rows[0];
+  console.log('🚀 Inserted Row:', insertedRow);
+  expect(insertedRow).to.exist;
+  expect(insertedRow.id).to.exist;
+
+  const found = await pool.query('SELECT * FROM sales_conversationsTest WHERE id = $1', [insertedRow.id]);
+  console.log('🔍 Found Row:', found.rows[0]);
+
+  expect(found.rows.length).to.be.greaterThan(0, '❌ No rows found by ID');
+  expect(found.rows[0]).to.deep.equal(insertedRow);
+});
 
   it('should update a row', async () => {
     const inserted = await pool.query(`
