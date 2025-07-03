@@ -2,7 +2,6 @@
 import axios from 'axios';
 import 'dotenv/config';
 
-
 const forwardAuthRequests = async (req, res, next) => {
   try {
     const authServiceUrl = process.env.AUTH_SERVICE_URL;
@@ -11,7 +10,6 @@ const forwardAuthRequests = async (req, res, next) => {
 
     console.log(`Forwarding request to ${url}`, ` body: ${req.body}`);
 
-    // Forward the exact method and body
     const response = await axios.request({
       method: req.method,
       url,
@@ -21,11 +19,7 @@ const forwardAuthRequests = async (req, res, next) => {
 
     return res.status(response.status).json(response.data);
   } catch (error) {
-    console.log(
-      'Error while forwarding request to auth service. Error: ',
-      error,
-      error?.data
-    );
+    console.log('Error while forwarding request to auth service:', error, error?.data);
 
     if (error.response) {
       return res.status(error.response.status).json(error.response.data);
@@ -41,7 +35,6 @@ export async function ping(req, res, next) {
     return next(error);
   }
 }
-// Forward requests to the leads service
 
 const forwardLeadsRequests = async (req, res, next) => {
   try {
@@ -51,7 +44,6 @@ const forwardLeadsRequests = async (req, res, next) => {
 
     console.log(`Forwarding request to ${url}`, ' body: ', req.body);
 
-    // Forward the exact method and body
     const response = await axios({
       method: req.method,
       url,
@@ -62,11 +54,7 @@ const forwardLeadsRequests = async (req, res, next) => {
 
     return res.status(response.status).json(response.data);
   } catch (error) {
-    console.log(
-      'Error while forwarding request to leads service. Error: ',
-      error,
-      error?.data
-    );
+    console.log('Error while forwarding request to leads service:', error, error?.data);
 
     if (error.response) {
       return res.status(error.response.status).json(error.response.data);
@@ -76,16 +64,14 @@ const forwardLeadsRequests = async (req, res, next) => {
   }
 };
 
-// used by the tech-supprt module.
 const forwardTechSupportRequests = async (req, res, next) => {
   try {
     const techSupServiceUrl = process.env.TECH_SUP_SERVICE_URL;
     const path = req.originalUrl.replace('/ts', '');
     const url = `${techSupServiceUrl}${path}`;
 
-    console.log('TS: Forwarding request to ' + url, ' body: ' + req.body);
+    console.log('Forwarding request to ' + url, ' body: ' + req.body);
 
-    // Forward the exact method and body
     const response = await axios.request({
       method: req.method,
       url,
@@ -95,11 +81,7 @@ const forwardTechSupportRequests = async (req, res, next) => {
 
     return res.status(response.status).json(response.data);
   } catch (error) {
-    console.log(
-      'Error while forwarding request to auth service. Error: ',
-      error,
-      error?.data
-    );
+    console.log('Error while forwarding request to tech support:', error, error?.data);
 
     if (error.response) {
       return res.status(error.response.status).json(error.response.data);
@@ -108,10 +90,8 @@ const forwardTechSupportRequests = async (req, res, next) => {
   }
 };
 
-
 const forwardSalesRequests = async (req, res, next) => {
   try {
-    // Use environment variable instead of hardcoded URL
     const salesServiceUrl = process.env.SALES_SERVICE_URL;
     const path = req.originalUrl.replace('/sales', '');
     const url = `${salesServiceUrl}/sales${path}`;
@@ -132,23 +112,19 @@ const forwardSalesRequests = async (req, res, next) => {
 
     return res.status(response.status).json(response.data);
   } catch (error) {
-    console.log('❌ Error while forwarding request to sales service:');
-  
-    try {
-      console.log('📛 error.toJSON:', error.toJSON());
-      console.log('📛 error.response?.status:', error.response?.status);
-      console.log('📛 error.response?.data:', error.response?.data);
+    console.log('Error while forwarding request to sales service:', error.message);
 
+    try {
+      console.log('error.response?.status:', error.response?.status);
+      console.log('error.response?.data:', error.response?.data);
     } catch (jsonErr) {
-      console.log('📛 error.message:', error.message);
+      console.log('error.message:', error.message);
     }
-  
+
     return res
       .status(error.response?.status || 500)
       .json(error.response?.data || { error: 'Unknown gateway error' });
   }
-  
-  
 };
 
 const forwardProductsRequests = async (req, res, next) => {
@@ -159,7 +135,6 @@ const forwardProductsRequests = async (req, res, next) => {
 
     console.log(`Forwarding request to ${url}`, ` body: ${req.body}`);
 
-    // Forward the exact method and body
     const response = await axios({
       method: req.method,
       url,
@@ -169,22 +144,45 @@ const forwardProductsRequests = async (req, res, next) => {
 
     return res.status(response.status).json(response.data);
   } catch (error) {
-    // Error from the microservice or network
-    console.log(
-      'Error while forwarding request to products service. Error: ',
-      error,
-      error?.data
-    );
+    console.log('Error while forwarding request to products service:', error, error?.data);
 
     if (error.response) {
-      // The microservice responded with an error status
       return res.status(error.response.status).json(error.response.data);
     }
     return next(error);
   }
 };
 
+const forwardFinanceRequests = async (req, res, next) => {
+  try {
+    const financeServiceUrl = process.env.FINANCE_SERVICE_URL;
+    const path = req.originalUrl.replace('/finance', '');
+    const url = `${financeServiceUrl}${path}`;
+    console.log('Final URL being requested:', url);
 
+    const response = await axios({
+      method: req.method,
+      url,
+      data: req.body,
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log('Success from finance:', response.data);
 
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error('Error while forwarding to Finance Service:', error.message);
+    if (error.response) {
+      return res.status(error.response.status).json(error.response.data);
+    }
+    return next(error);
+  }
+};
 
-export { forwardLeadsRequests, forwardAuthRequests, forwardProductsRequests, forwardTechSupportRequests, forwardSalesRequests };
+export {
+  forwardAuthRequests,
+  forwardLeadsRequests,
+  forwardProductsRequests,
+  forwardTechSupportRequests,
+  forwardSalesRequests,
+  forwardFinanceRequests,
+};
