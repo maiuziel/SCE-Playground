@@ -100,7 +100,7 @@ export default function HomePage() {
             >
               Sales
             </button>
- </div>
+</div>
              {/* ── FINANCE TILE ── */}
         <div style={tileStyle}>
           <img src="/reports.jpg" alt="Finance" style={imgStyle} />
@@ -116,7 +116,6 @@ export default function HomePage() {
           >
             Finance
           </button>
-
         </div>
       </div>
     </div>
