@@ -184,7 +184,33 @@ const forwardProductsRequests = async (req, res, next) => {
   }
 };
 
+const forwardFinanceRequests = async (req, res, next) => {
+  try {
+    const financeServiceUrl = process.env.FINANCE_SERVICE_URL;
+    const path = req.originalUrl.replace('/finance', '');
+    const url = `${financeServiceUrl}${path}`;
+    console.log('Final URL being requested:', url);
+
+
+    const response = await axios({
+      method: req.method,
+      url,
+      data: req.body,
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log('Success from finance:', response.data);
+
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error('Error while forwarding to Finance Service:', error.message);
+    if (error.response) {
+      return res.status(error.response.status).json(error.response.data);
+    }
+    return next(error);
+  }
+};
 
 
 
-export { forwardLeadsRequests, forwardAuthRequests, forwardProductsRequests, forwardTechSupportRequests, forwardSalesRequests };
+
+export { forwardLeadsRequests, forwardAuthRequests, forwardProductsRequests, forwardTechSupportRequests, forwardSalesRequests, forwardFinanceRequests };
