@@ -33,6 +33,12 @@ import EditProductPage from './pages/UpdateProductPage.jsx';
 import LeadsPage from './pages/LeadsPage.jsx';
 import LeadsGeneration from './pages/LeadsGeneration.jsx';
 import LeadManager from './pages/LeadManager.jsx';
+import FinanceModulePage from './pages/FinanceModulePage.jsx';
+import CreateTransactionPage from './pages/CreateTransactionPage.jsx';
+import ViewTransactionsPage from './pages/ViewTransactionsPage.jsx';
+import ManagementPage from './pages/ManagementPage.jsx';
+import MonthlyReportPage from './pages/MonthlyReportPage.jsx';
+import UpdateStatusPage from './pages/UpdateStatusPage.jsx';
 
 function Navbar() {
   const { user, signOut, isLoading, isValidating } = useContext(StoreContext);
@@ -160,11 +166,63 @@ function App() {
                 </ProductsAdminRoute>
               }
             />
+            <Route
+              path="/finance-module"
+              element={
+                <ProtectedRoute>
+                  <FinanceModulePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/finance/create"
+              element={
+                <ProtectedRoute>
+                  <CreateTransactionPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/finance-module/view"
+              element={
+                <ProtectedRoute>
+                  <ViewTransactionsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/finance/management"
+              element={
+                <ProtectedRoute>
+                  <ManagementPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/finance/management/monthly"
+              element={
+                <ProtectedRoute>
+                  <MonthlyReportPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/update-status"
+              element={
+                <ProtectedRoute>
+                  <UpdateStatusPage />
+                </ProtectedRoute>
+              }
+              />
           </Routes>
         </div>
       </BrowserRouter>
     </StoreProvider>
+
+    
   );
+
+
 }
 
 export default App;
