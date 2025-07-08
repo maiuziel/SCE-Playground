@@ -15,25 +15,62 @@ export const sequelize = new Sequelize(process.env.POSTGRES_URI, {
   },
 });
 
+
+// ----- Auto-create tables -----
+async function createTablesIfNotExist() {
+  await sequelize.query(`
+    CREATE TABLE IF NOT EXISTS invoices (
+      id SERIAL PRIMARY KEY,
+      customer_id INTEGER,
+      amount NUMERIC,
+      status TEXT,
+      description TEXT,
+      created_at TIMESTAMP
+    );
+  `);
+
+  await sequelize.query(`
+    CREATE TABLE IF NOT EXISTS receipts (
+      id SERIAL PRIMARY KEY,
+      customer_id INTEGER,
+      amount NUMERIC,
+      status TEXT,
+      description TEXT,
+      created_at TIMESTAMP
+    );
+  `);
+
+  await sequelize.query(`
+    CREATE TABLE IF NOT EXISTS reports (
+      id SERIAL PRIMARY KEY,
+      title TEXT,
+      content TEXT
+    );
+  `);
+
+  await sequelize.query(`
+    CREATE TABLE IF NOT EXISTS transaction (
+      id SERIAL PRIMARY KEY,
+      customer_id INTEGER,
+      amount NUMERIC,
+      status TEXT,
+      description TEXT,
+      created_at TIMESTAMP
+    );
+  `);
+}
+createTablesIfNotExist().catch((err) => {
+  console.error('Failed to create tables:', err);
+});
+
 // ----- INVOICES -----
 export async function insertInvoice(data) {
   const { customer_id, amount, status, description, created_at } = data;
-  console.log('Trying to insert invoice:', data);
-
-  try {
-    const [result] = await sequelize.query(
-      'INSERT INTO invoices (customer_id, amount, status, description, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      {
-        bind: [customer_id, amount, status, description, created_at]
-      }
-    );
-
-    console.log('Invoice inserted:', result);
-    return result[0];
-  } catch (err) {
-    console.error('Failed to insert invoice:', err);
-    throw err;
-  }
+  const [result] = await sequelize.query(
+    'INSERT INTO invoices (customer_id, amount, status, description, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    { bind: [customer_id, amount, status, description, created_at] }
+  );
+  return result[0];
 }
 
 export async function fetchAllInvoices() {
