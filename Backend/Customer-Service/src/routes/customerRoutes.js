@@ -19,13 +19,12 @@ import {
 
 const router = Router();
 
-// ראוטים לפניות לקוח
 router.post(  '/',                    createSupportRequest);
 router.get(   '/',                    getSupportRequests);
 router.patch( '/:id/status',          updateSupportRequestStatus);
 router.patch( '/:id/respond',         respondToSupportRequest);
 router.get(   '/unread',              getUnreadSupportRequests);
-router.patch( '/:id/mark-read',       markResponseAsRead); // ✅ הנתיב החדש
+router.patch( '/:id/mark-read',       markResponseAsRead); 
 router.get('/new-client-requests', getNewClientRequests);
 router.patch('/:id/comment', addClientComment);
 router.get('/notifications', getClientNotifications);

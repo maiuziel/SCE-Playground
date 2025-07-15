@@ -7,41 +7,35 @@ export default function SupportHistoryPage() {
   const [activeRequestId, setActiveRequestId] = useState(null);
   const [commentText, setCommentText] = useState('');
 
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
+
   useEffect(() => {
-    fetch('http://localhost:4002/support-requests', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    })
-      .then(res => {
-        if (!res.ok) throw new Error(`Status ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        setRequests(data);
-        setLoading(false);
-      })
+    loadRequests();
+  }, []);
+  const loadRequests = () => { // פה מתחילה הפונקציה loadRequests
+    fetch(`${baseUrl}/support-requests`)
+      .then(res => res.json())
+      .then(setRequests)
       .catch(err => {
         console.error('Error fetching requests:', err);
         setError('לא ניתן להציג פניות כרגע');
         setLoading(false);
       });
-  }, []);
+  };
 
   const submitComment = async () => {
     if (!commentText.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:4002/support-requests/${activeRequestId}/comment`, {
+      const res = await fetch(`${baseUrl}/support-requests/${activeRequestId}/comment`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ comment: commentText }),
       });
 
       if (res.ok) {
-        const { request } = await res.json(); // משתמשים ב-request מהשרת
+        const { request } = await res.json(); 
 
-        // עדכון הפנייה עם ההערה החדשה בטבלה
         setRequests(prev =>
           prev.map(r => r.id === request.id ? request : r)
         );

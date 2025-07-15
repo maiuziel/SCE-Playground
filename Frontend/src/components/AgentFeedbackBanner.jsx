@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 export default function AgentFeedbackBanner() {
   const [feedbackNotifications, setFeedbackNotifications] = useState([]);
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
 
   useEffect(() => {
-    fetch('http://localhost:4002/feedback/notifications')
+    fetch(`${baseUrl}/feedback/notifications`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch feedback notifications');
         return res.json();
@@ -13,11 +14,11 @@ export default function AgentFeedbackBanner() {
       .catch(err => {
         console.error('❌ Failed to load feedback notifications:', err);
       });
-  }, []);
+  }, [baseUrl]);
 
   const markAsRead = async (notificationId) => {
     try {
-      await fetch(`http://localhost:4002/feedback/notifications/${notificationId}/mark-read`, {
+      await fetch(`${baseUrl}/feedback/notifications/${notificationId}/mark-read`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' }
       });

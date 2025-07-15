@@ -6,7 +6,6 @@ export default function ReportsPage() {
   const { user, token } = useContext(StoreContext);
   console.log('User:', JSON.stringify(user), token);
 
-  // If user is not logged in, redirect to /signin
   if (!user || !token) return <Navigate to='/signin' replace />;
   return (
     <div>

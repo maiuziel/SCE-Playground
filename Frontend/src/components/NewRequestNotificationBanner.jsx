@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 export default function NewRequestNotificationBanner() {
   const [newRequestNotifs, setNewRequestNotifs] = useState([]);
   const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
 
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch('http://localhost:4002/support-requests/notifications/new-requests');
+        const res = await fetch(`${baseUrl}/support-requests/notifications/new-requests`);
         if (!res.ok) throw new Error('Failed to fetch new request notifications');
         const notifications = await res.json();
 
@@ -16,15 +17,15 @@ export default function NewRequestNotificationBanner() {
       } catch (err) {
         console.error('❌ Failed to fetch notifications:', err);
       }
-    }, 5000); // Fetch every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [baseUrl]);
 
   const handleClick = async () => {
     try {
       for (const notif of newRequestNotifs) {
-        await fetch(`http://localhost:4002/support-requests/notifications/${notif.id}/mark-read`, {
+        await fetch(`${baseUrl}/support-requests/notifications/${notif.id}/mark-read`, {
           method: 'PATCH',
         });
       }

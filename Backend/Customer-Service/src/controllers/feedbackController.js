@@ -5,22 +5,19 @@ export async function submitFeedback(req, res) {
   const { rating, comment, supportRequestId } = req.body;
 
   try {
-    // שמירת הפידבק עצמו
     await Feedback.create({ rating, comment, supportRequestId });
 
-    // סימון התראה ישנה ללקוח כנקראה
     await Notification.update(
       { read: true },
       { where: { supportRequestId, type: 'feedback_prompt' } }
     );
 
-    // יצירת התראה חדשה לנציג שירות
     await Notification.create({
       type: 'new_feedback',
       supportRequestId,
       message: `⭐ לקוח דירג את הבקשה מספר ${supportRequestId}`,
-      rating,    // ⬅️ חשוב כדי להציג לנציג
-      comment,   // ⬅️ חשוב כדי להציג לנציג
+      rating,    
+      comment,   
       read: false
     });
 

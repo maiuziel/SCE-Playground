@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 export default function ClientNotificationBanner() {
   const [newMessages, setNewMessages] = useState([]);
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
 
   useEffect(() => {
-    fetch('http://localhost:4002/support-requests/unread')
+    fetch(`${baseUrl}/support-requests/unread`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch unread messages');
         return res.json();
@@ -15,11 +16,11 @@ export default function ClientNotificationBanner() {
       .catch(err => {
         console.error('Error loading unread messages:', err);
       });
-  }, []);
+  }, [baseUrl]);
 
   const handleView = async (id, response) => {
     alert(`📩 Response:\n\n${response}`);
-    await fetch(`http://localhost:4002/support-requests/${id}/mark-read`, {
+    await fetch(`${baseUrl}/support-requests/${id}/mark-read`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' }
     });

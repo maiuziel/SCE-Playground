@@ -11,13 +11,13 @@ export async function signup(req, res, next) {
     } = req.body;
 
     console.log('Got signup request: ', email, ' and password: ', password);
-
+    
 
     const newUser = await authService.signup(
-        email,
-        password,
-        firstName,
-        lastName
+      email,
+      password,
+      firstName,
+      lastName
     );
     // newUser will not include password
     return res.status(201).json(newUser);
@@ -29,6 +29,7 @@ export async function signup(req, res, next) {
 export async function signin(req, res, next) {
   try {
     const { email, password } = req.body;
+    console.log('Got signin request: ', email, ' and password: ', password);
     const userAndToken = await authService.signin(email, password);
     return res.status(200).json(userAndToken);
   } catch (error) {

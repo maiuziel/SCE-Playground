@@ -20,7 +20,7 @@ export const Notification = sequelize.define('Notification', {
   },
   rating: {
     type: DataTypes.INTEGER,
-    allowNull: true, // כי רק בהתראות על feedback זה קיים
+    allowNull: true, 
   },
   comment: {
     type: DataTypes.TEXT,

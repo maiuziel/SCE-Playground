@@ -1,19 +1,18 @@
 import { Router } from 'express';
-import { forwardAuthRequests } from '../controllers/gatewayController.js';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import {
+  forwardAuthRequests,
+  forwardLeadsRequests,
+  forwardProductsRequests,
+  ping,
+} from '../controllers/gatewayController.js';
 
 const router = Router();
 
-// Forward /auth
 router.use('/auth', forwardAuthRequests);
+router.use('/products', forwardProductsRequests);
+router.get('/ping', ping);
 
-// Forward /support-requests
-router.use(
-  '/support-requests',
-  createProxyMiddleware({
-    target: 'http://localhost:4002',
-    changeOrigin: true
-  })
-);
+router.use('/leads', forwardLeadsRequests);
+router.use('/support-requests', createProxy('https://sce-playground-y67y.onrender.com'));
 
 export default router;

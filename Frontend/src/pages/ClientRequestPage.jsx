@@ -8,7 +8,7 @@ export default function ClientRequestPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:4002/support-requests', {
+    fetch(`${import.meta.env.VITE_GATEWAY_URL}/support-requests`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

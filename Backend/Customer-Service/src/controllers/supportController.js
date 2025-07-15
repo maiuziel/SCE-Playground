@@ -10,7 +10,6 @@ export async function createSupportRequest(req, res) {
   try {
     const request = await SupportRequest.create({ subject, description });
 
-    // ✅ יצירת התראה חדשה לנציג שירות
     await Notification.create({
       type: 'new_request',
       supportRequestId: request.id,
@@ -56,7 +55,6 @@ export async function updateSupportRequestStatus(req, res) {
 
     console.log(`✅ Updated status for request #${id} to: ${status}`);
 
-    // ✅ יצירת התראה כאשר הסטטוס הוא "done"
     if (status.toLowerCase() === 'closed') {
       const notif = await Notification.create({
         type: 'feedback_prompt',
@@ -85,7 +83,7 @@ export async function respondToSupportRequest(req, res) {
     if (!reqItem) return res.status(404).json({ message: 'Not found' });
 
     reqItem.response = response;
-    reqItem.responseMessageRead = false; // ✅ מסומן כלא נקרא
+    reqItem.responseMessageRead = false; 
     await reqItem.save();
 
     res.json({ message: 'Response saved successfully', request: reqItem });

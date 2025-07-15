@@ -1,3 +1,4 @@
+// authentication-service/src/index.js
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -24,8 +25,12 @@ app.use(express.json());
 
 // 3) אתחול בסיס נתונים
 initDb()
-  .then(() => console.log('Database connected successfully'))
-  .catch(err => console.error('DB connection failed:', err));
+  .then(() => {
+    console.log('Database connected successfully');
+  })
+  .catch((err) => {
+    console.error('Database connection failed:', err.message);
+  });
 
 // 4) רוטות התחברות/הרשמה
 app.use('/', authRoutes);

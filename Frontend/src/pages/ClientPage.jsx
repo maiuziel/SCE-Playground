@@ -8,7 +8,7 @@ export default function ClientPage() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:4002/support-requests/notifications')
+    fetch(`${import.meta.env.VITE_GATEWAY_URL}/support-requests/notifications`)
       .then(res => res.json())
       .then(data => {
         const feedbackNotifs = data.filter(n => n.type === 'feedback_prompt' && !n.read);
@@ -20,7 +20,6 @@ export default function ClientPage() {
   }, []);
 
   const goToFeedback = (supportRequestId, notificationId) => {
-    // נווט לדף הפידבק ושמור את notificationId ב-state
     navigate(`/feedback/${supportRequestId}`, {
       state: { notificationId }
     });

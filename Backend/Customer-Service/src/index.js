@@ -4,7 +4,6 @@ import cors from 'cors';
 
 import { sequelize } from './data-access/db.js';
 
-// טוענים את המודלים לפני הסנכרון
 import './data-access/supportRequest.model.js';
 import './data-access/feedback.model.js';
 import './data-access/notification.model.js';
@@ -15,7 +14,7 @@ import feedbackRouter from './routes/feedbackRoutes.js';
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_ORIGIN, 
   credentials: true
 }));
 

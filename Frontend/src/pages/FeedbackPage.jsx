@@ -1,9 +1,10 @@
+// frontend/src/pages/FeedbackPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 export default function FeedbackPage() {
-  const { id } = useParams(); // מזהה את הפנייה (supportRequestId)
-  const { state } = useLocation(); // מקבל notificationId
+  const { id } = useParams(); 
+  const { state } = useLocation(); 
   const notificationId = state?.notificationId;
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -11,8 +12,7 @@ export default function FeedbackPage() {
 
   const submitFeedback = async () => {
     try {
-      // שליחת הפידבק
-      await fetch('http://localhost:4002/feedback', {
+      await fetch(`${import.meta.env.VITE_GATEWAY_URL}/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -22,9 +22,8 @@ export default function FeedbackPage() {
         })
       });
 
-      // סימון ההתראה כנקראה רק אם יש notificationId
       if (notificationId) {
-        await fetch(`http://localhost:4002/support-requests/notifications/${notificationId}/mark-read`, {
+        await fetch(`${import.meta.env.VITE_GATEWAY_URL}/support-requests/notifications/${notificationId}/mark-read`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' }
         });

@@ -1,3 +1,4 @@
+// frontend/src/pages/ManageRequestsPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,13 +9,15 @@ export default function ManageRequestsPage() {
   const [searchId, setSearchId] = useState('');
   const navigate = useNavigate();
 
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
+
   useEffect(() => {
     loadRequests();
     loadNotifications();
   }, []);
 
   const loadRequests = () => {
-    fetch('http://localhost:4002/support-requests', {
+    fetch(`${baseUrl}/support-requests`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -25,7 +28,7 @@ export default function ManageRequestsPage() {
   };
 
   const loadNotifications = () => {
-    fetch('http://localhost:4002/feedback/notifications')
+    fetch(`${baseUrl}/feedback/notifications`)
       .then(res => res.json())
       .then(setNotifications)
       .catch(err => console.error('Failed to load feedback notifications:', err));
@@ -33,7 +36,7 @@ export default function ManageRequestsPage() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:4002/support-requests/${id}/status`, {
+      const res = await fetch(`${baseUrl}/support-requests/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -54,7 +57,7 @@ export default function ManageRequestsPage() {
 
   const handleViewFeedback = async (notif) => {
     try {
-      const res = await fetch(`http://localhost:4002/feedback/notifications/${notif.id}/mark-read`, {
+      const res = await fetch(`${baseUrl}/feedback/notifications/${notif.id}/mark-read`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -63,7 +66,7 @@ export default function ManageRequestsPage() {
         setNotifications(prev => prev.filter(n => n.id !== notif.id));
         const { supportRequestId } = notif;
 
-        const feedbackRes = await fetch(`http://localhost:4000/feedback/by-request/${supportRequestId}`);
+        const feedbackRes = await fetch(`${baseUrl}/feedback/by-request/${supportRequestId}`);
         const feedback = await feedbackRes.json();
 
         alert(`⭐ Rating: ${feedback.rating}/5\n📝 Comment: ${feedback.comment || 'No comment'}`);

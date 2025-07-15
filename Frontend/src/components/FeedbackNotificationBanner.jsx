@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 export default function FeedbackNotificationBanner() {
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
 
   useEffect(() => {
-    fetch('http://localhost:4002/support-requests/notifications')
+    fetch(`${baseUrl}/support-requests/notifications`)
       .then(res => res.json())
       .then(data => {
         setNotifications(data);
@@ -14,10 +15,10 @@ export default function FeedbackNotificationBanner() {
       .catch(err => {
         console.error('Error loading notifications:', err);
       });
-  }, []);
+  }, [baseUrl]);
 
   const handleClick = async (notification) => {
-    await fetch(`http://localhost:4002/support-requests/notifications/${notification.id}/mark-read`, {
+    await fetch(`${baseUrl}/support-requests/notifications/${notification.id}/mark-read`, {
       method: 'PATCH'
     });
 

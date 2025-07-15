@@ -7,10 +7,12 @@ export default function RespondRequestPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState(null);
 
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:4002/support-requests/${id}/respond`, {
+      const res = await fetch(`${baseUrl}/support-requests/${id}/respond`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response: message })
