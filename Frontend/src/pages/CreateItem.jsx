@@ -1,24 +1,19 @@
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
+import api from '../services/api'; // Uses baseURL and token interceptor
 
 export default function CreateItem() {
   const { user } = useContext(UserContext);
 
   const handleCreate = async () => {
-    const res = await fetch('http://localhost:4001/items', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({ name: 'Example Item' }),
-    });
+    try {
+      const res = await api.post('/items', {
+        name: 'Example Item',
+      });
 
-    const data = await res.json();
-
-    if (res.ok) {
-      alert(`Created new item with ID ${data.id}. Welcome, ${user.name}!`);
-    } else {
+      alert(`✅ Created new item with ID ${res.data.id}. Welcome, ${user.name}!`);
+    } catch (err) {
+      console.error('❌ Failed to create item:', err);
       alert('❌ Failed to create item');
     }
   };

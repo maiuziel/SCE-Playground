@@ -6,7 +6,8 @@ if (!import.meta.env.VITE_GATEWAY_URL) {
 }
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_GATEWAY_URL
+  baseURL: import.meta.env.VITE_GATEWAY_URL,
+  withCredentials: true // ✅ חשוב כדי לשלוח קוקיז/טוקנים בבקשות cross-origin
 });
 
 // Optional: attach an interceptor to inject token

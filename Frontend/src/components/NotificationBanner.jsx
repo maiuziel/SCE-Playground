@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api'; // Axios instance with baseURL and token support
 
 export default function NotificationBanner() {
   const [hasNewMessages, setHasNewMessages] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:4001/api/support-requests/unread', {
-
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log('🔔 Response from /unread:', data);
-        if (data.length > 0) setHasNewMessages(true);
+    // Check for unread support responses from customer service
+    api.get('/support-requests/unread')
+      .then(res => {
+        console.log('🔔 Response from /unread:', res.data);
+        if (res.data.length > 0) {
+          setHasNewMessages(true);
+        }
       })
       .catch(err => {
         console.error('Error checking notifications:', err);
@@ -35,7 +33,7 @@ export default function NotificationBanner() {
       }}
       onClick={() => navigate('/support-history')}
     >
-      📬 יש לך תגובה חדשה מנציג שירות – לחץ כאן לצפייה
+      📬 You have a new reply from Customer Service – Click here to view
     </div>
   );
 }
