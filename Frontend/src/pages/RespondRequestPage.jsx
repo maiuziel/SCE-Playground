@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 export default function RespondRequestPage() {
-  const { id }      = useParams();
-  const navigate    = useNavigate();
-  const [response, setResponse] = useState('');
-  const [error, setError]       = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(null);
+
+  const baseUrl = import.meta.env.VITE_GATEWAY_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:4001/support-requests/${id}/response`, {
-        method: 'POST',
+      const res = await fetch(`${baseUrl}/support-requests/${id}/respond`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response })
+        body: JSON.stringify({ response: message })
       });
+
       if (!res.ok) throw new Error(`Status ${res.status}`);
       alert('Response sent successfully! ✅');
       navigate('/manage-requests');
@@ -30,8 +33,8 @@ export default function RespondRequestPage() {
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <textarea
           placeholder="Type your response here..."
-          value={response}
-          onChange={e => setResponse(e.target.value)}
+          value={message}
+          onChange={e => setMessage(e.target.value)}
           rows={6}
           required
         />

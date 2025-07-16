@@ -1,59 +1,59 @@
-// Backend/AuthenticationService/src/index.js
+// authentication-service/src/index.js
+
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { Op } from 'sequelize';
-// authentication-service/src/index.js
-import './data-access/supportRequest.model.js'; 
-
 import authRoutes from './routes/authRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { initDb } from './data-access/db.js';
-import { SupportRequest } from './data-access/supportRequest.model.js';
-import { updateSupportRequestStatus } from './controllers/supportController.js';
-import { getSupportRequests } from './controllers/supportController.js';
-import { sequelize } from './data-access/db.js';
-
-
-
+import { initDb, sequelize } from './data-access/db.js';
+import SupportRequest from './data-access/supportRequest.model.js';
+import {
+  createSupportRequest,
+  getSupportRequests,
+  updateSupportRequestStatus
+} from './controllers/supportController.js';
+import { Op } from 'sequelize';
 
 const app = express();
 const PORT = process.env.PORT || 4001;
 
-
 app.use(cors({
-  origin: 'http://localhost:5173',  
+  origin: process.env.CLIENT_ORIGIN,
   credentials: true
 }));
 
+// 2) JSON parsing
 app.use(express.json());
 
+// Initialize the database connection
 initDb()
-.then(() => {
-  console.log('Database connected successfully');
+  .then(() => {
+    console.log('Database connected successfully');
 
-  // ✅ הוספת שדות חדשים לטבלה אם הם לא קיימים
-  sequelize.sync({ alter: true });
-})
-.catch(err => console.error('DB connection failed:', err));
+    // במידת הצורך: עדכון סכימה מול הדאטהבייס
+    sequelize.sync({ alter: true });
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err.message);
+  });
 
+// Auth routes
 app.use('/api', authRoutes);
 
-
-
+// ✅ Customer Support routes
 app.post('/support-request', async (req, res) => {
   const { subject, description } = req.body;
   try {
     await SupportRequest.create({ subject, description });
-    return res.status(201).json({ message: 'Support request received' });
+    res.status(201).json({ message: 'Support request received' });
   } catch (error) {
-    console.error('Error saving support request:', error);
-    return res.status(500).json({ message: 'Failed to save support request' });
+    console.error('❌ Error saving support request:', error);
+    res.status(500).json({ message: 'Failed to save support request' });
   }
 });
+
 app.patch('/support-requests/:id/status', updateSupportRequestStatus);
 
-app.get('/support-requests', getSupportRequests);
 app.get('/support-requests', async (req, res) => {
   try {
     const allRequests = await SupportRequest.findAll({
@@ -66,19 +66,6 @@ app.get('/support-requests', async (req, res) => {
   }
 });
 
-
-app.get('/support-requests', async (req, res) => {
-  try {
-    const all = await SupportRequest.findAll({
-      order: [['createdAt', 'DESC']]
-    });
-    res.json(all);
-  } catch (err) {
-    console.error('Error fetching support requests:', err);
-    res.status(500).json({ message: 'Error fetching support requests' });
-  }
-});
-// POST /support-requests/:id/respond
 app.post('/support-requests/:id/respond', async (req, res) => {
   const { id } = req.params;
   const { response } = req.body;
@@ -93,28 +80,23 @@ app.post('/support-requests/:id/respond', async (req, res) => {
     return res.status(500).json({ message: 'Failed' });
   }
 });
+
 app.post('/support-requests/:id/response', async (req, res) => {
   const { id } = req.params;
   const { message } = req.body;
-
   try {
     const request = await SupportRequest.findByPk(id);
-    if (!request) {
-      return res.status(404).json({ message: 'Support request not found' });
-    }
-
-
+    if (!request) return res.status(404).json({ message: 'Not found' });
     request.responseMessage = message;
     await request.save();
-
-    return res.status(200).json({ message: 'Response saved successfully' });
+    res.status(200).json({ message: 'Response saved' });
   } catch (error) {
-    console.error('Error saving response:', error);
-    return res.status(500).json({ message: 'Failed to save response' });
+    console.error('❌ Error saving response:', error);
+    res.status(500).json({ message: 'Failed to save response' });
   }
 });
 
-  app.get('/support-requests/unread', async (req, res) => {
+app.get('/support-requests/unread', async (req, res) => {
   try {
     const unreadResponses = await SupportRequest.findAll({
       where: {
@@ -123,23 +105,19 @@ app.post('/support-requests/:id/response', async (req, res) => {
         },
         responseMessageRead: false
       },
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
     });
-
     res.json(unreadResponses);
   } catch (err) {
-    console.error('Error fetching unread messages:', err);
+    console.error('❌ Error fetching unread responses:', err);
     res.status(500).json({ message: 'Failed to fetch notifications' });
   }
 });
 
-
-// 6) error handler צריך לבוא אחרי כל הרוטות
+// Error handling - תמיד בסוף!
 app.use(errorHandler);
 
 // 7) הפעלת השרת
 app.listen(PORT, () => {
-  console.log(`Authentication service running on port ${PORT}`);
+  console.log(`🚀 Authentication service running on port ${PORT}`);
 });
-
-

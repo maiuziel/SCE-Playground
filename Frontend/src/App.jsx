@@ -20,6 +20,7 @@ import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
 import SupportHistoryPage from './pages/SupportHistoryPage.jsx';
 import ManageRequestsPage from './pages/ManageRequestsPage.jsx';
 import RespondPage from './pages/RespondRequestPage.jsx';
+import FeedbackPage from './pages/FeedbackPage.jsx';
 
 import { StoreProvider, StoreContext } from './store/StoreContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';

@@ -175,6 +175,11 @@ const forwardProductsRequests = async (req, res, next) => {
       error,
       error?.data
     );
+    console.log(
+      'Error while forwarding request to products service. Error: ',
+      error,
+      error?.data
+    );
 
     if (error.response) {
       // The microservice responded with an error status
