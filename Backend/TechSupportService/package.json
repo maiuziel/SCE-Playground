@@ -1,0 +1,31 @@
+{
+  "name": "techsupport-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha tests/*.spec.js",
+    "start": "node src/index.js",
+    "lint": "eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.1",
+    "@types/mocha": "^10.0.10",
+    "eslint": "^9.25.0",
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0"
+  },
+  "mocha": {
+  "timeout": 5000
+  }
+}

@@ -1,16 +1,27 @@
 import { describe, test, expect } from 'vitest'; // ✅ חובה להיות ראשון
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import HomePage from '../src/pages/HomePage.jsx';
 import { BrowserRouter } from 'react-router-dom';
+
+import HomePage from '../src/pages/HomePage.jsx';
+import { StoreContext } from '../src/store/StoreContext.jsx';
+
+// MOCK api.js to avoid import.meta.env crash
+jest.mock('../src/services/api.js', () => ({}));
 
 describe('HomePage', () => {
   test('renders the welcome message', () => {
+    const mockContext = { user: { firstName: 'Alice' } };
+
     render(
-      <BrowserRouter>
-        <HomePage />
-      </BrowserRouter>
+      <StoreContext.Provider value={mockContext}>
+        <BrowserRouter>
+          <HomePage />
+        </BrowserRouter>
+      </StoreContext.Provider>
     );
-    expect(screen.getByText('Welcome to SCE Software Ltd.')).toBeTruthy();
+
+    // ✅ contains the expected text somewhere in the heading
+    expect(screen.getByText(/Welcome to SCE Software Ltd\./i)).toBeInTheDocument();
   });
 });
