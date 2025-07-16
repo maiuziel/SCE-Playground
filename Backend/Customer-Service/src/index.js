@@ -1,39 +1,72 @@
-require('dotenv').config();
-const express = require('express');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+
+import { sequelize } from './data-access/db.js';
+
+import './data-access/supportRequest.model.js';
+import './data-access/feedback.model.js';
+import './data-access/notification.model.js';
+
+import supportRequestRouter from './routes/customerRoutes.js';
+import feedbackRouter from './routes/feedbackRoutes.js';
+
 const app = express();
-const port = process.env.PORT || 4002;
 
-const customerController = require('./Controller/Customer-ServiceController');
+// Clean up and split allowed origins from env
+const allowedOrigins = process.env.CLIENT_ORIGIN
+  .split(',')
+  .map(origin => origin.trim());
 
+app.use(cors({
+  origin: process.env.CLIENT_ORIGIN, 
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman or same-origin)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`❌ CORS blocked for origin: ${origin}`));
+    }
+  },
+  credentials: true
+}));
 
 app.use(express.json());
 
-app.use('/customers', customerController);
-const recipes = [
-  {
-    id: 1,
-    name: "Spaghetti Carbonara",
-    ingredients: ["Spaghetti", "Eggs", "Pancetta", "Parmesan", "Black Pepper"],
-    instructions: "Boil pasta. Cook pancetta. Mix with eggs and cheese. Combine all and serve."
-  },
-  {
-    id: 2,
-    name: "Chicken Tikka Masala",
-    ingredients: ["Chicken", "Yogurt", "Tomato", "Garlic", "Garam Masala"],
-    instructions: "Marinate chicken. Grill it. Cook sauce. Combine and simmer."
-  },
-  {
-    id: 3,
-    name: "Avocado Toast",
-    ingredients: ["Bread", "Avocado", "Lemon", "Chili Flakes", "Salt"],
-    instructions: "Toast bread. Mash avocado with lemon; Spread and top with chili flakes."
+async function start() {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ Database connection established');
+try {
+  await sequelize.authenticate();
+  console.log('✅ Database connection established');
+
+    await sequelize.sync({ alter: true });
+    console.log('📦 Database synced');
+  await sequelize.sync({ alter: true });
+  console.log('📦 Database synced');
+} catch (err) {
+  console.error('❌ Database error:', err.message);
+}
+
+    // מטעינים את כל ה-routers
+    app.use('/support-requests', supportRequestRouter);
+    app.use('/feedback', feedbackRouter);
+app.use('/support-requests', supportRequestRouter);
+app.use('/feedback', feedbackRouter);
+
+    const port = 4002;
+    app.listen(port, () => {
+      console.log(`🚀 Customer-Service is running on port ${port}`);
+    });
+  } catch (error) {
+    console.error('Database connection failed:', error.message);
+    process.exit(1);
   }
-];
+}
 
-app.get( '/h', (req, res) => {
-  res.json(recipes);
-});
-
+start();
+const port = process.env.PORT || 4002;
 app.listen(port, () => {
-  console.log(`Customer-Service is running on port ${port}`);
+  console.log(`🚀 Customer-Service is running on port ${port}`);
 });
