@@ -2,7 +2,7 @@
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';
 
-export const sequelize = new Sequelize(process.env.POSTGRES_URI, {
+export const sequelize = new Sequelize(process.env.DB_CONNECTION_STRING, {
   dialect: 'postgres',
   logging: false,
   dialectOptions: {
@@ -18,6 +18,7 @@ export async function initDb() {
     await sequelize.authenticate();
     // Sync all defined models
     await sequelize.sync({ alter: true });
+    console.log('✅ Database connected and synced');
   } catch (err) {
     console.error('Unable to connect to the database:', err);
     throw err;
