@@ -1,3 +1,4 @@
+// tests/HomePage.test.jsx
 import { describe, test, expect } from 'vitest'; // ✅ חובה להיות ראשון
 import React from 'react';
 import { render, screen } from '@testing-library/react';

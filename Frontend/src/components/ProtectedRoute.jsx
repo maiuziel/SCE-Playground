@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }) {
   const { token } = useContext(StoreContext);
 
   if (!token) {
-    
+    // If there's no token, redirect to /signin
     return <Navigate to="/signin" replace />;
   }
 

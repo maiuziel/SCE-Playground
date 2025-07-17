@@ -1,5 +1,4 @@
 // frontend/src/App.jsx
-import React, { useContext } from 'react';
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
@@ -112,12 +111,13 @@ function Navbar() {
         {/* If logged in, show user circle */}
         {user && <div className="user-circle">{userInitial}</div>}
       </div>
+
     </div>
   );
 }
 
 
-export default function App() {
+function App() {
   return (
     <StoreProvider>
       <BrowserRouter>
@@ -144,6 +144,7 @@ export default function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path='/reports' element={<ReportsPage />} />
             <Route path='/sales' element={<SalesPage />} />
+
             <Route path='/reports' element={<ReportsPage />} />
             <Route path='/salesConverstaion' element={<SalesConverstaionPage />} />
             <Route path='/salesSearchHistory' element={<SalesSearchHistoryPage />}/>
@@ -247,3 +248,4 @@ export default function App() {
 
 
 }
+export default App;

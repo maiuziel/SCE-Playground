@@ -43,7 +43,7 @@ describe('Authentication Service Tests', () => {
         expect(res.body).to.have.property('firstName').equal('Test');
         expect(res.body).to.have.property('lastName').equal('User');
         done();
-        done();
+        
       });
   });
 
@@ -137,4 +137,3 @@ describe('Authentication Service Tests', () => {
           });
       });
   });
-});
